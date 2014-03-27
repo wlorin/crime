@@ -14,7 +14,7 @@ if (user != null) {
 <%
 } else {
 	// No user logged in.%>
-	Welcome! No user logged in2
+	Welcome! No user logged in3
 <%
 }
 %>
