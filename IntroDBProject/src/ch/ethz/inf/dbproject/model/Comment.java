@@ -1,9 +1,11 @@
 package ch.ethz.inf.dbproject.model;
 
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
 /**
  * Object that represents a user comment.
  */
-public class Comment {
+public class Comment implements Entity {
 
 	private final String username;
 	private final String comment;

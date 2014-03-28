@@ -1,9 +1,11 @@
 package ch.ethz.inf.dbproject.model;
 
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
 /**
  * This class represents an Address 
  */
-public final class Address {
+public final class Address implements Entity {
 
 	private final String city;
 	private final String country;

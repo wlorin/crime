@@ -3,7 +3,9 @@ package ch.ethz.inf.dbproject.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class Case {
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
+public final class Case implements Entity {
 	
 	/**
 	 * TODO The properties of the case should be added here

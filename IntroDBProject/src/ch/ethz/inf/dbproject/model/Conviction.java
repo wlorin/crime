@@ -2,10 +2,12 @@ package ch.ethz.inf.dbproject.model;
 
 import java.util.Date;
 
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
 /**
  * Object that represents a conviction.
  */
-public class Conviction {
+public class Conviction implements Entity {
 
 	private final Date date;
 	private final Date endDate;

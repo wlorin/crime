@@ -1,9 +1,11 @@
 package ch.ethz.inf.dbproject.model;
 
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
 /**
  * Object that represents a registered in user.
  */
-public final class User {
+public final class User implements Entity {
 
 	private final int userid;
 	private final String username;
