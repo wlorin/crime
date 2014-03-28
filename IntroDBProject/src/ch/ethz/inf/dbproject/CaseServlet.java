@@ -43,6 +43,7 @@ public final class CaseServlet extends HttpServlet {
 		final String idString = request.getParameter("id");
 		if (idString == null) {
 			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
+			return;
 		}
 
 		try {
@@ -78,11 +79,10 @@ public final class CaseServlet extends HttpServlet {
 
 			session.setAttribute("caseTable", table);			
 			
+			this.getServletContext().getRequestDispatcher("/Case.jsp").forward(request, response);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
 			this.getServletContext().getRequestDispatcher("/Cases.jsp").forward(request, response);
 		}
-
-		this.getServletContext().getRequestDispatcher("/Case.jsp").forward(request, response);
 	}
 }
