@@ -78,7 +78,7 @@ public final class CasesServlet extends HttpServlet {
 		if (filter == null && category == null) {
 
 			// If no filter is specified, then we display all the cases!
-			table.addObjects(this.dbInterface.getAllCases());
+			table.addObjects(this.dbInterface.getAll(Case.class));
 
 		} else if (category != null) {
 
