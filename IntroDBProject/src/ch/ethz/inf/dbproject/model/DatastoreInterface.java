@@ -34,6 +34,16 @@ public final class DatastoreInterface {
 		
 		try (
 			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM " + tableName);
+		) {
+			return all(stmt, clazz);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}			
+	}
+
+	private <T extends Entity> List<T> all(PreparedStatement stmt, Class<T> clazz) {
+		try (
 			ResultSet rs = stmt.executeQuery();
 		) {
 			Constructor<T> constructor = clazz.getConstructor(ResultSet.class);
@@ -44,8 +54,15 @@ public final class DatastoreInterface {
 			
 			return ts;
 			
-		} catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {			
-			ex.printStackTrace();
+		} catch (SQLException 
+				| InstantiationException 
+				| IllegalAccessException 
+				| IllegalArgumentException 
+				| InvocationTargetException 
+				| NoSuchMethodException 
+				| SecurityException e
+		) {
+			e.printStackTrace();
 			return null;
 		}
 	}
