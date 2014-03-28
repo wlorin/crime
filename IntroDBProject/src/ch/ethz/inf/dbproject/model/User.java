@@ -1,5 +1,8 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
 /**
@@ -15,6 +18,10 @@ public final class User implements Entity {
 		this.userid = userid;
 		this.username = username;
 		this.name = name;
+	}
+	
+	public User(ResultSet rs) throws SQLException {
+		throw new UnsupportedOperationException("Constructor not yet implemented");
 	}
 
 	public int getUserid() {

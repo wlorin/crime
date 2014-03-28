@@ -1,5 +1,8 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
 /**
@@ -15,6 +18,10 @@ public final class Category implements Entity {
 	public Category(final String name) {
 		super();
 		this.name = name;
+	}
+	
+	public Category(ResultSet rs) throws SQLException {
+		throw new UnsupportedOperationException("Constructor not yet implemented");
 	}
 
 	public final String getName() {

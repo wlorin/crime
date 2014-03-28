@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
@@ -13,6 +15,10 @@ public class Conviction implements Entity {
 	private final Date endDate;
 	private final String type;
 
+	public Conviction(ResultSet rs) throws SQLException {
+		throw new UnsupportedOperationException("Constructor not yet implemented");
+	}
+	
 	public Date getDate() {
 		return date;
 	}
