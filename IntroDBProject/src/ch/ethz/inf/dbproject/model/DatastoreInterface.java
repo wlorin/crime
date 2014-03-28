@@ -1,10 +1,17 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.database.MySQLConnection;
+import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.meta.TableName;
 
 /**
  * This class should be the interface between the web application
@@ -48,22 +55,24 @@ public final class DatastoreInterface {
 		
 	}
 	
-	public final List<Case> getAllCases() {
-
-		/**
-		 * TODO this method should return all the cases in the database
-		 */
-			
-		/*
-		//Code example for DB access
-		try {
-			
-			final Statement stmt = this.sqlConnection.createStatement();
-			final ResultSet rs = stmt.executeQuery("Select ...");
+	public final <T extends Entity> List<T> getAll(Class<T> clazz) {
+		String tableName;
+		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
+		if (tableAnnotation != null) {
+			tableName = tableAnnotation.name();
+		}
+		else {
+			tableName =  clazz.getSimpleName();
+		}
 		
-			final List<Case> cases = new ArrayList<Case>(); 
+		try (
+			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM " + tableName);
+			ResultSet rs = stmt.executeQuery();
+		) {
+			Constructor<T> constructor = clazz.getConstructor(ResultSet.class);
+			List<T> cases = new ArrayList<T>(); 
 			while (rs.next()) {
-				cases.add(new Case(rs));
+				cases.add(constructor.newInstance(rs));
 			}
 			
 			rs.close();
@@ -71,20 +80,9 @@ public final class DatastoreInterface {
 
 			return cases;
 			
-		} catch (final SQLException ex) {			
+		} catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {			
 			ex.printStackTrace();
-			return null;			
+			return null;
 		}
-		
-		*/
-		
-		// If you chose to use PreparedStatements instead of statements, you should prepare them in the constructor of DatastoreInterface.
-		
-		// For the time being, we return some bogus projects
-		return staticCaseList;
 	}
-	
-	//TODO Implement all missing data access methods
-
-
 }
