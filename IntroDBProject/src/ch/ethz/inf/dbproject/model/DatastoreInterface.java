@@ -75,9 +75,6 @@ public final class DatastoreInterface {
 				cases.add(constructor.newInstance(rs));
 			}
 			
-			rs.close();
-			stmt.close();
-
 			return cases;
 			
 		} catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {			
