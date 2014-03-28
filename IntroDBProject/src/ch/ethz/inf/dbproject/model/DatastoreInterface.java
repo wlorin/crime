@@ -70,12 +70,12 @@ public final class DatastoreInterface {
 			ResultSet rs = stmt.executeQuery();
 		) {
 			Constructor<T> constructor = clazz.getConstructor(ResultSet.class);
-			List<T> cases = new ArrayList<T>(); 
+			List<T> ts = new ArrayList<T>(); 
 			while (rs.next()) {
-				cases.add(constructor.newInstance(rs));
+				ts.add(constructor.newInstance(rs));
 			}
 			
-			return cases;
+			return ts;
 			
 		} catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {			
 			ex.printStackTrace();
