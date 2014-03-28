@@ -16,7 +16,6 @@ public final class Category implements Entity {
 	private final String name;
 
 	public Category(final String name) {
-		super();
 		this.name = name;
 	}
 	

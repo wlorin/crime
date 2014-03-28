@@ -18,7 +18,6 @@ public final class Address implements Entity {
 
 
 	public Address(final String city, final String country, final String street, final int streetNo, final int zipCode) {
-		super();
 		this.city = city;
 		this.country = country;
 		this.street = street;
