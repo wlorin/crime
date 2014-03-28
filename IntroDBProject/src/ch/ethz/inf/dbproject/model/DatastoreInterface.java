@@ -56,7 +56,7 @@ public final class DatastoreInterface {
 			return tableAnnotation.name();
 		}
 		else {
-			return clazz.getSimpleName();
+			return "`" + clazz.getSimpleName() + "`";
 		}
 	}
 }
