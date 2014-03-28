@@ -45,7 +45,7 @@ public final class CaseServlet extends HttpServlet {
 		try {
 
 			final Integer id = Integer.parseInt(idString);
-			final Case aCase = this.dbInterface.getCaseById(id);
+			final Case aCase = this.dbInterface.getById(id, Case.class);
 
 			
 			/*******************************************************
