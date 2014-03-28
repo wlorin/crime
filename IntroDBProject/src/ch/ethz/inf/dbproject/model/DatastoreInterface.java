@@ -25,8 +25,31 @@ public final class DatastoreInterface {
 		this.sqlConnection = MySQLConnection.getInstance().getConnection();
 	}
 	
-	public final Case getCaseById(final int id) {
-		return null;
+	public final <T extends Entity> T getById(final int id, Class<T> clazz) {
+		String idColName = getIdColName(clazz);
+		String tableName = getTableName(clazz);
+		
+		String sql = String.format("SELECT * FROM %s WHERE %s=?", tableName, idColName);
+		try (
+			PreparedStatement stmt = this.sqlConnection.prepareStatement(sql);
+		) {
+			stmt.setInt(1, id);
+			List<T> all = all(stmt, clazz);
+			
+			if (all.size() == 1) {
+				return all.get(0);
+			}
+			
+			if (all.size() > 1) {
+				throw new IllegalStateException("Expected at most one result from query: " + sql);
+			}
+			
+			return null;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public final <T extends Entity> List<T> getAll(Class<T> clazz) {
