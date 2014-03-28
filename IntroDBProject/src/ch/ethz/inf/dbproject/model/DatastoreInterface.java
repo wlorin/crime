@@ -34,7 +34,6 @@ public final class DatastoreInterface {
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	private Connection sqlConnection;
 
 	public DatastoreInterface() {
