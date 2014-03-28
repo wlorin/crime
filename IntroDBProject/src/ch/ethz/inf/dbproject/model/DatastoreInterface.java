@@ -30,14 +30,7 @@ public final class DatastoreInterface {
 	}
 	
 	public final <T extends Entity> List<T> getAll(Class<T> clazz) {
-		String tableName;
-		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
-		if (tableAnnotation != null) {
-			tableName = tableAnnotation.name();
-		}
-		else {
-			tableName =  clazz.getSimpleName();
-		}
+		String tableName = getTableName(clazz);
 		
 		try (
 			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM " + tableName);
@@ -54,6 +47,16 @@ public final class DatastoreInterface {
 		} catch (SQLException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {			
 			ex.printStackTrace();
 			return null;
+		}
+	}
+
+	private <T extends Entity> String getTableName(Class<T> clazz) {
+		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
+		if (tableAnnotation != null) {
+			return tableAnnotation.name();
+		}
+		else {
+			return clazz.getSimpleName();
 		}
 	}
 }
