@@ -68,6 +68,14 @@ public final class DatastoreInterface {
 	}
 
 	private <T extends Entity> String getTableName(Class<T> clazz) {
+			return "`" + getRawTableName(clazz) + "`";
+	}
+	
+	private <T extends Entity> String getIdColName(Class<T> clazz) {
+		return "`" + getRawTableName(clazz) + "Id`";
+	}
+
+	private <T extends Entity> String getRawTableName(Class<T> clazz) {
 		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
 		if (tableAnnotation != null) {
 			return tableAnnotation.name();
