@@ -14,7 +14,9 @@ if (user != null) {
 <%
 } else {
 	// No user logged in.%>
-	Welcome! No user logged in3
+	Welcome! 
+	<br />
+	Currently, you are not logged in. To log in go to <a href="User">user profile</a>. 
 <%
 }
 %>

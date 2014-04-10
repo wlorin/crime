@@ -17,7 +17,7 @@
 			<tr>
 				<th id="masterHeader" colspan="2">
 					<h1>Law Enforcement Project</h1>
-					Project by powa powa powa 
+					Project by Christian, Lorin & Nina
 				</th>
 			</tr>
 			<tr id="masterContent">
