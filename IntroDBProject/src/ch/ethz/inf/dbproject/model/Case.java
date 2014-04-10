@@ -10,30 +10,31 @@ public final class Case implements Entity {
 	/**
 	 * TODO The properties of the case should be added here
 	 */
-	private final int id;
+	private final int caseId;
 	private final String description;
-	private final String field2;
-	private final int field3;
+	private final String status;
+	private final String location;
+	//TODO: Date, Time
 	
 	/**
 	 * Construct a new case.
 	 * 
 	 * @param description		The name of the case
 	 */
-	public Case(	final int id, final String description, final String field2, final int field3) {
-		this.id = id;
+	public Case(	final int id, final String description, final String status, final String location) {
+		this.caseId = id;
 		this.description = description;
-		this.field2 = field2;
-		this.field3 = field3;
+		this.status = status;
+		this.location = location;
 	}
 	
 	public Case(	final ResultSet rs) throws SQLException {
 		// TODO These need to be adapted to your schema
 		// TODO Extra properties need to be added
-		this.id = rs.getInt("id");
-		this.description = rs.getString("name");
-		this.field2 = rs.getString("field2");
-		this.field3  = rs.getInt("field3");
+		this.caseId = rs.getInt("caseId");
+		this.description = rs.getString("description");
+		this.status = rs.getString("status");
+		this.location = rs.getString("location");
 	}
 
 	/**
@@ -44,16 +45,16 @@ public final class Case implements Entity {
 	public String getDescription() {
 		return description;
 	}
-
-	public int getId() {
-		return id;
+	
+	public String getStatus() {
+		return status;
 	}
 
-	public String getField2() {
-		return field2;
+	public int getCaseId() {
+		return caseId;
 	}
 
-	public int getField3() {
-		return field3;
-	}	
+	public String getLocation() {
+		return location;
+	}
 }

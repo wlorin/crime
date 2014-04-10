@@ -67,8 +67,8 @@ public final class CaseServlet extends HttpServlet {
 			/*
 			 * Columns 2 & 3: Some random fields. These should be replaced by i.e. funding progress, or time remaining
 			 */
-			table.addBeanColumn("Test Field2", "field2");
-			table.addBeanColumn("Test Integer Field 3", "field3");
+			table.addBeanColumn("Status", "status");
+			table.addBeanColumn("Location", "location");
 
 			table.addObject(aCase);
 			table.setVertical(true);			
