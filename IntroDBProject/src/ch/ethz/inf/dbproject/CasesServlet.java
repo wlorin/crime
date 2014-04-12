@@ -91,23 +91,23 @@ public final class CasesServlet extends HttpServlet {
 		
 			if(filter.equals("open")) {
 
-				table.addObjects(this.dbInterface.getByStatus(Case.class, "open"));
+				table.addObjects(this.dbInterface.getByStatus("open"));
 
 			} else if (filter.equals("closed")) {
 
-				table.addObjects(this.dbInterface.getByStatus(Case.class, "closed"));
+				table.addObjects(this.dbInterface.getByStatus("closed"));
 
 			} else if (filter.equals("recent")) {
 
 				// TODO implement this!
-				table.addObjects(this.dbInterface.getMostRecentCases(Case.class, 5));
+				table.addObjects(this.dbInterface.getMostRecentCases(5));
 
 			}
 			
 			else if (filter.equals("oldest")) {
 
 				// TODO implement this!
-				table.addObjects(this.dbInterface.getOldestUnsolvedCases(Case.class, 2));
+				table.addObjects(this.dbInterface.getOldestUnsolvedCases(2));
 
 			}
 			

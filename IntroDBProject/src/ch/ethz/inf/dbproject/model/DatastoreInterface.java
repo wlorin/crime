@@ -108,40 +108,38 @@ public final class DatastoreInterface {
 		}
 	}
 
-	public final <T extends Entity>List<T> getByStatus(Class<T> clazz, String status) {
-		String tableName = getTableName(clazz);
+	public final List<Case> getByStatus(String status) {
+		String tableName = getTableName(Case.class);
 		try (
 			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = '" + status  + "';");
 		) {
-			return all(stmt, clazz);
+			return all(stmt, Case.class);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	// Zeigt most recent, open Cases an, Anzahl: 'number'
-	public final <T extends Entity>List<T> getMostRecentCases(Class<T> clazz, int number) {
-		String tableName = getTableName(clazz);
+	public final List<Case> getMostRecentCases(int number) {
+		String tableName = getTableName(Case.class);
 		try (
 			PreparedStatement stmt = 
 			this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = 'open' ORDER BY date DESC LIMIT 0," + number + ";");
 		) {
-			return all(stmt, clazz);
+			return all(stmt, Case.class);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	// Zeigt oldest, unsolved, open Cases an, Anzahl: 'number'
-	public final <T extends Entity>List<T> getOldestUnsolvedCases(Class<T> clazz, int number) {
-		String tableName = getTableName(clazz);
+	public final List<Case> getOldestUnsolvedCases(int number) {
+		String tableName = getTableName(Case.class);
 		try (
 			PreparedStatement stmt = 
 			this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = 'open' ORDER BY date ASC LIMIT 0," + number + ";");
 		) {
-			return all(stmt, clazz);
+			return all(stmt, Case.class);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;
