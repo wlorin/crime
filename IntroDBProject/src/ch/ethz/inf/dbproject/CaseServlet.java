@@ -69,6 +69,8 @@ public final class CaseServlet extends HttpServlet {
 			 */
 			table.addBeanColumn("Status", "status");
 			table.addBeanColumn("Location", "location");
+			table.addBeanColumn("Date", "date");
+			table.addBeanColumn("Time", "time");
 
 			table.addObject(aCase);
 			table.setVertical(true);			
