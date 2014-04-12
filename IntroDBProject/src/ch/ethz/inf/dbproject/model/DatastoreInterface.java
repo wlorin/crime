@@ -119,4 +119,32 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	// Zeigt most recent, open Cases an, Anzahl: 'number'
+	public final <T extends Entity>List<T> getMostRecentCases(Class<T> clazz, int number) {
+		String tableName = getTableName(clazz);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = 'open' ORDER BY date DESC LIMIT 0," + number + ";");
+		) {
+			return all(stmt, clazz);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// Zeigt oldest, unsolved, open Cases an, Anzahl: 'number'
+	public final <T extends Entity>List<T> getOldestUnsolvedCases(Class<T> clazz, int number) {
+		String tableName = getTableName(clazz);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = 'open' ORDER BY date ASC LIMIT 0," + number + ";");
+		) {
+			return all(stmt, clazz);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

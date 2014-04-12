@@ -58,6 +58,8 @@ public final class CasesServlet extends HttpServlet {
 		 */
 		table.addBeanColumn("Location", "location");
 		table.addBeanColumn("Status", "status");
+		table.addBeanColumn("Date", "date");
+		table.addBeanColumn("Time", "time");
 
 		/*
 		 * Column 4: This is a special column. It adds a link to view the
@@ -89,25 +91,23 @@ public final class CasesServlet extends HttpServlet {
 		
 			if(filter.equals("open")) {
 
-				// TODO implement this!
 				table.addObjects(this.dbInterface.getByStatus(Case.class, "open"));
 
 			} else if (filter.equals("closed")) {
 
-				// TODO implement this!
 				table.addObjects(this.dbInterface.getByStatus(Case.class, "closed"));
 
 			} else if (filter.equals("recent")) {
 
 				// TODO implement this!
-				// table.addObjects(this.dbInterface.getMostRecentCases());
+				table.addObjects(this.dbInterface.getMostRecentCases(Case.class, 5));
 
 			}
 			
 			else if (filter.equals("oldest")) {
 
 				// TODO implement this!
-				// table.addObjects(this.dbInterface.getOldestUnsolvedCases());
+				table.addObjects(this.dbInterface.getOldestUnsolvedCases(Case.class, 2));
 
 			}
 			
