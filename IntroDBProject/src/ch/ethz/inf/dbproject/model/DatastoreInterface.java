@@ -107,4 +107,16 @@ public final class DatastoreInterface {
 			return clazz.getSimpleName();
 		}
 	}
+
+	public final <T extends Entity>List<T> getByStatus(Class<T> clazz, String status) {
+		String tableName = getTableName(clazz);
+		try (
+			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE status = '" + status  + "';");
+		) {
+			return all(stmt, clazz);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

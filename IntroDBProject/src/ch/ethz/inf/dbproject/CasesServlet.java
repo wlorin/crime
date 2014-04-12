@@ -90,12 +90,12 @@ public final class CasesServlet extends HttpServlet {
 			if(filter.equals("open")) {
 
 				// TODO implement this!
-				//table.addObjects(this.dbInterface.getOpenCases());
+				table.addObjects(this.dbInterface.getByStatus(Case.class, "open"));
 
 			} else if (filter.equals("closed")) {
 
 				// TODO implement this!
-				// table.addObjects(this.dbInterface.getClosedCases());
+				table.addObjects(this.dbInterface.getByStatus(Case.class, "closed"));
 
 			} else if (filter.equals("recent")) {
 
