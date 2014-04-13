@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
+import ch.ethz.inf.dbproject.util.Constant;
 import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
@@ -22,6 +23,7 @@ public final class UserServlet extends HttpServlet {
 
 	public final static String SESSION_USER_LOGGED_IN = "userLoggedIn";
 	public final static String SESSION_USER_DETAILS = "userDetails";
+	public final static String SESSION_USER_CREDENTIALS_INCORRECT = "userCredentialsIncorrect";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -47,6 +49,7 @@ public final class UserServlet extends HttpServlet {
 			// Logged in
 			final BeanTableHelper<User> userDetails = new BeanTableHelper<User>("userDetails", "userDetails", User.class);
 			userDetails.addBeanColumn("Name", "name");
+			userDetails.addObject(loggedUser);
 
 			session.setAttribute(SESSION_USER_LOGGED_IN, true);
 			session.setAttribute(SESSION_USER_DETAILS, userDetails);
@@ -62,11 +65,15 @@ public final class UserServlet extends HttpServlet {
 			// However for this project, security is not a requirement.
 			final String password = request.getParameter("password");
 
-			// TODO
-			// Ask the data store interface if it knows this user
-			// Retrieve User
-			// Store this user into the session
-
+			User user = new DatastoreInterface().tryGetUserFromCredentials(username, password);
+			if (user != null) {
+				session.setAttribute(UserManagement.SESSION_USER, user);
+				response.sendRedirect(Constant.WEB_ROOT + "User");
+				return;
+			}
+			else {
+			
+			}
 		}
 
 		// Finally, proceed to the User.jsp page which will renden the profile
