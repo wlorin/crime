@@ -28,5 +28,5 @@ public class Comment implements Entity {
 
 	public String getComment() {
 		return comment;
-	}	
+	}
 }
