@@ -93,6 +93,8 @@ public final class CaseServlet extends HttpServlet {
 			session.setAttribute("caseTable", table);
 			session.setAttribute("caseNoteTable", caseNotes);
 			
+			session.setAttribute("caseIsOpen", aCase.isOpen());
+			
 			this.getServletContext().getRequestDispatcher("/Case.jsp").forward(request, response);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
