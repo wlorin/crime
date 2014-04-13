@@ -224,6 +224,11 @@ public final class DatastoreInterface {
 		);
 	}
 
+	public PoINote insertPoINote(String comment, int caseId, int userid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
 		if (fields.length % 2 != 0) {
 			throw new IllegalArgumentException("Pair fieldnames and field values");
@@ -363,5 +368,5 @@ public final class DatastoreInterface {
 			e.printStackTrace();
 			return null;
 		}
-	}
+}
 }
