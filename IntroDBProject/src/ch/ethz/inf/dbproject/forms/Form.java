@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.forms;
 
+import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
-
-import static ch.ethz.inf.dbproject.util.Constant.*;
 
 public abstract class Form<NewResult> {
 	public static String FIELD_TARGET_CLASS = "__targetClass";
@@ -41,6 +41,7 @@ public abstract class Form<NewResult> {
 		}
 		
 		try {
+			validateFields(newFormFields, values);
 			NewResult result = processNewForm(newFormFields, values);
 			onNewSuccess(result, servletContext, request, response, session);
 		}
@@ -58,6 +59,14 @@ public abstract class Form<NewResult> {
 	
 	public String generateNewForm() {
 		return generateNewForm(new HashMap<String, String>());
+	}
+	
+	private void validateFields(List<Field> fields, HashMap<String, String> values) {
+		// TODO Auto-generated method stub
+		for (Field field : fields) {
+			field.validate(values);
+		}
+
 	}
 	
 	public String generateNewForm(HashMap<String, String> values) {
