@@ -8,7 +8,7 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 /**
  * Object that represents a user comment.
  */
-public class Note implements Entity {
+public abstract class Note implements Entity {
 
 	private final String username;
 	private final String comment;
