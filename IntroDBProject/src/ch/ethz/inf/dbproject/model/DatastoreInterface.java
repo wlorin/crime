@@ -217,6 +217,13 @@ public final class DatastoreInterface {
 		);
 	}
 
+	public PoI insertPoI(String name, Date birthdate) {
+		return insert(PoI.class, 
+				"Name", name, 
+				"Birthdate", birthdate
+		);
+	}
+
 	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
 		if (fields.length % 2 != 0) {
 			throw new IllegalArgumentException("Pair fieldnames and field values");
