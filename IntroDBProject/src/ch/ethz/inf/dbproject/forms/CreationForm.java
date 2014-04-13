@@ -69,7 +69,7 @@ public abstract class CreationForm<NewResult> extends Form<NewResult> {
 		return generateNewForm(values);
 	}
 	
-	private String generateNewForm(HashMap<String, String> values) {
+	public String generateNewForm(HashMap<String, String> values) {
 		return generateForm(getNewFormTitle(), newFormFields(), values);
 	}
 }
