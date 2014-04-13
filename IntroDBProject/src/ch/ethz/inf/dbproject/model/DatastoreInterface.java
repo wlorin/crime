@@ -327,6 +327,7 @@ public final class DatastoreInterface {
 		}
 	}
 
+
 	public List<CaseNote> getCaseNotesFrom(int caseId) {
 		String tableName = getTableName(CaseNote.class);
 		try (
@@ -334,6 +335,23 @@ public final class DatastoreInterface {
 		) {
 			stmt.setInt(1, caseId);
 			return all(stmt, CaseNote.class);
+			
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+}
+
+	
+	public List<PoI> getAllSuspects(Integer id) {
+		String tableName = getTableName(PoI.class);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT PoI.* FROM" + 
+			tableName +  ", `Suspect` WHERE Suspect.CaseId = " + id + " and PoI.PoIId = Suspect.PoIId;");
+		) {
+			return all(stmt, PoI.class);
+
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;

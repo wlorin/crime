@@ -65,7 +65,6 @@ public final class PoIServlet extends HttpServlet {
 
 		table.addObjects(this.dbInterface.getAll(PoI.class));
 
-		// Finally, proceed to the Projects.jsp page which will render the Projects
 		this.getServletContext().getRequestDispatcher("/PoI.jsp").forward(request, response);
 	}
 }
