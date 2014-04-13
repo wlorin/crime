@@ -235,7 +235,6 @@ public final class DatastoreInterface {
 			) {
 				int nextPlaceholder = 1;
 				for (int i_data = 1; i_data < fields.length; i_data += 2) {
-					int i_db = 1 + i_data / 2;
 					Object data = fields[i_data];
 					if (data instanceof String) {
 						stmt.setString(nextPlaceholder++, (String) data);
