@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `CaseNote` (
 
 CREATE TABLE IF NOT EXISTS `Case` (
   `CaseId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `CrimeId` int(10) unsigned NOT NULL,
   `Status` enum('open','closed') COLLATE latin1_general_ci NOT NULL,
   `Date` date NOT NULL,
   `Time` time NOT NULL,
@@ -239,13 +240,6 @@ ALTER TABLE `Suspect`
   ADD CONSTRAINT `Suspect_ibfk_1` FOREIGN KEY (`CaseId`) REFERENCES `Case` (`CaseId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Suspect_ibfk_2` FOREIGN KEY (`PoIId`) REFERENCES `PoI` (`PoIId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-  
---
--- Neue Spalte bei 'Case'
---
-ALTER TABLE `Case`
-  ADD `CrimeId` int(10) unsigned NOT NULL;
-  
 --  
 -- Schreibfehler bei `Crime`
 --
