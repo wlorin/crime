@@ -14,6 +14,7 @@ public final class Case implements Entity {
 	 * TODO The properties of the case should be added here
 	 */
 	private final int caseId;
+	final private String name;
 	private final int crimeId;
 	private final String status;
 	private final String location;
@@ -25,8 +26,9 @@ public final class Case implements Entity {
 	 * 
 	 * @param description		The name of the case
 	 */
-	public Case(	final int id, final int crimeId, final String status, final String location, final Date date, final Time time) {
+	public Case(	final int id, final String name, final int crimeId, final String status, final String location, final Date date, final Time time) {
 		this.caseId = id;
+		this.name = name;
 		this.crimeId = crimeId;
 		this.status = status;
 		this.location = location;
@@ -38,6 +40,7 @@ public final class Case implements Entity {
 		// TODO These need to be adapted to your schema
 		// TODO Extra properties need to be added
 		this.caseId = rs.getInt("caseId");
+		this.name = rs.getString("Name");
 		this.crimeId = rs.getInt("crimeId");
 		this.status = rs.getString("status");
 		this.location = rs.getString("location");
@@ -52,6 +55,10 @@ public final class Case implements Entity {
 	 */
 	public int getCrimeId() {
 		return crimeId;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getCrime() {
