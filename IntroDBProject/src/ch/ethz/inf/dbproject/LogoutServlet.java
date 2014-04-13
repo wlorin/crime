@@ -48,6 +48,7 @@ public final class LogoutServlet extends HttpServlet {
 		} else {
 			// Logged in
 			session.removeAttribute(UserManagement.SESSION_USER);
+			session.setAttribute(UserServlet.SESSION_USER_LOGGED_IN, false);
 		}
 
 		
