@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,6 +154,19 @@ public final class DatastoreInterface {
 		) {
 			generatedKeys.next();
 			return generatedKeys.getLong(1);
+		}
+	}
+
+	public User insertUser(String name, String password) {
+		try (
+			PreparedStatement stmt = this.sqlConnection.prepareStatement("INSERT INTO `User` (Name, Password) VALUES (?, MD5(?))", Statement.RETURN_GENERATED_KEYS);
+		) {
+			stmt.setString(1, name);
+			stmt.setString(2, password);
+			return getById(insert(stmt), User.class);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
