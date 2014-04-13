@@ -32,7 +32,7 @@ public final class SearchServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected final void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
 		
 		final HttpSession session = request.getSession(true);
 		
@@ -50,7 +50,8 @@ public final class SearchServlet extends HttpServlet {
 		/*
 		 * Column 1: The name of the item (This will probably have to be changed)
 		 */
-		table.addBeanColumn("Case Description", "description");
+		table.addBeanColumn("Name", "name");
+		table.addBeanColumn("Case Description", "crime");
 
 		/*
 		 * Columns 2 & 3: Some random fields. These should be replaced by i.e. funding progress, or time remaining
@@ -67,7 +68,7 @@ public final class SearchServlet extends HttpServlet {
 		table.addLinkColumn(""	/* The header. We will leave it empty */,
 				"View Case" 	/* What should be displayed in every row */,
 				"Case?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+				"caseId" 		/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 
 		// Pass the table to the session. This will allow the respective jsp page to display the table.
 		session.setAttribute("results", table);
@@ -79,15 +80,13 @@ public final class SearchServlet extends HttpServlet {
 		
 			if(filter.equals("description")) {
 
-				// TODO implement this!
-				//final String name = request.getParameter("name");
-				//table.addObjects(this.dbInterface.searchByName(name));
+			    final String name = request.getParameter("description");
+				table.addObjects(this.dbInterface.searchByName(name));
 
 			} else if (filter.equals("category")) {
 
-				// TODO implement this!
-				//final String name = request.getParameter("category");
-				// table.addObjects(this.dbInterface.searchByCategory(category));
+				final String category = request.getParameter("category");
+				table.addObjects(this.dbInterface.getProjectsByCategory(category));
 
 			} else if (filter.equals("anotherattribute")) {
 
@@ -95,6 +94,7 @@ public final class SearchServlet extends HttpServlet {
 
 			}			
 		}
+		
 
 		// Finally, proceed to the Search.jsp page which will render the search results
         this.getServletContext().getRequestDispatcher("/Search.jsp").forward(request, response);	        

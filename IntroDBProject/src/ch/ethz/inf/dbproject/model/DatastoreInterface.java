@@ -305,4 +305,17 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public List<Case> searchByName(String string) {
+		String tableName = getTableName(Case.class);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT * FROM " + tableName + " WHERE `Name` = '" + string + "';");
+		) {
+			return all(stmt, Case.class);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
