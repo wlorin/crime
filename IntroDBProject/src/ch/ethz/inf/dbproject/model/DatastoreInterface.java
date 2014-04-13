@@ -3,12 +3,17 @@ package ch.ethz.inf.dbproject.model;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.database.MySQLConnection;
 import ch.ethz.inf.dbproject.model.meta.Entity;
@@ -194,6 +199,64 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+	
+	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
+		if (fields.length % 2 != 0) {
+			throw new IllegalArgumentException("Pair fieldnames and field values");
+		}
+		String tableName = getTableName(clazz);
+		
+		int columnCount = fields.length / 2;
+		
+		ArrayList<String> columnNames = new ArrayList<>();
+		for (int i_columnName = 0; i_columnName < fields.length; i_columnName += 2) {
+			String columnName = (String) fields[i_columnName];
+			columnNames.add(columnName);
+		}
+		
+		ArrayList<String> placeholders = new ArrayList<>();
+		for (int i_data = 1; i_data < fields.length; i_data += 2) {
+			String data = (String) fields[i_data];			
+			placeholders.add(data == null ? "NULL" : "?");
+		}
+		
+		try (
+				PreparedStatement stmt = this.sqlConnection.prepareStatement("INSERT INTO " + tableName +" (" + StringUtils.join(columnNames, ", ") +") VALUES (" + StringUtils.join(placeholders, ", ") + ")", Statement.RETURN_GENERATED_KEYS);
+			) {
+				for (int i_data = 1; i_data < fields.length; i_data += 2) {
+					int i_db = 1 + i_data / 2;
+					Object data = fields[i_data];
+					if (data instanceof String) {
+						stmt.setString(i_db, (String) data);
+					}
+					else if (data instanceof Integer) {
+						stmt.setInt(i_db, (Integer) data);
+					}
+					else if (data instanceof Long) {
+						stmt.setLong(i_db, (Long) data);
+					}
+					else if (data instanceof Date) {
+						stmt.setDate(i_db, (Date) data);
+					}
+					else if (data instanceof Time) {
+						stmt.setTime(i_db, (Time) data);
+					}
+					else if (data == null) {
+						// skip
+					}
+					else {
+						throw new UnsupportedOperationException("Type not supported: " + data.getClass());
+					}
+				}
+				
+				return getById(insert(stmt), clazz);
+			}  catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		
+	}
+	
 
 	public String getCrimeById(int id) {
 		try (
