@@ -48,6 +48,7 @@
 					<div class="menuDiv3"><a href="Cases?category=burglary">Burglary</a></div>
 					<div class="menuDiv3"><a href="Cases?category=robbery">Bank robbery</a></div>
 					<div class="menuDiv2"><a href="Cases?category=other">Other</a></div>
+					<div class="menuDiv1"><a href="PoI">Persons of Interest</a></div>
 					<div class="menuDiv1"><a href="Search">Search</a></div>
 					<div class="menuDiv1"><a href="User">User Profile</a></div>
 					
