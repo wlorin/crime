@@ -27,11 +27,6 @@ public final class PoI implements Entity {
 		this.birthdate = rs.getDate("birthdate");
 	}
 
-	/**
-	 * HINT: In eclipse, use Alt + Shirt + S menu and choose:
-	 * "Generate Getters and Setters to auto-magically generate
-	 * the getters. 
-	 */
 	public String getName() {
 		return name;
 	}

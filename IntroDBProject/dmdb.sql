@@ -244,8 +244,14 @@ ALTER TABLE `Suspect`
 -- Neue Spalte bei 'Case'
 --
 ALTER TABLE `Case`
-  ADD Description varchar(50);
-
+  ADD `CrimeId` int(10) unsigned NOT NULL;
+  
+--  
+-- Schreibfehler bei `Crime`
+--
+ALTER TABLE `Crime`
+  ADD `Crime` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  DROP COLUMN `Criem`;
   
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
