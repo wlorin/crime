@@ -224,9 +224,12 @@ public final class DatastoreInterface {
 		);
 	}
 
-	public PoINote insertPoINote(String comment, int caseId, int userid) {
-		// TODO Auto-generated method stub
-		return null;
+	public PoINote insertPoINote(String comment, int poiId, int userid) {
+		return insert(PoINote.class, 
+				"PoIId", poiId, 
+				"Note", comment,
+				"UserId", userid
+		);
 	}
 
 	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
