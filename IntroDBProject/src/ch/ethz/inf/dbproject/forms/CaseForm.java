@@ -56,7 +56,7 @@ public class CaseForm extends Form<Case> {
 	}
 	
 	@Override
-	protected Case processNewForm(List<Field> fields, HashMap<String, String> values) {
+	protected Case processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession session) {
 		requireNotEmpty(name, values);
 		
 		String name = StringUtils.strip(values.get(this.name));

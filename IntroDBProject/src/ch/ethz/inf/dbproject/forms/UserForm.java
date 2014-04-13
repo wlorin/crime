@@ -42,7 +42,7 @@ public class UserForm extends Form<User> {
 	}
 	
 	@Override
-	protected User processNewForm(List<Field> fields, HashMap<String, String> values) {
+	protected User processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession _) {
 		requireNotEmpty(name, values);
 		require("Password and confirmation don't match", Objects.equals(values.get(password), values.get(confirmation)));
 		
