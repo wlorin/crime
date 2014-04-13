@@ -14,7 +14,8 @@
 
 		<!-- Header -->
 		<% 
-		if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
+		Boolean loggedIn = (Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN);
+		if (loggedIn != null && loggedIn) {
 			// User is logged in. Display logout:
 		%>
 			<div id="logout"><a href="Logout" >Logout</a></div>
