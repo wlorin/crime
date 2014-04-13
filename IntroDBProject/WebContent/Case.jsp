@@ -1,11 +1,13 @@
 <%@page import="java.lang.*"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="ch.ethz.inf.dbproject.forms.CommentForm"%>
+<%@page import="ch.ethz.inf.dbproject.forms.CaseNoteForm"%>
 <%@page import="ch.ethz.inf.dbproject.model.User"%>
 <%@page import="ch.ethz.inf.dbproject.util.UserManagement"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="Header.jsp" %>
-<% final User user = (User) session.getAttribute(UserManagement.SESSION_USER); %>
+<%
+	final User user = (User) session.getAttribute(UserManagement.SESSION_USER);
+%>
 
 <h1>Case Details</h1>
 
@@ -19,11 +21,11 @@
 
 
 <%
-if (user != null) {
+	if (user != null) {
 	HashMap<String, String> initialValues = new HashMap<String, String>();
 	initialValues.put("Case", "" + request.getParameter("id"));
 %>
-	<%= new CommentForm().generateNewForm(initialValues) %>
+	<%=new CaseNoteForm().generateNewForm(initialValues)%>
 <%
 }
 %>
