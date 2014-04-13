@@ -62,7 +62,7 @@ public final class CaseServlet extends HttpServlet {
 			/*
 			 * Column 1: The name of the item (This will probably have to be changed)
 			 */
-			table.addBeanColumn("Case Description", "description");
+			table.addBeanColumn("Case Description", "crime");
 
 			/*
 			 * Columns 2 & 3: Some random fields. These should be replaced by i.e. funding progress, or time remaining

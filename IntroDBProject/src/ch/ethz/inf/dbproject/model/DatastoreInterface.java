@@ -169,4 +169,17 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public String getCrimeById(int id) {
+		try (
+				PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT `Crime` FROM `Crime` WHERE `CrimeId` = " + id);
+			) {
+			    ResultSet rs = stmt.executeQuery();
+				rs.next();
+			    return rs.getString(1);
+			}  catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
 }
