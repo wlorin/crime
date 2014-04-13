@@ -233,23 +233,24 @@ public final class DatastoreInterface {
 		try (
 				PreparedStatement stmt = this.sqlConnection.prepareStatement("INSERT INTO " + tableName +" (" + StringUtils.join(columnNames, ", ") +") VALUES (" + StringUtils.join(placeholders, ", ") + ")", Statement.RETURN_GENERATED_KEYS);
 			) {
+				int nextPlaceholder = 1;
 				for (int i_data = 1; i_data < fields.length; i_data += 2) {
 					int i_db = 1 + i_data / 2;
 					Object data = fields[i_data];
 					if (data instanceof String) {
-						stmt.setString(i_db, (String) data);
+						stmt.setString(nextPlaceholder++, (String) data);
 					}
 					else if (data instanceof Integer) {
-						stmt.setInt(i_db, (Integer) data);
+						stmt.setInt(nextPlaceholder++, (Integer) data);
 					}
 					else if (data instanceof Long) {
-						stmt.setLong(i_db, (Long) data);
+						stmt.setLong(nextPlaceholder++, (Long) data);
 					}
 					else if (data instanceof Date) {
-						stmt.setDate(i_db, (Date) data);
+						stmt.setDate(nextPlaceholder++, (Date) data);
 					}
 					else if (data instanceof Time) {
-						stmt.setTime(i_db, (Time) data);
+						stmt.setTime(nextPlaceholder++, (Time) data);
 					}
 					else if (data == null) {
 						// skip
