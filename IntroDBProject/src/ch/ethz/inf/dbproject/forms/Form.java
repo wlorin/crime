@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
+import static ch.ethz.inf.dbproject.util.Constant.*;
+
 public abstract class Form<NewResult> {
 	public static String FIELD_TARGET_CLASS = "__targetClass";
 	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
@@ -61,7 +63,7 @@ public abstract class Form<NewResult> {
 	public String generateNewForm(HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + getNewFormTitle() + "</h2>");
-		html.append("<form action='/IntroDBProject/PostHandlerServlet' method='" + getMethod() + "'>");
+		html.append("<form action='" + WEB_ROOT + "PostHandlerServlet' method='" + getMethod() + "'>");
 		html.append("<table>");
 		html.append(String.format("<input type=hidden name=" + FIELD_TARGET_CLASS + " value=%s />", this.getClass().getName()));
 		html.append("<input type=hidden name=" + FIELD_NEW_OR_EDIT + " value=new />");

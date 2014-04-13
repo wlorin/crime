@@ -21,6 +21,9 @@ import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.UserManagement;
 
+import static ch.ethz.inf.dbproject.util.Constant.*;
+
+
 public class UserForm extends Form<User> {
 
 	final String name = "Name";
@@ -73,6 +76,6 @@ public class UserForm extends Form<User> {
 	protected void onNewSuccess(User result, ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 		session.setAttribute(UserManagement.SESSION_USER, result);
-		response.sendRedirect("/IntroDBProject/User");
+		response.sendRedirect(WEB_ROOT + "User");
 	}
 }
