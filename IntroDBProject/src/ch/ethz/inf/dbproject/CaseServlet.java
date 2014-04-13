@@ -2,6 +2,7 @@ package ch.ethz.inf.dbproject;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,9 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.forms.ButtonForm;
+import ch.ethz.inf.dbproject.forms.OpenCloseButton;
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.CaseNote;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -92,8 +96,23 @@ public final class CaseServlet extends HttpServlet {
 			
 			session.setAttribute("caseTable", table);
 			session.setAttribute("caseNoteTable", caseNotes);
+
+			session.setAttribute("entity", aCase);
 			
-			session.setAttribute("caseIsOpen", aCase.isOpen());
+			if (UserManagement.isUserLoggedIn(session)) {
+				if (aCase.isOpen()) {
+					request.setAttribute("openCloseButton", 
+							new OpenCloseButton()
+							.generateForm("Close Case", OpenCloseButton.ACTION_CLOSE, "" + aCase.getCaseId())
+					);
+				}
+				else {
+					request.setAttribute("openCloseButton", 
+							new OpenCloseButton()
+							.generateForm("Reopen Case", OpenCloseButton.ACTION_OPEN, "" + aCase.getCaseId())
+					);
+				}
+			}
 			
 			this.getServletContext().getRequestDispatcher("/Case.jsp").forward(request, response);
 		} catch (final Exception ex) {
