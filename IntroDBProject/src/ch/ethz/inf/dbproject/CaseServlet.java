@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.Case;
+import ch.ethz.inf.dbproject.model.CaseNote;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
@@ -75,7 +76,22 @@ public final class CaseServlet extends HttpServlet {
 			table.addObject(aCase);
 			table.setVertical(true);			
 
-			session.setAttribute("caseTable", table);			
+			session.setAttribute("caseTable", table);		
+			
+			
+			final BeanTableHelper<CaseNote> caseNotes = new BeanTableHelper<CaseNote>(
+					"cases" 		/* The table html id property */,
+					"casesTable" /* The table html class property */,
+					CaseNote.class 	/* The class of the objects (rows) that will be displayed */
+			);
+
+			caseNotes.addBeanColumn("User", "username");
+			caseNotes.addBeanColumn("Note", "note");
+
+			caseNotes.addObjects(aCase.getCaseNotes());
+			
+			session.setAttribute("caseTable", table);
+			session.setAttribute("caseNoteTable", caseNotes);
 			
 			this.getServletContext().getRequestDispatcher("/Case.jsp").forward(request, response);
 		} catch (final Exception ex) {
