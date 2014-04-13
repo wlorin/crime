@@ -226,7 +226,7 @@ public final class DatastoreInterface {
 		
 		ArrayList<String> placeholders = new ArrayList<>();
 		for (int i_data = 1; i_data < fields.length; i_data += 2) {
-			String data = (String) fields[i_data];			
+			Object data = fields[i_data];			
 			placeholders.add(data == null ? "NULL" : "?");
 		}
 		
