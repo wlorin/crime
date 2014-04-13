@@ -61,10 +61,9 @@ public class CaseForm extends Form<Case> {
 		String name = StringUtils.strip(values.get(this.name));
 		String location = StringUtils.strip(fieldLocation.parse(values));
 		String state = StringUtils.strip(values.get(this.status));
-		Date date = null; //StringUtils.strip(values.get(this.date));
-		Time time = null; //StringUtils.strip(values.get(this.time));
+		Date date = fieldDate.parse(values);
+		Time time = fieldTime.parse(values);
 		
-
 		return new DatastoreInterface().insertCase(name, state, location, date, time);
 	}
 
