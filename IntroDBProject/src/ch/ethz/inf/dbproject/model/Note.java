@@ -11,23 +11,23 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 public abstract class Note implements Entity {
 
 	private final String username;
-	private final String comment;
+	private final String note;
 	
 	public Note(final String username, final String comment) {
 		this.username = username;
-		this.comment = comment;
+		this.note = comment;
 	}
 	
 	public Note(ResultSet rs) throws SQLException {
 		username = new DatastoreInterface().getById(rs.getInt("UserId"), User.class).getName();
-		comment = rs.getString("Note");
+		note = rs.getString("Note");
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getNote() {
+		return note;
 	}
 }
