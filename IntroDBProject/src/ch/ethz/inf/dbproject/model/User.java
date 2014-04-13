@@ -19,7 +19,8 @@ public final class User implements Entity {
 	}
 	
 	public User(ResultSet rs) throws SQLException {
-		throw new UnsupportedOperationException("Constructor not yet implemented");
+		userid = rs.getInt("UserId");
+		name = rs.getString("Name");
 	}
 
 	public int getUserid() {
