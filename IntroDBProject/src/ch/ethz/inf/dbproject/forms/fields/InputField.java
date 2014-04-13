@@ -27,11 +27,11 @@ public abstract class InputField<T> extends Field {
 	}
 
 	@Override
-	public void validate(String string) {
+	public void validate(HashMap<String, String> values) {
 		 
 	}
 	
-	protected abstract T parse(HashMap<String, String> values);
+	public abstract T parse(HashMap<String, String> values);
 	
 	protected void validateNull(String value) {
 		if (!allowNull && isNull(value)) {
