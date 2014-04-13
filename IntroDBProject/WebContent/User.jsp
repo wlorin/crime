@@ -1,3 +1,4 @@
+<%@page import="ch.ethz.inf.dbproject.forms.CaseForm"%>
 <%@page import="ch.ethz.inf.dbproject.forms.UserForm"%>
 <%@page import="ch.ethz.inf.dbproject.UserServlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -14,10 +15,11 @@ if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
 	
 
 
+
+<%= new CaseForm().generateNewForm() %>
+
 <%
 //TODO: Display cases opened by the user
-
-//TODO: Add possibility to create new case (requires a form) 
 	
 } else {
 	// User not logged in. Display the login form.
