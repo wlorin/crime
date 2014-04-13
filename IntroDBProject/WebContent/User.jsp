@@ -1,3 +1,4 @@
+<%@page import="ch.ethz.inf.dbproject.forms.UserForm"%>
 <%@page import="ch.ethz.inf.dbproject.UserServlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="Header.jsp" %>
@@ -40,7 +41,7 @@ if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
 		</tr>
 	</table>
 	</form>
-
+<%= new UserForm().generateNewForm() %>
 <%
 }
 %>
