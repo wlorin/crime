@@ -215,8 +215,6 @@ public final class DatastoreInterface {
 		}
 		String tableName = getTableName(clazz);
 		
-		int columnCount = fields.length / 2;
-		
 		ArrayList<String> columnNames = new ArrayList<>();
 		for (int i_columnName = 0; i_columnName < fields.length; i_columnName += 2) {
 			String columnName = (String) fields[i_columnName];
