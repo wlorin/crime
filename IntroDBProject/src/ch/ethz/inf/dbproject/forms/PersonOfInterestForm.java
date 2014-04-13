@@ -24,7 +24,7 @@ import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.util.UserManagement;
 
 
-public class PersonOfInterestForm extends Form<PoI> {
+public class PersonOfInterestForm extends CreationForm<PoI> {
 
 	final String name = "Name";
 	final String date = "Birthdate";

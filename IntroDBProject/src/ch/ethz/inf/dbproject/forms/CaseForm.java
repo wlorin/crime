@@ -26,7 +26,7 @@ import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
-public class CaseForm extends Form<Case> {
+public class CaseForm extends CreationForm<Case> {
 
 	final String name = "Name";
 	final String location = "Location";

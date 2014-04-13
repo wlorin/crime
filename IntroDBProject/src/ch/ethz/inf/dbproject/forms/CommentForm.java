@@ -9,7 +9,7 @@ import ch.ethz.inf.dbproject.forms.fields.TextArea;
 import ch.ethz.inf.dbproject.model.Note;
 
 
-public abstract class CommentForm<T extends Note> extends Form<T> {
+public abstract class CommentForm<T extends Note> extends CreationForm<T> {
 
 	final String comment = "Comment";
 	public final static String REFERENCE_ID = "ReferenceId";

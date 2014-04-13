@@ -24,7 +24,7 @@ import ch.ethz.inf.dbproject.util.UserManagement;
 import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
-public class UserForm extends Form<User> {
+public class UserForm extends CreationForm<User> {
 
 	final String name = "Name";
 	final String password = "Password";
