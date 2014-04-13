@@ -25,7 +25,7 @@ public final class DatastoreInterface {
 		this.sqlConnection = MySQLConnection.getInstance().getConnection();
 	}
 	
-	public final <T extends Entity> T getById(final int id, Class<T> clazz) {
+	public final <T extends Entity> T getById(final long id, Class<T> clazz) {
 		String idColName = getIdColName(clazz);
 		String tableName = getTableName(clazz);
 		
@@ -33,7 +33,7 @@ public final class DatastoreInterface {
 		try (
 			PreparedStatement stmt = this.sqlConnection.prepareStatement(sql);
 		) {
-			stmt.setInt(1, id);
+			stmt.setLong(1, id);
 			List<T> all = all(stmt, clazz);
 			
 			if (all.size() == 1) {
