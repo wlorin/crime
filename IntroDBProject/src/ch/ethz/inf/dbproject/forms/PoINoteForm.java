@@ -3,7 +3,6 @@ package ch.ethz.inf.dbproject.forms;
 import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,9 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
-import ch.ethz.inf.dbproject.forms.fields.HiddenField;
-import ch.ethz.inf.dbproject.forms.fields.TextArea;
-import ch.ethz.inf.dbproject.model.CaseNote;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoINote;
 import ch.ethz.inf.dbproject.util.UserManagement;

@@ -21,7 +21,6 @@ import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
-import ch.ethz.inf.dbproject.util.UserManagement;
 
 
 public class PersonOfInterestForm extends CreationForm<PoI> {
