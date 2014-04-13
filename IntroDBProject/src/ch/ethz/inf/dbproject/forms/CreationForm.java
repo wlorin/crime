@@ -70,7 +70,7 @@ public abstract class CreationForm<NewResult> extends Form {
 	}
 	
 	public String generateNewForm(HashMap<String, String> values) {
-		return generateForm(getNewFormTitle(), newFormFields(), values);
+		return generateForm(getNewFormTitle(), newFormFields(), "new", values);
 	}
 }
 

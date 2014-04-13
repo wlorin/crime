@@ -18,20 +18,20 @@ import ch.ethz.inf.dbproject.forms.fields.Field;
 
 public abstract class Form {
 	public static String FIELD_TARGET_CLASS = "__targetClass";
-	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
+	public static String FIELD_ACTION = "__action";
 	
 	public static String SESSION_FORM_FAIL = "__onFormFailMsg";
 	public static String SESSION_FORM_FAIL_MSG = "__onFormFailHtml";
 	
 	protected abstract String getMethod();
 	
-	public String generateForm(String title, List<Field> fields, HashMap<String, String> values) {
+	public String generateForm(String title, List<Field> fields, String action, HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + title + "</h2>");
 		html.append("<form action='" + WEB_ROOT + "PostHandlerServlet' method='" + getMethod() + "'>");
 		html.append("<table>");
 		html.append(String.format("<input type=hidden name=" + FIELD_TARGET_CLASS + " value=%s />", this.getClass().getName()));
-		html.append("<input type=hidden name=" + FIELD_NEW_OR_EDIT + " value=new />");
+		html.append("<input type=hidden name=" + FIELD_ACTION + " value=" + action +" />");
 		for (Field field : fields) {
 			html.append(field.getHtmlCode(values.get(field.getDisplayName())));
 		}
