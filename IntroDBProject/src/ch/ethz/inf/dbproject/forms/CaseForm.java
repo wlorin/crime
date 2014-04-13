@@ -23,6 +23,7 @@ import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.forms.fields.TimeField;
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
 public class CaseForm extends Form<Case> {
@@ -92,7 +93,6 @@ public class CaseForm extends Form<Case> {
 	protected void onNewSuccess(Case result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+		response.sendRedirect(WEB_ROOT + "Case?id=" + result.getCaseId());
 	}
 }
