@@ -139,7 +139,7 @@ DELIMITER ;
 
 CREATE TABLE IF NOT EXISTS `Crime` (
   `CrimeId` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `Criem` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  `Crime` varchar(50) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`CrimeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
@@ -239,13 +239,6 @@ ALTER TABLE `PoINote`
 ALTER TABLE `Suspect`
   ADD CONSTRAINT `Suspect_ibfk_1` FOREIGN KEY (`CaseId`) REFERENCES `Case` (`CaseId`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `Suspect_ibfk_2` FOREIGN KEY (`PoIId`) REFERENCES `PoI` (`PoIId`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---  
--- Schreibfehler bei `Crime`
---
-ALTER TABLE `Crime`
-  ADD `Crime` varchar(50) COLLATE latin1_general_ci NOT NULL,
-  DROP COLUMN `Criem`;
   
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
