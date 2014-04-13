@@ -49,6 +49,10 @@ public abstract class Form {
 	protected void requireNotEmpty(String fieldName, HashMap<String, String> values) {
 		require(fieldName + " cannot be empty", StringUtils.isNotBlank(values.get(fieldName)));
 	}
+
+	public abstract void dispatch(String action, ServletContext servletContext,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws ServletException, IOException;
 }
 
 

@@ -72,6 +72,22 @@ public abstract class CreationForm<NewResult> extends Form {
 	public String generateNewForm(HashMap<String, String> values) {
 		return generateForm(getNewFormTitle(), newFormFields(), "new", values);
 	}
+	
+	@Override
+	public void dispatch(String action, ServletContext servletContext,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		if ("new".equals(action)) {
+			processNewForm(servletContext, request, response, request.getSession());
+		}
+		else if ("edit".equals(action)) {
+			
+		}
+		else {
+			
+		}
+	}
 }
 
 
