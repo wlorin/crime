@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject;
 
+import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -12,9 +14,6 @@ import javax.servlet.http.HttpSession;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.UserManagement;
-import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
-
-import static ch.ethz.inf.dbproject.util.Constant.*;
 
 @WebServlet(description = "Page that processes the logout", urlPatterns = { "/Logout" })
 public final class LogoutServlet extends HttpServlet {

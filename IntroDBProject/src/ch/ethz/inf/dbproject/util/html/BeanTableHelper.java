@@ -7,9 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import com.mysql.jdbc.EscapeTokenizer;
 
 public final class BeanTableHelper<T> extends HtmlHelperIface {
 
