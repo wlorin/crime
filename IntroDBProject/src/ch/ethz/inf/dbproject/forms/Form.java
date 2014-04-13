@@ -31,17 +31,29 @@ public abstract class Form {
 	public String generateForm(String title, String buttonCaption, List<Field> fields, String action, HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + title + "</h2>");
-		html.append("<form action='" + WEB_ROOT + "PostHandlerServlet' method='" + getMethod() + "'>");
+		appendFormHeader(action, html);
 		html.append("<table>");
-		html.append(String.format("<input type=hidden name=" + FIELD_TARGET_CLASS + " value=%s />", this.getClass().getName()));
-		html.append("<input type=hidden name=" + FIELD_ACTION + " value=" + action +" />");
 		for (Field field : fields) {
 			html.append(field.getHtmlCode(values.get(field.getDisplayName())));
 		}
-		html.append("<tr><th colspan=2><input type=submit value=" + StringEscapeUtils.escapeHtml4(buttonCaption) +"></th></tr>");
+		html.append("<tr><th colspan=2>" + submitButton(buttonCaption) + "</th></tr>");
 		html.append("</table>");
-		html.append("</form>");
+		appendFormFooter(html);
 		return html.toString();
+	}
+
+	protected String submitButton(String buttonCaption) {
+		return "<input type=submit value=\"" + StringEscapeUtils.escapeHtml4(buttonCaption) +"\">";
+	}
+
+	protected void appendFormFooter(StringBuilder html) {
+		html.append("</form>");
+	}
+
+	protected void appendFormHeader(String action, StringBuilder html) {
+		html.append("<form action='" + WEB_ROOT + "PostHandlerServlet' method='" + getMethod() + "'>");
+		html.append(String.format("<input type=hidden name=" + FIELD_TARGET_CLASS + " value=%s />", this.getClass().getName()));
+		html.append("<input type=hidden name=" + FIELD_ACTION + " value=" + action +" />");
 	}
 	
 	protected void require(String string, boolean conditionSatisfied) {
