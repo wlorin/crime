@@ -40,7 +40,7 @@ public class PostHandlerServlet extends HttpServlet {
 		try {
 			@SuppressWarnings("unchecked")
 			Class<? extends Form> formHandlerClass = (Class<? extends Form>) Class.forName(request.getParameter(CreationForm.FIELD_TARGET_CLASS));
-			String action = request.getParameter(CreationForm.FIELD_NEW_OR_EDIT);
+			String action = request.getParameter(Form.FIELD_ACTION);
 			Form formHandler = formHandlerClass.newInstance();
 			formHandler.dispatch(action, this.getServletContext(), request, response, request.getSession());
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
