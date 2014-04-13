@@ -1,3 +1,6 @@
+<%@page import="java.lang.*"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="ch.ethz.inf.dbproject.forms.CommentForm"%>
 <%@page import="ch.ethz.inf.dbproject.model.User"%>
 <%@page import="ch.ethz.inf.dbproject.util.UserManagement"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -15,17 +18,10 @@
 
 <%
 if (user != null) {
-	// User is logged in. He can add a comment
+	HashMap<String, String> initialValues = new HashMap<String, String>();
+	initialValues.put("Case", "" + request.getParameter("id"));
 %>
-	<form action="Case" method="get">
-		<input type="hidden" name="action" value="add_comment" />
-		<input type="hidden" name="user_id" value="<%= user.getUserid() %>" />
-		Add Comment
-		<br />
-		<textarea rows="4" cols="50" name="comment"></textarea>
-		<br />
-		<input type="submit" value="Submit" />
-	</form>
+	<%= new CommentForm().generateNewForm(initialValues) %>
 <%
 }
 %>
