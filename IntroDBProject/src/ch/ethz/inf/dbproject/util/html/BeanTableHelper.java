@@ -52,10 +52,10 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 		@Override
 		public String getString(final T t) {
 
-			String value = null;
+			Object value = null;
 
 			try {
-				value = (String) this.getMethod.invoke(t);
+				value = this.getMethod.invoke(t);
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -64,7 +64,7 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 				e.printStackTrace();
 			}
 
-			return (value == null) ? "<i>" + textOnNull + "</i>" : value;
+			return (value == null) ? "<i>" + textOnNull + "</i>" : "" + value;
 
 		}
 
