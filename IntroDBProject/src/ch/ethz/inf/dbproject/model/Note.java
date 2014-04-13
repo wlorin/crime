@@ -8,17 +8,17 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 /**
  * Object that represents a user comment.
  */
-public class Comment implements Entity {
+public class Note implements Entity {
 
 	private final String username;
 	private final String comment;
 	
-	public Comment(final String username, final String comment) {
+	public Note(final String username, final String comment) {
 		this.username = username;
 		this.comment = comment;
 	}
 	
-	public Comment(ResultSet rs) throws SQLException {
+	public Note(ResultSet rs) throws SQLException {
 		throw new UnsupportedOperationException("Constructor not yet implemented");
 	}
 
