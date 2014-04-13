@@ -45,7 +45,7 @@ public abstract class Form<NewResult> {
 		catch(UserInputException e) {
 			session.setAttribute(SESSION_FORM_FAIL_MSG, e.getMessage());
 			session.setAttribute(SESSION_FORM_FAIL, generateNewForm(values));
-			servletContext.getRequestDispatcher("/Form.jsp").forward(request, response);
+			servletContext.getRequestDispatcher("/FormError.jsp").forward(request, response);
 		}
 	}
 	
