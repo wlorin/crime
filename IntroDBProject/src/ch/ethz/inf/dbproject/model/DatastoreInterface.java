@@ -285,7 +285,7 @@ public final class DatastoreInterface {
 		String tableName = getTableName(Case.class);
 		try (
 			PreparedStatement stmt = 
-			this.sqlConnection.prepareStatement("SELECT Case.CaseId, Case.CrimeId, Case.Location, Case.Date, Case.Time, Case.Status FROM" + 
+			this.sqlConnection.prepareStatement("SELECT Case.CaseId, Case.CrimeId, Case.Location, Case.Date, Case.Time, Case.Status, Case.Name FROM" + 
 			tableName + ", `Crime` WHERE Case.CrimeId = Crime.CrimeId and Crime.Crime = '" + category + "';");
 		) {
 			return all(stmt, Case.class);
