@@ -1,11 +1,14 @@
 package ch.ethz.inf.dbproject.forms;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +20,7 @@ import ch.ethz.inf.dbproject.forms.fields.PasswordField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
+import ch.ethz.inf.dbproject.util.UserManagement;
 
 public class UserForm extends Form<User> {
 
@@ -68,8 +72,8 @@ public class UserForm extends Form<User> {
 
 	@Override
 	protected void onNewSuccess(User result, ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, HttpSession session) {
-		
-		
+			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+		session.setAttribute(UserManagement.SESSION_USER, result);
+		response.sendRedirect("/IntroDBProject/User");
 	}
 }

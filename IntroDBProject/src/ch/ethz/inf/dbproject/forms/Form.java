@@ -50,7 +50,7 @@ public abstract class Form<NewResult> {
 	}
 	
 	protected abstract void onNewSuccess(NewResult result, ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response, HttpSession session);
+			HttpServletResponse response, HttpSession session) throws ServletException, IOException;
 
 	protected abstract NewResult processNewForm(List<Field> fields, HashMap<String, String> values);
 	
