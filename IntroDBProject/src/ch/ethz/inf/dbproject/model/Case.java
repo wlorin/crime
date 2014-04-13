@@ -90,4 +90,8 @@ public final class Case implements Entity {
 	public List<CaseNote> getCaseNotes() {
 		return new DatastoreInterface().getCaseNotesFrom(this.getCaseId());
 	}
+
+	public boolean isOpen() {
+		return "open".equals(getStatus());
+	}
 }
