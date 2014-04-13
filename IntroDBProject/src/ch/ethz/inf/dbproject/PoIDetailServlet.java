@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ch.ethz.inf.dbproject.model.Case;
-import ch.ethz.inf.dbproject.model.CaseNote;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
