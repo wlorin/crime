@@ -42,7 +42,7 @@ public abstract class Form<NewResult> {
 		
 		try {
 			validateFields(newFormFields, values);
-			NewResult result = processNewForm(newFormFields, values);
+			NewResult result = processNewForm(newFormFields, values, session);
 			onNewSuccess(result, servletContext, request, response, session);
 		}
 		catch(UserInputException e) {
@@ -55,7 +55,7 @@ public abstract class Form<NewResult> {
 	protected abstract void onNewSuccess(NewResult result, ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException;
 
-	protected abstract NewResult processNewForm(List<Field> fields, HashMap<String, String> values);
+	protected abstract NewResult processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession session);
 	
 	public String generateNewForm() {
 		return generateNewForm(new HashMap<String, String>());
