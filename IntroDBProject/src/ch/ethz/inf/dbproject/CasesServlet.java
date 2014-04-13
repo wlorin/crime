@@ -83,7 +83,36 @@ public final class CasesServlet extends HttpServlet {
 			table.addObjects(this.dbInterface.getAll(Case.class));
 
 		} else if (category != null) {
+			if(category.equals("personal")) {
 
+				table.addObjects(this.dbInterface.getProjectsByCategory("Koerperverletzung"));
+				table.addObjects(this.dbInterface.getProjectsByCategory("Mord"));
+			
+			} else if (category.equals("property")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Bankraub"));
+				table.addObjects(this.dbInterface.getProjectsByCategory("Diebstahl"));
+				table.addObjects(this.dbInterface.getProjectsByCategory("Einbruch"));
+
+			} 
+			else if (category.equals("assault")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Koerperverletzung"));
+
+			}			
+			else if (category.equals("murder")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Mord"));
+			}
+			else if (category.equals("theft")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Diebstahl"));
+			}
+			else if (category.equals("burglary")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Einbruch"));
+			}
+			else if (category.equals("robbery")) {
+				table.addObjects(this.dbInterface.getProjectsByCategory("Bankraub"));
+			}
+			else {
+				
+			}
 			// TODO implement this!
 			//table.addObjects(this.dbInterface.getProjectsByCategory(category));
 			
