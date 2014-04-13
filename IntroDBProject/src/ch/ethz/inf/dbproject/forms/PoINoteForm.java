@@ -27,7 +27,7 @@ import ch.ethz.inf.dbproject.util.UserManagement;
 public class PoINoteForm extends CommentForm<PoINote> {
 
 	final String comment = "Comment";
-	final String caseId = "Case";
+	final String caseId = CommentForm.REFERENCE_ID;
 
 	@Override
 	protected PoINote processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession session) {

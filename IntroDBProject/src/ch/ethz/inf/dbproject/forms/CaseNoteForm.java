@@ -26,7 +26,7 @@ import ch.ethz.inf.dbproject.util.UserManagement;
 public class CaseNoteForm extends CommentForm<CaseNote> {
 
 	final String comment = "Comment";
-	final String caseId = "Case";
+	final String caseId = CommentForm.REFERENCE_ID;
 
 	
 	TextArea fieldComment = new TextArea(comment);
