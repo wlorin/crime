@@ -209,6 +209,14 @@ public final class DatastoreInterface {
 		);
 	}
 	
+	public CaseNote insertComment(String comment, int caseId, int userid) {
+		return insert(CaseNote.class, 
+				"CaseId", caseId, 
+				"Note", comment,
+				"UserId", userid
+		);
+	}
+
 	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
 		if (fields.length % 2 != 0) {
 			throw new IllegalArgumentException("Pair fieldnames and field values");
