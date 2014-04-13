@@ -19,7 +19,8 @@ public abstract class Note implements Entity {
 	}
 	
 	public Note(ResultSet rs) throws SQLException {
-		throw new UnsupportedOperationException("Constructor not yet implemented");
+		username = new DatastoreInterface().getById(rs.getInt("UserId"), User.class).getName();
+		comment = rs.getString("Note");
 	}
 
 	public String getUsername() {
