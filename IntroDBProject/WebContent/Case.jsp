@@ -18,19 +18,8 @@ ${openCloseButton}
 
 <h2>Notes</h2>
 <%=session.getAttribute("caseNoteTable")%>
-<%
-	//TODO close or reopen the case
-%>
 
+${newCaseNote}
 
-<%
-	if (user != null) {
-	HashMap<String, String> initialValues = new HashMap<String, String>();
-	initialValues.put(CommentForm.REFERENCE_ID, "" + request.getParameter("id"));
-%>
-	<%=new CaseNoteForm().generateNewForm(initialValues)%>
-<%
-}
-%>
 
 <%@ include file="Footer.jsp"%>
