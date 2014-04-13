@@ -13,11 +13,6 @@ import javax.servlet.http.HttpSession;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
 public abstract class CreationForm<NewResult> extends Form {
-	public static String FIELD_TARGET_CLASS = "__targetClass";
-	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
-	
-	public static String SESSION_FORM_FAIL = "__onFormFailMsg";
-	public static String SESSION_FORM_FAIL_MSG = "__onFormFailHtml";
 	protected abstract List<Field> newFormFields();
 	
 	protected List<Field> editFormFields() {
