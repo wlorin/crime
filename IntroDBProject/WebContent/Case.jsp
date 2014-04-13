@@ -1,3 +1,4 @@
+<%@page import="ch.ethz.inf.dbproject.forms.CommentForm"%>
 <%@page import="java.lang.*"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="ch.ethz.inf.dbproject.forms.CaseNoteForm"%>
@@ -23,7 +24,7 @@
 <%
 	if (user != null) {
 	HashMap<String, String> initialValues = new HashMap<String, String>();
-	initialValues.put("Case", "" + request.getParameter("id"));
+	initialValues.put(CommentForm.REFERENCE_ID, "" + request.getParameter("id"));
 %>
 	<%=new CaseNoteForm().generateNewForm(initialValues)%>
 <%
