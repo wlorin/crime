@@ -48,9 +48,7 @@ public final class CasesServlet extends HttpServlet {
 
 		// Add columns to the new table
 
-		/*
-		 * Column 1: The name of the item (This will probably have to be changed)
-		 */
+		table.addBeanColumn("Name", "name");
 		table.addBeanColumn("Case Description", "crime");
 
 		/*
