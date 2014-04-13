@@ -146,6 +146,31 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+	
+	/**
+	 * Will return null if users with given credentials does not exist.
+	 * @param number
+	 * @return
+	 */
+	public final User tryGetUserFromCredentials(String name, String password) {
+		Class<User> userClass = User.class;
+		String tableName = getTableName(userClass);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT * FROM" + tableName + "WHERE Name=? AND Password=MD5(?)");
+		) {
+			stmt.setString(1, name);
+			stmt.setString(2, password);
+			List<User> users = all(stmt, userClass);
+			if (users.size() == 1) {
+				return users.get(0);
+			}
+			return null;
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public long insert(PreparedStatement statement) throws SQLException {
 		statement.executeUpdate();
