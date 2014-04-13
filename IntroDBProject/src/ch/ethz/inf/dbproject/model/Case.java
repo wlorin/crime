@@ -1,8 +1,8 @@
 package ch.ethz.inf.dbproject.model;
 
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
+import java.sql.Time;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
@@ -18,14 +18,14 @@ public final class Case implements Entity {
 	private final String status;
 	private final String location;
 	private final Date date;
-	private final Date time;
+	private final Time time;
 	
 	/**
 	 * Construct a new case.
 	 * 
 	 * @param description		The name of the case
 	 */
-	public Case(	final int id, final int crimeId, final String status, final String location, final Date date, final Date time) {
+	public Case(	final int id, final int crimeId, final String status, final String location, final Date date, final Time time) {
 		this.caseId = id;
 		this.crimeId = crimeId;
 		this.status = status;
