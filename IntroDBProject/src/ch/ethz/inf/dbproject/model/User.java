@@ -29,5 +29,10 @@ public final class User implements Entity {
 	
 	public String getName() {
 		return name;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("<User: userid=%d, name='%s'>", getUserid(), getName());
+	}
 }
