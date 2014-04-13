@@ -73,7 +73,6 @@ public class PersonOfInterestForm extends Form<PoI> {
 	@Override
 	protected void onNewSuccess(PoI result, ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
-		session.setAttribute(UserManagement.SESSION_USER, result);
 		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getId());
 	}
 }
