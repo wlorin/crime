@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS `CaseNote` (
 CREATE TABLE IF NOT EXISTS `Case` (
   `CaseId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
-  `CrimeId` int(10) unsigned NOT NULL,
+  `CrimeId` int(10) unsigned NULL,
   `Status` enum('open','closed') COLLATE latin1_general_ci NOT NULL,
-  `Date` date NOT NULL,
-  `Time` time NOT NULL,
-  `Location` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  `Date` date NULL,
+  `Time` time NULL,
+  `Location` varchar(50) COLLATE latin1_general_ci NULL,
   PRIMARY KEY (`CaseId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
 
@@ -212,6 +212,9 @@ CREATE TABLE IF NOT EXISTS `User` (
 ALTER TABLE `CaseNote`
   ADD CONSTRAINT `CaseNote_ibfk_1` FOREIGN KEY (`UserId`) REFERENCES `User` (`UserId`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `CaseNote_ibfk_2` FOREIGN KEY (`CaseId`) REFERENCES `Case` (`CaseId`) ON DELETE CASCADE ON UPDATE CASCADE;
+  
+ALTER TABLE `Case`
+  ADD CONSTRAINT `Case_ibfk_1` FOREIGN KEY (`CrimeId`) REFERENCES `Crime` (`CrimeId`) ON DELETE SET NULL;
 
 --
 -- Constraints der Tabelle `Convicted`
