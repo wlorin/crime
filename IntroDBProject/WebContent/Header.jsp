@@ -1,3 +1,4 @@
+<%@page import="ch.ethz.inf.dbproject.UserServlet"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -12,6 +13,12 @@
 	<body>
 
 		<!-- Header -->
+		<% 
+		if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
+			// User is logged in. Display logout:
+		%>
+			<div id="logout"><a href="Logout" >Logout</a></div>
+		<% } %>			
 		
 		<table id="masterTable" cellpadding="0" cellspacing="0">
 			<tr>
