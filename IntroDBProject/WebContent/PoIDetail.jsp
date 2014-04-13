@@ -1,21 +1,29 @@
+<%@page import="ch.ethz.inf.dbproject.forms.CommentForm"%>
+<%@page import="ch.ethz.inf.dbproject.util.UserManagement"%>
+<%@page import="ch.ethz.inf.dbproject.model.User"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="ch.ethz.inf.dbproject.forms.PoINoteForm"%>
 <%@page import="ch.ethz.inf.dbproject.forms.PersonOfInterestForm"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="Header.jsp" %>
-
+<%
+	final User user = (User) session.getAttribute(UserManagement.SESSION_USER);
+%>
 <h1>Persons of Interest</h1>
 
 <hr/>
 
-<%= session.getAttribute("poI") %>
+<%= session.getAttribute("poi") %>
 
 <hr/>
 
-<% 
-if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
-	// User is logged in. Display the details:
+<%
+if (user != null) {
+	HashMap<String, String> initialValues = new HashMap<String, String>();
+	initialValues.put(CommentForm.REFERENCE_ID, "" + request.getParameter("id"));
 %>
 
-	<%= new PersonOfInterestForm().generateNewForm() %>
+	<%= new PoINoteForm().generateNewForm(initialValues) %>
 
 <% } %>
 <%@ include file="Footer.jsp" %>

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.model.Case;
+import ch.ethz.inf.dbproject.model.CaseNote;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
@@ -37,35 +39,43 @@ public final class PoIDetailServlet extends HttpServlet {
 
 		final HttpSession session = request.getSession(true);
 
-		/*******************************************************
-		 * Construct a table to present all our results
-		 *******************************************************/
-		final BeanTableHelper<PoI> table = new BeanTableHelper<PoI>(
-				"poI" 		/* The table html id property */,
-				"casesTable" /* The table html class property */,
-				PoI.class 	/* The class of the objects (rows) that will be displayed */
-		);
+		final String idString = request.getParameter("id");
+		if (idString == null) {
+			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
+			return;
+		}
 
-		// Add columns to the new table
+		try {
 
-		table.addBeanColumn("Name", "name");
-		table.addBeanColumn("Birthdate", "birthdate");
+			final Integer id = Integer.parseInt(idString);
+			final PoI poi = this.dbInterface.getById(id, PoI.class);
 
-//		/*
-//		 * Column 4: This is a special column. It adds a link to view the
-//		 * Project. We need to pass the case identifier to the url.
-//		 */
-//		table.addLinkColumn(""	/* The header. We will leave it empty */,
-//				"View Case" 	/* What should be displayed in every row */,
-//				"Case?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-//				"caseId" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
-//        
-		// Pass the table to the session. This will allow the respective jsp page to display the table.
-		session.setAttribute("poI", table);
+			
+			/*******************************************************
+			 * Construct a table to present all properties of a case
+			 *******************************************************/
+			final BeanTableHelper<PoI> table = new BeanTableHelper<PoI>(
+					"cases" 		/* The table html id property */,
+					"casesTable" /* The table html class property */,
+					PoI.class 	/* The class of the objects (rows) that will be displayed */
+			);
 
-		table.addObjects(this.dbInterface.getAll(PoI.class));
+			// Add columns to the new table
 
-		// Finally, proceed to the Projects.jsp page which will render the Projects
-		this.getServletContext().getRequestDispatcher("/PoI.jsp").forward(request, response);
+			/*
+			 * Column 1: The name of the item (This will probably have to be changed)
+			 */
+			table.addBeanColumn("Name", "name");
+			table.addBeanColumn("Birthdate", "birthdate");
+			
+			table.addObject(poi);
+			table.setVertical(true);			
+
+			session.setAttribute("poi", table);	
+			this.getServletContext().getRequestDispatcher("/PoIDetail.jsp").forward(request, response);
+		} catch (final Exception ex) {
+			ex.printStackTrace();
+			this.getServletContext().getRequestDispatcher("/PoI.jsp").forward(request, response);
+		}
 	}
 }
