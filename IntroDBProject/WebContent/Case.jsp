@@ -11,6 +11,8 @@
 
 <%=session.getAttribute("caseTable")%>
 
+<h2>Notes</h2>
+<%=session.getAttribute("caseNoteTable")%>
 <%
 	//TODO close or reopen the case
 %>
