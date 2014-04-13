@@ -11,12 +11,10 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 public final class User implements Entity {
 
 	private final int userid;
-	private final String password;
 	private final String name;
 	
-	public User(final int userid, final String password, final String name) {
+	public User(final int userid, final String username, final String name) {
 		this.userid = userid;
-		this.password = password;
 		this.name = name;
 	}
 	
@@ -28,10 +26,6 @@ public final class User implements Entity {
 		return userid;
 	}
 	
-	public String getPassword() {
-		return password;
-	}
-
 	public String getName() {
 		return name;
 	}	
