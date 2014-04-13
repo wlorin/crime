@@ -25,11 +25,13 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 		private final String field;
 		private final Method getMethod;
 		private final Class<T> clazz;
+		private String textOnNull;
 
-		private BeanColumn(final String header, final String field,
+		private BeanColumn(final String header, final String field, final String textOnNull,
 				final Class<T> clazz) {
 			super(header);
 			this.field = field;
+			this.textOnNull = textOnNull;
 			this.clazz = clazz;
 			final String methodName = "get"
 					+ this.field.substring(0, 1).toUpperCase()
@@ -50,10 +52,10 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 		@Override
 		public String getString(final T t) {
 
-			String value = "";
+			String value = null;
 
 			try {
-				value = "" + this.getMethod.invoke(t);
+				value = (String) this.getMethod.invoke(t);
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -62,7 +64,7 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 				e.printStackTrace();
 			}
 
-			return value;
+			return (value == null) ? "<i>" + textOnNull + "</i>" : value;
 
 		}
 
@@ -74,9 +76,9 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 		private final String urlBase;
 
 		public LinkColumn(final String header, final String text,
-				final String urlBase, final String urlExtraParamBean,
+				final String urlBase, final String urlExtraParamBean, final String textOnNull,
 				final Class<T> clazz) {
-			super(header, urlExtraParamBean, clazz);
+			super(header, urlExtraParamBean, textOnNull, clazz);
 			this.text = text;
 			this.urlBase = urlBase;
 		}
@@ -119,13 +121,13 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 	}
 
 	public final void addBeanColumn(final String header, final String fieldName) {
-		this.columns.add(new BeanColumn(header, fieldName, this.clazz));
+		this.columns.add(new BeanColumn(header, fieldName, "unknown", this.clazz));
 	}
 
 	public final void addLinkColumn(final String header, final String text,
 			final String urlBase, final String urlExtraParamBean) {
 		this.columns.add(new LinkColumn(header, text, urlBase,
-				urlExtraParamBean, this.clazz));
+				urlExtraParamBean, "unknown", this.clazz));
 	}
 
 	public final void addObjects(final List<T> contentBeans) {
