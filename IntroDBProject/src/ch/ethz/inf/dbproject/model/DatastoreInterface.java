@@ -145,4 +145,14 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public long insert(PreparedStatement statement) throws SQLException {
+		statement.executeUpdate();
+		try (
+			ResultSet generatedKeys = statement.getGeneratedKeys()
+		) {
+			generatedKeys.next();
+			return generatedKeys.getLong(1);
+		}
+	}
 }
