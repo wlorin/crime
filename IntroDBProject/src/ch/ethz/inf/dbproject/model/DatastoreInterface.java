@@ -326,4 +326,17 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public List<CaseNote> getCaseNotesFrom(int caseId) {
+		String tableName = getTableName(CaseNote.class);
+		try (
+			PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT * FROM" + tableName +  " WHERE caseId=? ORDER BY CaseNoteId DESC");
+		) {
+			stmt.setInt(1, caseId);
+			return all(stmt, CaseNote.class);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
