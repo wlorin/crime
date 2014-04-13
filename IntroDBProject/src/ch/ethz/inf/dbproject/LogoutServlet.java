@@ -1,0 +1,59 @@
+package ch.ethz.inf.dbproject;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import ch.ethz.inf.dbproject.model.User;
+import ch.ethz.inf.dbproject.util.UserManagement;
+import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
+
+import static ch.ethz.inf.dbproject.util.Constant.*;
+
+@WebServlet(description = "Page that processes the logout", urlPatterns = { "/Logout" })
+public final class LogoutServlet extends HttpServlet {
+
+	private static final long serialVersionUID = 1L;
+	private final DatastoreInterface dbInterface = new DatastoreInterface();
+
+	public final static String SESSION_USER_LOGGED_IN = "userLoggedIn";
+	public final static String SESSION_USER_DETAILS = "userDetails";
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public LogoutServlet() {
+		super();
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected final void doGet(final HttpServletRequest request,
+			final HttpServletResponse response) throws ServletException,
+			IOException {
+
+		final HttpSession session = request.getSession(true);
+		final User loggedUser = UserManagement.getCurrentlyLoggedInUser(session);
+
+		if (loggedUser == null) {
+			// Not logged in!
+
+		} else {
+			// Logged in
+			session.removeAttribute(UserManagement.SESSION_USER);
+		}
+
+		
+		// Finally, proceed to the User.jsp page which will renden the profile
+		response.sendRedirect(WEB_ROOT);
+
+	}
+
+}
