@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.Case;
+import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -19,6 +20,7 @@ import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 public final class SearchServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	private final DatastoreInterface dbInterface = new DatastoreInterface();
 		
     /**
      * @see HttpServlet#HttpServlet()
@@ -53,8 +55,10 @@ public final class SearchServlet extends HttpServlet {
 		/*
 		 * Columns 2 & 3: Some random fields. These should be replaced by i.e. funding progress, or time remaining
 		 */
-		table.addBeanColumn("Test Field2", "field2");
-		table.addBeanColumn("Test Integer Field 3", "field3");
+		table.addBeanColumn("Location", "location");
+		table.addBeanColumn("Status", "status");
+		table.addBeanColumn("Date", "date");
+		table.addBeanColumn("Time", "time");
 
 		/*
 		 * Column 4: This is a special column. It adds a link to view the
@@ -92,7 +96,7 @@ public final class SearchServlet extends HttpServlet {
 			}			
 		}
 
-		// Finally, proceed to the Seaech.jsp page which will render the search results
+		// Finally, proceed to the Search.jsp page which will render the search results
         this.getServletContext().getRequestDispatcher("/Search.jsp").forward(request, response);	        
 	}
 }

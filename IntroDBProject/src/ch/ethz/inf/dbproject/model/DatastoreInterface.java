@@ -182,4 +182,18 @@ public final class DatastoreInterface {
 				return null;
 			}
 		}
+
+	public List<Case> getProjectsByCategory(String category) {
+		String tableName = getTableName(Case.class);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT Case.CaseId, Case.CrimeId, Case.Location, Case.Date, Case.Time, Case.Status FROM" + 
+			tableName + ", `Crime` WHERE Case.CrimeId = Crime.CrimeId and Crime.Crime = '" + category + "';");
+		) {
+			return all(stmt, Case.class);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
