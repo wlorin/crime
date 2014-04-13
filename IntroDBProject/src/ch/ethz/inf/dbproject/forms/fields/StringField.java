@@ -1,19 +1,21 @@
 package ch.ethz.inf.dbproject.forms.fields;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import java.util.HashMap;
 
-public class StringField extends Field {
 
-	public StringField(String displayName) {
-		super(displayName);
+public class StringField extends InputField<String> {
+
+	public StringField(String displayName, boolean allowNull) {
+		super(displayName, "text", allowNull);
 	}
-	
+
 	@Override
-	public String getHtmlCode(String value) {
-		if (value == null) {
-			value = "";
+	public String parse(HashMap<String, String> values) {
+		String value = getValue(values);
+		if (isNull(value)) {
+			return null;
 		}
-		return String.format("<tr><th>%s</th><td><input type=text name=%s value=\"%s\" /></td></tr>", displayName, displayName, StringEscapeUtils.escapeHtml4(value));
+		
+		return value;
 	}
-
 }
