@@ -12,11 +12,11 @@ import ch.ethz.inf.dbproject.model.Note;
 public abstract class CommentForm<T extends Note> extends Form<T> {
 
 	final String comment = "Comment";
-	final String refId = "ReferenceId";
+	public final static String REFERENCE_ID = "ReferenceId";
 
 	
 	TextArea fieldComment = new TextArea(comment);
-	HiddenField fieldReference = new HiddenField(refId, false);
+	HiddenField fieldReference = new HiddenField(REFERENCE_ID, false);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
