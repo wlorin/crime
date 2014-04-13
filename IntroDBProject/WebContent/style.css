@@ -37,6 +37,11 @@ td#masterContentMenu {
 	padding: 10px;
 }
 
+#logout {
+	position: absolute;
+	right: 0px;
+}
+
 div.menuDiv2 {
 	padding-left: 25px;
 }
