@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
-public abstract class CreationForm<NewResult> extends Form<NewResult> {
+public abstract class CreationForm<NewResult> extends Form {
 	public static String FIELD_TARGET_CLASS = "__targetClass";
 	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
 	

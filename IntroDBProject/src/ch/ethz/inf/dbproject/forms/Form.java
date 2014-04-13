@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
-public abstract class Form<NewResult> {
+public abstract class Form {
 	public static String FIELD_TARGET_CLASS = "__targetClass";
 	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
 	
