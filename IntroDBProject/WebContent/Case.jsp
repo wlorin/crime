@@ -14,6 +14,8 @@
 
 <%=session.getAttribute("caseTable")%>
 
+${openCloseButton}
+
 <h2>Notes</h2>
 <%=session.getAttribute("caseNoteTable")%>
 <%
@@ -29,11 +31,6 @@
 	<%=new CaseNoteForm().generateNewForm(initialValues)%>
 <%
 }
-%>
-
-<%
-	//TODO Display existing comments
-	//session.getAttribute("commentTable")
 %>
 
 <%@ include file="Footer.jsp"%>
