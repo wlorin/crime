@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `CaseNote` (
 
 CREATE TABLE IF NOT EXISTS `Case` (
   `CaseId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(100) NOT NULL,
   `CrimeId` int(10) unsigned NOT NULL,
   `Status` enum('open','closed') COLLATE latin1_general_ci NOT NULL,
   `Date` date NOT NULL,
