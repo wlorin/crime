@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `Crime` (
 CREATE TABLE IF NOT EXISTS `PoI` (
   `PoIId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) COLLATE latin1_general_ci NOT NULL,
-  `Birthdate` date NOT NULL,
+  `Birthdate` date NULL,
   `UserId` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`PoIId`),
   UNIQUE KEY `Name` (`Name`,`Birthdate`),
