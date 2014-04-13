@@ -7,6 +7,7 @@ import java.sql.Time;
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
 import java.util.Date;
+import java.util.List;
 
 public final class Case implements Entity {
 	
@@ -84,5 +85,9 @@ public final class Case implements Entity {
 	
 	public Date getTime() {
 		return time;
+	}
+
+	public List<CaseNote> getCaseNotes() {
+		return new DatastoreInterface().getCaseNotesFrom(this.getCaseId());
 	}
 }
