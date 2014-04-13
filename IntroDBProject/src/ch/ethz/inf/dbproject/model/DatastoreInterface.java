@@ -200,6 +200,16 @@ public final class DatastoreInterface {
 		}
 	}
 	
+	public Case insertCase(String name, String state, String location, Date date, Time time) {
+		return insert(Case.class, 
+				"Name", name, 
+				"Status", state,
+				"Location", location,
+				"Date", date,
+				"time", time
+		);
+	}
+	
 	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
 		if (fields.length % 2 != 0) {
 			throw new IllegalArgumentException("Pair fieldnames and field values");
