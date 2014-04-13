@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.mysql.jdbc.EscapeTokenizer;
+
 public final class BeanTableHelper<T> extends HtmlHelperIface {
 
 	private abstract class Column {
@@ -64,7 +69,7 @@ public final class BeanTableHelper<T> extends HtmlHelperIface {
 				e.printStackTrace();
 			}
 
-			return (value == null) ? "<i>" + textOnNull + "</i>" : "" + value;
+			return (value == null) ? "<i>" + textOnNull + "</i>" : StringEscapeUtils.escapeHtml4("" + value);
 
 		}
 
