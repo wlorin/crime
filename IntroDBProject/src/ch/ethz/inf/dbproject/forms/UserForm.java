@@ -35,7 +35,7 @@ public class UserForm extends Form<User> {
 	public List<Field> newFormFields() {
 		return (List<Field>) (List) Arrays.asList(
 				new Field[]{
-				new StringField(name),
+				new StringField(name, false),
 				new PasswordField(password),
 				new PasswordField(confirmation)}
 		);
