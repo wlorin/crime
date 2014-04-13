@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.mysql.jdbc.EscapeTokenizer;
 
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
@@ -25,7 +28,7 @@ public abstract class Form {
 	
 	protected abstract String getMethod();
 	
-	public String generateForm(String title, List<Field> fields, String action, HashMap<String, String> values) {
+	public String generateForm(String title, String buttonCaption, List<Field> fields, String action, HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + title + "</h2>");
 		html.append("<form action='" + WEB_ROOT + "PostHandlerServlet' method='" + getMethod() + "'>");
@@ -35,7 +38,7 @@ public abstract class Form {
 		for (Field field : fields) {
 			html.append(field.getHtmlCode(values.get(field.getDisplayName())));
 		}
-		html.append("<tr><th colspan=2><input type=submit value=Create></th></tr>");
+		html.append("<tr><th colspan=2><input type=submit value=" + StringEscapeUtils.escapeHtml4(buttonCaption) +"></th></tr>");
 		html.append("</table>");
 		html.append("</form>");
 		return html.toString();
