@@ -69,6 +69,12 @@ public abstract class Form<NewResult> {
 
 	}
 	
+	public String generateNewFormWith(String key, String value) {
+		HashMap<String, String> values = new HashMap<>();
+		values.put(key, value);
+		return generateNewForm(values);
+	}
+	
 	public String generateNewForm(HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + getNewFormTitle() + "</h2>");
