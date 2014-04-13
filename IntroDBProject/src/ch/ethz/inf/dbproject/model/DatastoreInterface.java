@@ -291,4 +291,18 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public List<Case> getProjectsWithoutCategory() {
+		String tableName = getTableName(Case.class);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT Case.CaseId, Case.CrimeId, Case.Location, Case.Date, Case.Time, Case.Status, Case.Name FROM" + 
+			tableName +  "WHERE Case.CrimeId is null;");
+		) {
+			return all(stmt, Case.class);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -109,10 +109,8 @@ public final class CasesServlet extends HttpServlet {
 				table.addObjects(this.dbInterface.getProjectsByCategory("Bankraub"));
 			}
 			else {
-				
+				table.addObjects(this.dbInterface.getProjectsWithoutCategory());
 			}
-			// TODO implement this!
-			//table.addObjects(this.dbInterface.getProjectsByCategory(category));
 			
 		} else if (filter != null) {
 		
@@ -126,14 +124,12 @@ public final class CasesServlet extends HttpServlet {
 
 			} else if (filter.equals("recent")) {
 
-				// TODO implement this!
 				table.addObjects(this.dbInterface.getMostRecentCases(5));
 
 			}
 			
 			else if (filter.equals("oldest")) {
 
-				// TODO implement this!
 				table.addObjects(this.dbInterface.getOldestUnsolvedCases(2));
 
 			}
