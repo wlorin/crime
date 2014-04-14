@@ -28,4 +28,8 @@ public abstract class Note implements Entity {
 	public String getNote() {
 		return note;
 	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
 }
