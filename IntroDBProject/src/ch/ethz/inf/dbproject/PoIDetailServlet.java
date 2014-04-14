@@ -66,6 +66,12 @@ public final class PoIDetailServlet extends HttpServlet {
 			table.addBeanColumn("Name", "name");
 			table.addBeanColumn("Birthdate", "birthdate");
 			
+			table.addLinkColumn("Convictions"	/* The header. We will leave it empty */,
+					"View Convictions" 	/* What should be displayed in every row */,
+					"Conviction?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+					"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+	  
+			
 			table.addObject(poi);
 			table.setVertical(true);			
 
