@@ -80,7 +80,7 @@ public final class CaseServlet extends HttpServlet {
 			table.addLinkColumn("Suspects"	/* The header. We will leave it empty */,
 					"View Suspects" 	/* What should be displayed in every row */,
 					"Suspect?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-					"caseId" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+					"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 
 			table.addObject(aCase);
 			table.setVertical(true);			
@@ -106,18 +106,18 @@ public final class CaseServlet extends HttpServlet {
 			
 			
 			if (UserManagement.isUserLoggedIn(session)) {
-				request.setAttribute("newCaseNote", new CaseNoteForm().generateNewFormWith(CommentForm.REFERENCE_ID, "" + aCase.getCaseId()));
+				request.setAttribute("newCaseNote", new CaseNoteForm().generateNewFormWith(CommentForm.REFERENCE_ID, "" + aCase.getId()));
 
 				if (aCase.isOpen()) {
 					request.setAttribute("openCloseButton", 
 							new OpenCloseButton()
-							.generateForm("Close Case", OpenCloseButton.ACTION_CLOSE, "" + aCase.getCaseId())
+							.generateForm("Close Case", OpenCloseButton.ACTION_CLOSE, "" + aCase.getId())
 					);
 				}
 				else {
 					request.setAttribute("openCloseButton", 
 							new OpenCloseButton()
-							.generateForm("Reopen Case", OpenCloseButton.ACTION_OPEN, "" + aCase.getCaseId())
+							.generateForm("Reopen Case", OpenCloseButton.ACTION_OPEN, "" + aCase.getId())
 					);
 				}
 			}

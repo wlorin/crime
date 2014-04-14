@@ -68,7 +68,7 @@ public final class SearchServlet extends HttpServlet {
 		table.addLinkColumn(""	/* The header. We will leave it empty */,
 				"View Case" 	/* What should be displayed in every row */,
 				"Case?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-				"caseId" 		/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+				"id" 		/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 
 		// Pass the table to the session. This will allow the respective jsp page to display the table.
 		session.setAttribute("results", table);
