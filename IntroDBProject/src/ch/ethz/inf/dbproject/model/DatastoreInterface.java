@@ -199,10 +199,11 @@ public final class DatastoreInterface {
 		}
 	}
 	
-	public Case insertCase(String name, String state, String location, Date date, Time time) {
+	public Case insertCase(String name, String state, int crimeId, String location, Date date, Time time) {
 		return insert(Case.class, 
 				"Name", name, 
 				"Status", state,
+				"CrimeId", crimeId,
 				"Location", location,
 				"Date", date,
 				"time", time

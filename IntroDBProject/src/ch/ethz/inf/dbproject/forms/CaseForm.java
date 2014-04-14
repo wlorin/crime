@@ -71,7 +71,7 @@ public class CaseForm extends CreationForm<Case> {
 		Date date = fieldDate.parse(values);
 		Time time = fieldTime.parse(values);
 		
-		return new DatastoreInterface().insertCase(name, state, location, date, time);
+		return new DatastoreInterface().insertCase(name, state, crimeId, location, date, time);
 	}
 
 	@Override
