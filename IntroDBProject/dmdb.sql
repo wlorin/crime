@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `dmdb`
 --
-CREATE DATABASE IF NOT EXISTS `dmdb` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
-USE `dmdb`;
+CREATE DATABASE IF NOT EXISTS `dmdb2014` DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci;
+USE `dmdb2014`;
 
 -- --------------------------------------------------------
 

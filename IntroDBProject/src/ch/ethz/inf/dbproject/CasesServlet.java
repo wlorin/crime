@@ -95,6 +95,8 @@ public final class CasesServlet extends HttpServlet {
 			table.addObjects(this.dbInterface.getAll(Case.class));
 
 		} else if (category != null) {
+			table.addObjects(dbInterface.getProjectsByCategory(category));
+			/*
 			if(category.equals("personal")) {
 
 				table.addObjects(this.dbInterface.getProjectsByCategory("Koerperverletzung"));
@@ -125,6 +127,7 @@ public final class CasesServlet extends HttpServlet {
 			else {
 				table.addObjects(this.dbInterface.getProjectsWithoutCategory());
 			}
+			*/
 			
 		} else if (filter != null) {
 		

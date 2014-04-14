@@ -1,4 +1,7 @@
+<%@page import="ch.ethz.inf.dbproject.model.DatastoreInterface"%>
 <%@page import="ch.ethz.inf.dbproject.UserServlet"%>
+<%@page import="ch.ethz.inf.dbproject.model.Crime"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -40,7 +43,16 @@
 					<div class="menuDiv2"><a href="Cases?filter=recent">Recent</a></div>
 					<div class="menuDiv2"><a href="Cases?filter=oldest">Oldest Unsolved</a></div>
 					<div class="menuDiv1">Categories</div>
-					<div class="menuDiv2"><a href="Cases?category=personal">Personal Crimes</a></div>
+					<%
+					DatastoreInterface dbInterface = new DatastoreInterface();
+					for (Crime crime : dbInterface.getAll(Crime.class)) {
+						%><div class="menuDiv2"><a href="Cases?category=<%=crime.getName()%>"><%=crime.getName() %>
+						</a></div>
+					<%
+					}
+					%>
+
+					<!-- 
 					<div class="menuDiv3"><a href="Cases?category=assault">Assault</a></div>
 					<div class="menuDiv3"><a href="Cases?category=murder">Murder</a></div>
 					<div class="menuDiv2"><a href="Cases?category=property">Property Crimes</a></div>
@@ -48,6 +60,7 @@
 					<div class="menuDiv3"><a href="Cases?category=burglary">Burglary</a></div>
 					<div class="menuDiv3"><a href="Cases?category=robbery">Bank robbery</a></div>
 					<div class="menuDiv2"><a href="Cases?category=other">Other</a></div>
+					 -->
 					<div class="menuDiv1"><a href="PoI">Persons of Interest</a></div>
 					<div class="menuDiv1"><a href="Search">Search</a></div>
 					<div class="menuDiv1"><a href="User">User Profile</a></div>
