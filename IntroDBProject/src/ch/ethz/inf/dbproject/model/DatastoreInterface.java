@@ -382,10 +382,10 @@ public final class DatastoreInterface {
 		//		String tableName = getTableName(Conviction.class);
 //		String tableName = "Convicted";
 		String sql = " SELECT Convicted.*                "
-		          + " FROM Convicted, PoI                "
-		          + " WHERE                              "
-		          + "     PoI.PoIId = " + id
-		          + "     AND Convicted.PoIId = PoI.PoIId";
+		           + " FROM Convicted, PoI                "
+		           + " WHERE                              "
+		           + "     PoI.PoIId = " + id
+		           + "     AND Convicted.PoIId = PoI.PoIId";
 		try (
 				//			this.sqlConnection.prepareStatement("SELECT Convicted.Date, Convicted.Sentence, Convicted.CaseId FROM" + 
 				//			tableName +  ", `PoI` WHERE PoI.PoIId = '" + id + "' and PoI.PoIId = Convicted.PoIId;");
