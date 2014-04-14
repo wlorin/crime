@@ -14,7 +14,7 @@ import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
- * Servlet implementation class of Case list page
+ * Servlet implementation class of PoI list page
  */
 @WebServlet(description = "Persons of Interest", urlPatterns = { "/PoI" })
 public final class PoIServlet extends HttpServlet {
@@ -50,16 +50,25 @@ public final class PoIServlet extends HttpServlet {
 
 		table.addBeanColumn("Name", "name");
 		table.addBeanColumn("Birthdate", "birthdate");
+		table.addBeanColumn("ID", "id");
 
 //		/*
 //		 * Column 4: This is a special column. It adds a link to view the
 //		 * Project. We need to pass the case identifier to the url.
 //		 */
-//		table.addLinkColumn(""	/* The header. We will leave it empty */,
-//				"View Case" 	/* What should be displayed in every row */,
-//				"Case?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-//				"caseId" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
-//        
+		table.addLinkColumn("Convictions"	/* The header. We will leave it empty */,
+				"View Convictions" 	/* What should be displayed in every row */,
+				"Conviction?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+        
+		
+		table.addLinkColumn("Details"	/* The header. We will leave it empty */,
+		"View Person" 	/* What should be displayed in every row */,
+		"PoIDetail?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+		"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+		
+		
+		
 		// Pass the table to the session. This will allow the respective jsp page to display the table.
 		session.setAttribute("poI", table);
 
