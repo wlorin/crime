@@ -442,7 +442,7 @@ public final class DatastoreInterface {
 		}
 	}
 	public final List<Convict> getAllConvicts(Integer caseId) {
-		String sql = "SELECT poi.*, cr.CrimeId, cr.Crime, c.CaseId, c.Date as ConvictionDate, c.Sentence  FROM poi " +
+		String sql = "SELECT poi.*, cr.CrimeId, cr.Crime, c.CaseId, c.Date as ConvictionDate, c.Sentence  FROM PoI poi " +
 				"INNER JOIN Convicted c ON (poi.PoIId = c.PoIId AND c.CaseId=" + caseId + ") " +
 				"INNER JOIN Crime cr ON (cr.CrimeId=c.CrimeId)";
 		try (

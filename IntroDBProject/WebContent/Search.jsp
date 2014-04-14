@@ -31,7 +31,13 @@
 <div>
 	<input type="hidden" name="filter" value="category" />
 	Search By Category:
-	<input type="text" name="category" />
+	<select name="category">
+	  <option>Koerperverletzung</option>
+	  <option>Mord</option>
+	  <option>Diebstahl</option>
+	  <option>Einbruch</option>
+	  <option>Bankraub</option>
+	</select>
 	<input type="submit" value="Search" title="Search by Category" />
 </div>
 </form>
