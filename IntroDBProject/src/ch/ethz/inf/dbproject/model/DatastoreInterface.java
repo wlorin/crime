@@ -483,9 +483,6 @@ public final class DatastoreInterface {
 		           + "     PoI.PoIId = " + id
 		           + "     AND Convicted.PoIId = PoI.PoIId";
 		try (
-				//			this.sqlConnection.prepareStatement("SELECT Convicted.Date, Convicted.Sentence, Convicted.CaseId FROM" + 
-				//			tableName +  ", `PoI` WHERE PoI.PoIId = '" + id + "' and PoI.PoIId = Convicted.PoIId;");
-				// fix whatever is wrong with above statement
 				PreparedStatement stmt = this.sqlConnection.prepareStatement(sql);
 		) {
 			return all(stmt, Conviction.class);
@@ -540,5 +537,21 @@ public final class DatastoreInterface {
 		}
 		
 		return null;
+	}
+
+	public List<PoINote> getPoINote(int id) {
+		String tableName = getTableName(PoINote.class);
+		String sql = "SELECT * FROM " +
+				tableName +  "WHERE PoIId = " + id + ";";
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement(sql);
+		) {
+			return all(stmt, PoINote.class);
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

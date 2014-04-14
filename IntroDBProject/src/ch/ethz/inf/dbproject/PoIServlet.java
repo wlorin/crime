@@ -50,7 +50,6 @@ public final class PoIServlet extends HttpServlet {
 
 		table.addBeanColumn("Name", "name");
 		table.addBeanColumn("Birthdate", "birthdate");
-		table.addBeanColumn("ID", "id");
 
 //		/*
 //		 * Column 4: This is a special column. It adds a link to view the
@@ -63,9 +62,9 @@ public final class PoIServlet extends HttpServlet {
         
 		
 		table.addLinkColumn("Details"	/* The header. We will leave it empty */,
-		"View Person" 	/* What should be displayed in every row */,
-		"PoIDetail?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-		"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+				"View Person" 	/* What should be displayed in every row */,
+				"PoIDetail?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 		
 		
 		
