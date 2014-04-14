@@ -242,7 +242,7 @@ public final class DatastoreInterface {
 		ArrayList<String> columnNames = new ArrayList<>();
 		for (int i_columnName = 0; i_columnName < fields.length; i_columnName += 2) {
 			String columnName = (String) fields[i_columnName];
-			columnNames.add(columnName);
+			columnNames.add("`" + columnName + "`");
 		}
 		
 		ArrayList<String> placeholders = new ArrayList<>();
