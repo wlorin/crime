@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.meta.TableName;
 
 /**
  * Object that represents a conviction.
  */
+@TableName("Convicted")
 public class Conviction implements Entity {
 
 	private final int poIId;
