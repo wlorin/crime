@@ -1,6 +1,7 @@
 package ch.ethz.inf.dbproject;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -97,10 +98,11 @@ public final class CaseServlet extends HttpServlet {
 			caseNotes.addBeanColumn("User", "username");
 			caseNotes.addBeanColumn("Note", "note");
 
-			caseNotes.addObjects(aCase.getCaseNotes());
+			final List<CaseNote> notes = aCase.getCaseNotes();
+			caseNotes.addObjects(notes);
 			
 			session.setAttribute("caseTable", table);
-			session.setAttribute("caseNoteTable", caseNotes);
+			session.setAttribute("caseNoteTable", (notes.size() == 0) ? "<i>No notes</i>" : caseNotes);
 
 			session.setAttribute("entity", aCase);
 			
