@@ -96,6 +96,7 @@ public final class CaseServlet extends HttpServlet {
 			);
 
 			caseNotes.addBeanColumn("User", "username");
+			caseNotes.addBeanColumn("Date", "timestamp");
 			caseNotes.addBeanColumn("Note", "note");
 
 			final List<CaseNote> notes = aCase.getCaseNotes();
