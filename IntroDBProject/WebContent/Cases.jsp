@@ -9,4 +9,6 @@
 
 <hr/>
 
+${formNewCase}
+
 <%@ include file="Footer.jsp" %>

@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import ch.ethz.inf.dbproject.forms.CaseForm;
 import ch.ethz.inf.dbproject.model.Case;
+import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -83,6 +85,10 @@ public final class CasesServlet extends HttpServlet {
 		final String filter = request.getParameter("filter");
 		final String category = request.getParameter("category");
 
+		if (UserManagement.isUserLoggedIn(session)) {
+			request.setAttribute("formNewCase", new CaseForm().generateNewForm());
+		}
+		
 		if (filter == null && category == null) {
 
 			// If no filter is specified, then we display all the cases!
