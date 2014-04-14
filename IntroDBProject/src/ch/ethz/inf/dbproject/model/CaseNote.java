@@ -17,7 +17,7 @@ public class CaseNote extends Note {
 		caseId = rs.getInt("CaseId");
 	}
 
-	public int getCaseId() {
+	public int getId() {
 		return caseId;
 	}
 }
