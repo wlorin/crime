@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.CaseStatusField;
+import ch.ethz.inf.dbproject.forms.fields.CrimeField;
 import ch.ethz.inf.dbproject.forms.fields.DateField;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.InputField;
@@ -32,11 +33,13 @@ public class CaseForm extends CreationForm<Case> {
 	final String name = "Name";
 	final String location = "Location";
 	final String status = "Status";
+	final String crime = "Crime";
 	final String date = "Date";
 	final String time = "Time";
 
 	final String confirmation = "Confirmation";
 	private CaseStatusField caseStatusField = new CaseStatusField(status);
+	private CrimeField categoryField = new CrimeField(crime);
 	
 	private StringField fieldName = new StringField(name, false);
 	private StringField fieldLocation = new StringField(location, true);
@@ -51,6 +54,7 @@ public class CaseForm extends CreationForm<Case> {
 				fieldName,
 				fieldLocation,
 				caseStatusField,
+				categoryField,
 				fieldDate,
 				fieldTime,
 		});
@@ -63,6 +67,7 @@ public class CaseForm extends CreationForm<Case> {
 		String name = StringUtils.strip(values.get(this.name));
 		String location = StringUtils.strip(fieldLocation.parse(values));
 		String state = StringUtils.strip(values.get(this.status));
+		int crimeId = Integer.valueOf(values.get(this.crime));
 		Date date = fieldDate.parse(values);
 		Time time = fieldTime.parse(values);
 		
