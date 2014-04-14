@@ -185,8 +185,10 @@ public final class DatastoreInterface {
 		try (
 			ResultSet generatedKeys = statement.getGeneratedKeys()
 		) {
-			generatedKeys.next();
-			return generatedKeys.getLong(1);
+			if (generatedKeys.next()) {
+				return generatedKeys.getLong(1);
+			}
+			return 0L;
 		}
 	}
 	
