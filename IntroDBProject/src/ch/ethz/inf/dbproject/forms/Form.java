@@ -26,7 +26,7 @@ public abstract class Form {
 	
 	protected abstract String getMethod();
 	
-	public String generateForm(String title, String buttonCaption, List<Field> fields, String action, HashMap<String, String> values) {
+	protected String generateForm(String title, String buttonCaption, List<Field> fields, String action, HashMap<String, String> values) {
 		StringBuilder html = new StringBuilder();
 		html.append("<h2>" + title + "</h2>");
 		appendFormHeader(action, html);
