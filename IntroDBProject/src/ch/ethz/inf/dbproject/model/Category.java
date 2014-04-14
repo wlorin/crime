@@ -22,7 +22,8 @@ public final class Category implements Entity {
 	}
 	
 	public Category(ResultSet rs) throws SQLException {
-		throw new UnsupportedOperationException("Constructor not yet implemented");
+		id = rs.getInt("CrimeId");
+		crime = rs.getString("Crime");
 	}
 
 	public final String getName() {
