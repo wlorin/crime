@@ -99,6 +99,6 @@ public class CaseForm extends CreationForm<Case> {
 	protected void onNewSuccess(Case result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "Case?id=" + result.getCaseId());
+		response.sendRedirect(WEB_ROOT + "Case?id=" + result.getId());
 	}
 }

@@ -3,18 +3,17 @@ package ch.ethz.inf.dbproject.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-
-import ch.ethz.inf.dbproject.model.meta.Entity;
-
 import java.util.Date;
 import java.util.List;
+
+import ch.ethz.inf.dbproject.model.meta.Entity;
 
 public final class Case implements Entity {
 	
 	/**
 	 * TODO The properties of the case should be added here
 	 */
-	private final int caseId;
+	private final int id;
 	final private String name;
 	private final int crimeId;
 	private final String status;
@@ -28,7 +27,7 @@ public final class Case implements Entity {
 	 * @param description		The name of the case
 	 */
 	public Case(	final int id, final String name, final int crimeId, final String status, final String location, final Date date, final Time time) {
-		this.caseId = id;
+		this.id = id;
 		this.name = name;
 		this.crimeId = crimeId;
 		this.status = status;
@@ -40,7 +39,7 @@ public final class Case implements Entity {
 	public Case(	final ResultSet rs) throws SQLException {
 		// TODO These need to be adapted to your schema
 		// TODO Extra properties need to be added
-		this.caseId = rs.getInt("caseId");
+		this.id = rs.getInt("caseId");
 		this.name = rs.getString("Name");
 		this.crimeId = rs.getInt("crimeId");
 		this.status = rs.getString("status");
@@ -71,8 +70,8 @@ public final class Case implements Entity {
 		return status;
 	}
 
-	public int getCaseId() {
-		return caseId;
+	public int getId() {
+		return id;
 	}
 
 	public String getLocation() {
@@ -88,7 +87,7 @@ public final class Case implements Entity {
 	}
 
 	public List<CaseNote> getCaseNotes() {
-		return new DatastoreInterface().getCaseNotesFrom(this.getCaseId());
+		return new DatastoreInterface().getCaseNotesFrom(this.getId());
 	}
 
 	public boolean isOpen() {

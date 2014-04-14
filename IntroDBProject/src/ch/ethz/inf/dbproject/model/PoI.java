@@ -8,7 +8,7 @@ import java.util.Date;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
-public final class PoI implements Entity {
+public class PoI implements Entity {
 
 	private final int id;
 	private final String name;

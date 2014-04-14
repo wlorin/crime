@@ -86,6 +86,7 @@ public final class PoIDetailServlet extends HttpServlet {
 			);
 			
 			poiNoteTable.addBeanColumn("Author", "username");
+			poiNoteTable.addBeanColumn("Date", "timestamp");
 			poiNoteTable.addBeanColumn("", "Note");
 			
 			final List<PoINote> notes = dbInterface.getAll(PoINote.class);

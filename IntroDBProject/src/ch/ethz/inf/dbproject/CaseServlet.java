@@ -1,6 +1,7 @@
 package ch.ethz.inf.dbproject;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -80,7 +81,7 @@ public final class CaseServlet extends HttpServlet {
 			table.addLinkColumn("Suspects"	/* The header. We will leave it empty */,
 					"View Suspects" 	/* What should be displayed in every row */,
 					"Suspect?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
-					"caseId" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
+					"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 
 			table.addObject(aCase);
 			table.setVertical(true);			
@@ -94,30 +95,32 @@ public final class CaseServlet extends HttpServlet {
 					CaseNote.class 	/* The class of the objects (rows) that will be displayed */
 			);
 
-			caseNotes.addBeanColumn("User", "username");
+			caseNotes.addBeanColumn("Author", "username");
+			caseNotes.addBeanColumn("Date", "timestamp");
 			caseNotes.addBeanColumn("Note", "note");
 
-			caseNotes.addObjects(aCase.getCaseNotes());
+			final List<CaseNote> notes = aCase.getCaseNotes();
+			caseNotes.addObjects(notes);
 			
 			session.setAttribute("caseTable", table);
-			session.setAttribute("caseNoteTable", caseNotes);
+			session.setAttribute("caseNoteTable", (notes.size() == 0) ? "<i>No notes</i>" : caseNotes);
 
 			session.setAttribute("entity", aCase);
 			
 			
 			if (UserManagement.isUserLoggedIn(session)) {
-				request.setAttribute("newCaseNote", new CaseNoteForm().generateNewFormWith(CommentForm.REFERENCE_ID, "" + aCase.getCaseId()));
+				request.setAttribute("newCaseNote", new CaseNoteForm().generateNewFormWith(CommentForm.REFERENCE_ID, "" + aCase.getId()));
 
 				if (aCase.isOpen()) {
 					request.setAttribute("openCloseButton", 
 							new OpenCloseButton()
-							.generateForm("Close Case", OpenCloseButton.ACTION_CLOSE, "" + aCase.getCaseId())
+							.generateForm("Close Case", OpenCloseButton.ACTION_CLOSE, "" + aCase.getId())
 					);
 				}
 				else {
 					request.setAttribute("openCloseButton", 
 							new OpenCloseButton()
-							.generateForm("Reopen Case", OpenCloseButton.ACTION_OPEN, "" + aCase.getCaseId())
+							.generateForm("Reopen Case", OpenCloseButton.ACTION_OPEN, "" + aCase.getId())
 					);
 				}
 			}

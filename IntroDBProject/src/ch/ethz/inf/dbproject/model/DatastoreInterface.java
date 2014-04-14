@@ -106,7 +106,7 @@ public final class DatastoreInterface {
 	private <T extends Entity> String getRawTableName(Class<T> clazz) {
 		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
 		if (tableAnnotation != null) {
-			return tableAnnotation.name();
+			return tableAnnotation.value();
 		}
 		else {
 			return clazz.getSimpleName();
@@ -175,7 +175,7 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
-
+	
 	public long insert(PreparedStatement statement) throws SQLException {
 		statement.executeUpdate();
 		try (
@@ -184,6 +184,13 @@ public final class DatastoreInterface {
 			generatedKeys.next();
 			return generatedKeys.getLong(1);
 		}
+	}
+	
+	public void removeSuspect(int caseId, int poiId) {
+		runQuery("DELETE FROM Suspect WHERE CaseId=" + caseId + " AND PoIId=" + poiId);
+	}
+	public void deleteConviction(int caseId, int poiId, int crimeid) {
+		runQuery("DELETE FROM Convicted WHERE CaseId=" + caseId + " AND PoIId=" + poiId + " AND CrimeId=" + crimeid);
 	}
 
 	public User insertUser(String name, String password) {
@@ -197,6 +204,10 @@ public final class DatastoreInterface {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public final Suspect insertSuspect(int caseId, int poiId) {
+		return insert(Suspect.class, "CaseId", caseId, "PoIId", poiId);
 	}
 	
 	public Case insertCase(String name, String state, int crimeId, String location, Date date, Time time) {
@@ -374,13 +385,42 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+	public final List<Convict> getAllConvicts(Integer caseId) {
+		String sql = "SELECT poi.*, cr.CrimeId, cr.Crime, c.CaseId, c.Date as ConvictionDate, c.Sentence  FROM poi " +
+				"INNER JOIN Convicted c ON (poi.PoIId = c.PoIId AND c.CaseId=" + caseId + ") " +
+				"INNER JOIN Crime cr ON (cr.CrimeId=c.CrimeId)";
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement(sql);
+		) {
+			return all(stmt, Convict.class);
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public final List<PoI> getAllPoIsNotLinked(Integer id) {
+		String tableName = getTableName(PoI.class);
+		String sql = "SELECT poi.* FROM " +
+				tableName +  " poi LEFT JOIN Suspect s ON (poi.PoIId = s.PoIId AND s.CaseId=" + id + ") " +
+				"WHERE IsNull(s.CaseId);";
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement(sql);
+		) {
+			return all(stmt, PoI.class);
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 
 
 	public List<Conviction> getAllConvictions(Integer id) {
-		//	   TODO: annotate class Conviction with table name convicted according to database spec
-		//		String tableName = getTableName(Conviction.class);
-//		String tableName = "Convicted";
 		String sql = " SELECT Convicted.*                "
 		           + " FROM Convicted, PoI                "
 		           + " WHERE                              "
@@ -414,5 +454,34 @@ public final class DatastoreInterface {
 			e.printStackTrace();
 		}
 		
+	}
+
+	public Conviction insertConviction(int caseId, int poiId,
+			Date convictionDate, String sentence, int crimeId) {
+		try {
+			PreparedStatement stmt = sqlConnection.prepareStatement("INSERT INTO Convicted (CaseId, PoIId, CrimeId, `Date`, Sentence) VALUES (?, ?, ?, ?, ?);");
+			stmt.setInt(1, caseId);
+			stmt.setInt(2, poiId);
+			stmt.setInt(3, crimeId);
+			stmt.setDate(4, convictionDate);
+			stmt.setString(5, sentence);
+			stmt.execute();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		try (
+				Statement stmt = sqlConnection.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM Convicted WHERE CaseId=" + caseId + " AND PoIId=" + poiId);
+			) {
+				rs.next();
+				return new Conviction(rs);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 }

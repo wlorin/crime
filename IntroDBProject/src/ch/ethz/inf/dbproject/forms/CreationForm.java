@@ -64,8 +64,11 @@ public abstract class CreationForm<NewResult> extends Form {
 		return generateNewForm(values);
 	}
 	
+	public String generateNewForm(HashMap<String, String> values, String buttonStr) {
+		return generateForm(getNewFormTitle(), buttonStr, newFormFields(), "new", values);
+	}
 	public String generateNewForm(HashMap<String, String> values) {
-		return generateForm(getNewFormTitle(), "Create", newFormFields(), "new", values);
+		return generateNewForm(values, "Create");
 	}
 	
 	@Override

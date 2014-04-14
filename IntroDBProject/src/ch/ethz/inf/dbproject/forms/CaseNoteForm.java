@@ -61,6 +61,6 @@ public class CaseNoteForm extends CommentForm<CaseNote> {
 	protected void onNewSuccess(CaseNote result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "Case?id=" + result.getCaseId());
+		response.sendRedirect(WEB_ROOT + "Case?id=" + result.getId());
 	}
 }

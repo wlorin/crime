@@ -31,6 +31,7 @@ USE `dmdb2014`;
 CREATE TABLE IF NOT EXISTS `CaseNote` (
   `CaseNoteId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `CaseId` int(10) unsigned NOT NULL,
+  `Timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
   `Note` mediumtext COLLATE latin1_general_ci NOT NULL,
   `UserId` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`CaseNoteId`),
@@ -169,6 +170,7 @@ CREATE TABLE IF NOT EXISTS `PoI` (
 CREATE TABLE IF NOT EXISTS `PoINote` (
   `PoINoteId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `PoIId` int(10) unsigned NOT NULL,
+  `Timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
   `Note` mediumtext COLLATE latin1_general_ci NOT NULL,
   `UserId` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`PoINoteId`),
