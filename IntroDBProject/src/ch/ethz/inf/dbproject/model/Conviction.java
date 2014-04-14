@@ -46,7 +46,16 @@ public class Conviction implements Entity {
 	public String getSentence() {
 		return sentence;
 	}
-
+	
+	public String getCasename() {
+		final DatastoreInterface dbInterface = new DatastoreInterface();
+		return dbInterface.getCasenameById(crimeId);
+	}
+	
+	public String getCrime() {
+		final DatastoreInterface dbInterface = new DatastoreInterface();
+		return dbInterface.getCrimeById(crimeId);
+	}
 	
 	public Conviction(final Date date, final int poIId, final int caseId, final int crimeId, final String sentence) {
 		this.date = date;
