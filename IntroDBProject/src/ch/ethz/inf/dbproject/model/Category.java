@@ -13,10 +13,12 @@ public final class Category implements Entity {
 	/**
 	 * TODO All properties need to be added here 
 	 */	
-	private final String name;
+	private final int id;
+	private final String crime;
 
-	public Category(final String name) {
-		this.name = name;
+	public Category(final int id, final String name) {
+		this.crime = name;
+		this.id = id;
 	}
 	
 	public Category(ResultSet rs) throws SQLException {
@@ -24,7 +26,7 @@ public final class Category implements Entity {
 	}
 
 	public final String getName() {
-		return name;
+		return crime;
 	}
 	
 }
