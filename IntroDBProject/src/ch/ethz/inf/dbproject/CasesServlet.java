@@ -74,8 +74,8 @@ public final class CasesServlet extends HttpServlet {
 		 * Column 5: List of Suspects
 		 */
 		table.addLinkColumn("Suspects"	/* The header. We will leave it empty */,
-				"View Suspects" 	/* What should be displayed in every row */,
-				"Suspect?CaseId=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+				"View Suspects" 	/* What should be displayed in every row */, 
+				"Suspect?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
 				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
         
 		// Pass the table to the session. This will allow the respective jsp page to display the table.
