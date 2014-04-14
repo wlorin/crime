@@ -8,9 +8,20 @@
 <form method="get" action="Search">
 <div>
 	<input type="hidden" name="filter" value="description" />
-	Search By Name:
+	Search By Case Name:
 	<input type="text" name="description" />
 	<input type="submit" value="Search" title="Search by Description" />
+</div>
+</form>
+
+<hr/>
+
+<form method="get" action="Search">
+<div>
+	<input type="hidden" name="filter" value="poiname" />
+	Search By Person Name:
+	<input type="text" name="poiname" />
+	<input type="submit" value="Search" title="Search by Person Name" />
 </div>
 </form>
 
@@ -29,20 +40,12 @@
 
 <form method="get" action="Search">
 <div>
-	<input type="hidden" name="filter" value="attribute" />
-	Search By Attribute:
-	<input type="text" name="attribute" />
-	<input type="submit" value="Search" title="Search by Attribute" />
-</div>
-</form>
-
-<hr/>
-
-<form method="get" action="Search">
-<div>
 	<input type="hidden" name="filter" value="status" />
 	Search By Status:
-	<input type="text" name="status" />
+	<select name="status">
+	  <option>open</option>
+	  <option>closed</option>
+	</select>
 	<input type="submit" value="Search" title="Search by Status" />
 </div>
 </form>
