@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.Convict;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
@@ -98,22 +99,27 @@ public final class SuspectServlet extends HttpServlet {
 			);
 			pois.addBeanColumn("Name", "name");
 			pois.addBeanColumn("Birthdate", "birthdate");
-			if (UserManagement.isUserLoggedIn(session)) {
+			session.setAttribute("poisnotlinkted", "");
+			session.setAttribute("suspect", "");
+			final Case aCase = dbInterface.getById(id, Case.class);
+			if (UserManagement.isUserLoggedIn(session) && aCase.isOpen()) {
 				table.addLinkColumn("Remove Conviction", "Remove", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
 				table.addLinkColumn("Unlink", "Unlink", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
 				table.addLinkColumn("Convict", "Convict", "Convict?CaseId=" + id + "&PoIId=", "id");
 				pois.addLinkColumn("Link with Case", "Link", "Suspect?CaseId=" + id + "&action=link&id=", "id");
 				convicts.addLinkColumn("Delete Conviction", "Delete", "Suspect?action=delete&CaseId=" + id + "&poi-crime=", "poiCrime");
+				session.setAttribute("poisnotlinkted", pois);
+				session.setAttribute("suspect", table);
 			}
 			convicts.addObjects(dbInterface.getAllConvicts(id));
 			table.addObjects(this.dbInterface.getAllSuspects(id));
 			pois.addObjects(dbInterface.getAllPoIsNotLinked(id));
 			
-			
 			session.setAttribute("convicts", convicts);	
-			session.setAttribute("suspect", table);		
-			session.setAttribute("poisnotlinkted", pois);
 			
+			
+			session.setAttribute("casename", aCase.getName());
+			session.setAttribute("caseclosed", (aCase.isOpen() ? "false" : "true"));
 			
 			this.getServletContext().getRequestDispatcher("/Suspect.jsp").forward(request, response);
 		} catch (final Exception ex) {

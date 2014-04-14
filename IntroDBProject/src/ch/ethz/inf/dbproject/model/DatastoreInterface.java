@@ -112,6 +112,10 @@ public final class DatastoreInterface {
 			return clazz.getSimpleName();
 		}
 	}
+	
+	public boolean isCaseClosed(int caseId) {
+		return !getById(caseId, Case.class).isOpen();
+	}
 
 	public final List<Case> getByStatus(String status) {
 		String tableName = getTableName(Case.class);
@@ -455,6 +459,7 @@ public final class DatastoreInterface {
 		}
 		
 	}
+	
 
 	public Conviction insertConviction(int caseId, int poiId,
 			Date convictionDate, String sentence, int crimeId) {
