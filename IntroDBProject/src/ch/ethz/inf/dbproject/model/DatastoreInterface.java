@@ -116,19 +116,7 @@ public final class DatastoreInterface {
 			return clazz.getSimpleName();
 		}
 	}
-	public String getCasenameById(int id) {
-		 try (
-		 		PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT `Name` FROM `Case` WHERE `CaseId` = " + id);
-		 ) {
-			 ResultSet rs = stmt.executeQuery();
-			 rs.next();
-			 return rs.getString(1);
-		 }  catch (SQLException e) {
-			 e.printStackTrace();
-			 return null;
-		 }
-	}
-	
+
 	public boolean isCaseClosed(int caseId) {
 		return !getById(Long.valueOf(caseId), Case.class).isOpen();
 	}
