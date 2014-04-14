@@ -68,6 +68,7 @@ public final class CaseServlet extends HttpServlet {
 			 * Column 1: The name of the item (This will probably have to be changed)
 			 */
 			table.addBeanColumn("Case Description", "crime");
+			table.addBeanColumn("Case Name", "name");
 
 			/*
 			 * Columns 2 & 3: Some random fields. These should be replaced by i.e. funding progress, or time remaining
@@ -76,6 +77,10 @@ public final class CaseServlet extends HttpServlet {
 			table.addBeanColumn("Location", "location");
 			table.addBeanColumn("Date", "date");
 			table.addBeanColumn("Time", "time");
+			table.addLinkColumn("Suspects"	/* The header. We will leave it empty */,
+					"View Suspects" 	/* What should be displayed in every row */,
+					"Suspect?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+					"caseId" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 
 			table.addObject(aCase);
 			table.setVertical(true);			
