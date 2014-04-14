@@ -106,7 +106,7 @@ public final class DatastoreInterface {
 	private <T extends Entity> String getRawTableName(Class<T> clazz) {
 		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
 		if (tableAnnotation != null) {
-			return tableAnnotation.name();
+			return tableAnnotation.value();
 		}
 		else {
 			return clazz.getSimpleName();
