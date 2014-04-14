@@ -319,6 +319,19 @@ public final class DatastoreInterface {
 			}
 		}
 
+	public String getCasenameById(int id) {
+		try (
+				PreparedStatement stmt = this.sqlConnection.prepareStatement("SELECT `Name` FROM `Case` WHERE `CaseId` = " + id);
+			) {
+			    ResultSet rs = stmt.executeQuery();
+				rs.next();
+			    return rs.getString(1);
+			}  catch (SQLException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	
 	public List<Case> getProjectsByCategory(String category) {
 		String tableName = getTableName(Case.class);
 		try (
