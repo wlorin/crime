@@ -377,11 +377,15 @@ public final class DatastoreInterface {
 
 
 public List<Conviction> getAllConvictions(Integer id) {
-		String tableName = getTableName(Conviction.class);
+//	   TODO: annotate class Conviction with table name convicted according to database spec
+//		String tableName = getTableName(Conviction.class);
+		String tableName = "Convicted";
 		try (
 			PreparedStatement stmt = 
-			this.sqlConnection.prepareStatement("SELECT Convicted.Date, Convicted.Sentence, Convicted.CaseId FROM" + 
-			tableName +  ", `PoI` WHERE PoI.PoIId = " + id + " and PoI.PoIId = Convicted.PoIId;");
+//			this.sqlConnection.prepareStatement("SELECT Convicted.Date, Convicted.Sentence, Convicted.CaseId FROM" + 
+//			tableName +  ", `PoI` WHERE PoI.PoIId = '" + id + "' and PoI.PoIId = Convicted.PoIId;");
+			// fix whatever is wrong with above statement
+			this.sqlConnection.prepareStatement("select Convicted.* from Convicted, PoI where PoI.PoIId = " + id + " and Convicted.PoIId = PoI.PoIId;");
 		) {
 			return all(stmt, Conviction.class);
 
