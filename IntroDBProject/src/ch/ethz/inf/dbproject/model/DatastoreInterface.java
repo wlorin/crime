@@ -389,5 +389,22 @@ public List<Conviction> getAllConvictions(Integer id) {
 			e.printStackTrace();
 			return null;
 		}
+}
+
+	public void closeCase(int caseId) {
+		runQuery("UPDATE `Case` SET status='closed' WHERE CaseId=" + caseId);
+	}
+
+	public void openCase(int caseId) {
+		runQuery("UPDATE `Case` SET status='open' WHERE CaseId=" + caseId);
+	}
+
+	private void runQuery(String sql) {
+		try (Statement stmt = sqlConnection.createStatement()) {
+			stmt.execute(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

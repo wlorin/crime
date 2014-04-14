@@ -15,5 +15,9 @@ public class UserManagement {
 		} else {
 			return (User) obj; 
 		}
+	}
+
+	public static boolean isUserLoggedIn(final HttpSession session) {
+		return getCurrentlyLoggedInUser(session) != null;
 	}	
 }

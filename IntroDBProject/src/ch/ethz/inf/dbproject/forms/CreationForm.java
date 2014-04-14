@@ -13,11 +13,6 @@ import javax.servlet.http.HttpSession;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 
 public abstract class CreationForm<NewResult> extends Form {
-	public static String FIELD_TARGET_CLASS = "__targetClass";
-	public static String FIELD_NEW_OR_EDIT = "__newOrEdit";
-	
-	public static String SESSION_FORM_FAIL = "__onFormFailMsg";
-	public static String SESSION_FORM_FAIL_MSG = "__onFormFailHtml";
 	protected abstract List<Field> newFormFields();
 	
 	protected List<Field> editFormFields() {
@@ -70,7 +65,23 @@ public abstract class CreationForm<NewResult> extends Form {
 	}
 	
 	public String generateNewForm(HashMap<String, String> values) {
-		return generateForm(getNewFormTitle(), newFormFields(), values);
+		return generateForm(getNewFormTitle(), "Create", newFormFields(), "new", values);
+	}
+	
+	@Override
+	public void dispatch(String action, ServletContext servletContext,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		if ("new".equals(action)) {
+			processNewForm(servletContext, request, response, request.getSession());
+		}
+		else if ("edit".equals(action)) {
+			
+		}
+		else {
+			
+		}
 	}
 }
 
