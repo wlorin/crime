@@ -401,7 +401,7 @@ public final class DatastoreInterface {
 		String tableName = getTableName(Case.class);
 		try (
 			PreparedStatement stmt = 
-			this.sqlConnection.prepareStatement("SELECT * FROM " + tableName + " WHERE `Name` = '" + string + "';");
+			this.sqlConnection.prepareStatement("SELECT * FROM " + tableName + " WHERE `Name` like '%" + string + "%';");
 		) {
 			return all(stmt, Case.class);
 		}  catch (SQLException e) {
@@ -565,6 +565,25 @@ public final class DatastoreInterface {
 			rs.next();
 		    return rs.getString(1);
 
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public List<Case> getInvolvedPoI(String poiname) {
+		String tableName = getTableName(Case.class);
+		String sql = 
+				"SELECT `Case`.* FROM " + tableName + ", Suspect, PoI " 
+				+ "WHERE PoI.Name like '%" + poiname + "%' and Suspect.PoIId = PoI.PoIId and `Case`.CaseId = Suspect.CaseId "
+				+ "UNION "
+				+ "SELECT `Case`.* FROM " + tableName + ", Convicted, PoI "
+				+ "WHERE PoI.Name like '%" + poiname + "%' and Convicted.PoIId = PoI.PoIId and`Case`.CaseId = Convicted.CaseId";
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement(sql);
+		) {
+			return all(stmt, Case.class);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;
