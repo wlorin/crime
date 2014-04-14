@@ -14,7 +14,8 @@
 <hr/>
 
 <%= session.getAttribute("poi") %>
-
+<h2>Notes</h2>
+${poiNotes }
 <hr/>
 
 <%

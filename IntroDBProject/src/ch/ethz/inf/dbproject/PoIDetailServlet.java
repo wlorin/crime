@@ -1,6 +1,7 @@
 package ch.ethz.inf.dbproject;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
+import ch.ethz.inf.dbproject.model.PoINote;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -75,7 +77,26 @@ public final class PoIDetailServlet extends HttpServlet {
 			table.addObject(poi);
 			table.setVertical(true);			
 
-			session.setAttribute("poi", table);	
+			session.setAttribute("poi", table);
+			
+			final BeanTableHelper<PoINote> poiNoteTable = new BeanTableHelper<PoINote>(
+					"cases" 		/* The table html id property */,
+					"casesTable" /* The table html class property */,
+					PoINote.class 	/* The class of the objects (rows) that will be displayed */
+			);
+			
+			poiNoteTable.addBeanColumn("Author", "username");
+			poiNoteTable.addBeanColumn("", "Note");
+			
+			final List<PoINote> notes = dbInterface.getAll(PoINote.class);
+			poiNoteTable.addObjects(notes);
+			
+			if (notes.size() == 0) {
+				request.setAttribute("poiNotes", "<i>No notes</i>");
+			}
+			else {
+				request.setAttribute("poiNotes", poiNoteTable);
+			}
 			this.getServletContext().getRequestDispatcher("/PoIDetail.jsp").forward(request, response);
 		} catch (final Exception ex) {
 			ex.printStackTrace();
