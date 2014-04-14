@@ -25,12 +25,16 @@ import ch.ethz.inf.dbproject.model.meta.TableName;
  */
 public final class DatastoreInterface {
 	private Connection sqlConnection;
+	static private enum AUTOEXECUTE_MODE { INSERT, UPDATE };
 
 	public DatastoreInterface() {
 		this.sqlConnection = MySQLConnection.getInstance().getConnection();
 	}
 	
-	public final <T extends Entity> T getById(final long id, Class<T> clazz) {
+	public final <T extends Entity> T getById(final Long id, Class<T> clazz) {
+		if (id == null) {
+			return null;
+		}
 		String idColName = getIdColName(clazz);
 		String tableName = getTableName(clazz);
 		
@@ -114,7 +118,7 @@ public final class DatastoreInterface {
 	}
 	
 	public boolean isCaseClosed(int caseId) {
-		return !getById(caseId, Case.class).isOpen();
+		return !getById(Long.valueOf(caseId), Case.class).isOpen();
 	}
 
 	public final List<Case> getByStatus(String status) {
@@ -180,7 +184,7 @@ public final class DatastoreInterface {
 		}
 	}
 	
-	public long insert(PreparedStatement statement) throws SQLException {
+	public Long execute(PreparedStatement statement) throws SQLException {
 		statement.executeUpdate();
 		try (
 			ResultSet generatedKeys = statement.getGeneratedKeys()
@@ -188,7 +192,7 @@ public final class DatastoreInterface {
 			if (generatedKeys.next()) {
 				return generatedKeys.getLong(1);
 			}
-			return 0L;
+			return null;
 		}
 	}
 	
@@ -205,7 +209,7 @@ public final class DatastoreInterface {
 		) {
 			stmt.setString(1, name);
 			stmt.setString(2, password);
-			return getById(insert(stmt), User.class);
+			return getById(execute(stmt), User.class);
 		}  catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -213,11 +217,11 @@ public final class DatastoreInterface {
 	}
 	
 	public final Suspect insertSuspect(int caseId, int poiId) {
-		return insert(Suspect.class, "CaseId", caseId, "PoIId", poiId);
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, Suspect.class, "CaseId", caseId, "PoIId", poiId);
 	}
 	
 	public Case insertCase(String name, String state, int crimeId, String location, Date date, Time time) {
-		return insert(Case.class, 
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, Case.class, 
 				"Name", name, 
 				"Status", state,
 				"CrimeId", crimeId,
@@ -226,9 +230,21 @@ public final class DatastoreInterface {
 				"time", time
 		);
 	}
+	public Case updateCase(int CaseId, String name, String state, int crimeId, String location, Date date, Time time) {
+		autoExecute(AUTOEXECUTE_MODE.UPDATE, Case.class, 
+				"Name", name, 
+				"Status", state,
+				"CrimeId", crimeId,
+				"Location", location,
+				"Date", date,
+				"time", time,
+				"CaseId", CaseId
+		);
+		return getById(Long.valueOf(CaseId), Case.class);
+	}
 	
 	public CaseNote insertComment(String comment, int caseId, int userid) {
-		return insert(CaseNote.class, 
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, CaseNote.class, 
 				"CaseId", caseId, 
 				"Note", comment,
 				"UserId", userid
@@ -236,21 +252,21 @@ public final class DatastoreInterface {
 	}
 
 	public PoI insertPoI(String name, Date birthdate) {
-		return insert(PoI.class, 
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, PoI.class, 
 				"Name", name, 
 				"Birthdate", birthdate
 		);
 	}
 
 	public PoINote insertPoINote(String comment, int poiId, int userid) {
-		return insert(PoINote.class, 
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, PoINote.class, 
 				"PoIId", poiId, 
 				"Note", comment,
 				"UserId", userid
 		);
 	}
 
-	public <T extends Entity> T insert(Class<T> clazz, Object... fields) {
+	public <T extends Entity> T autoExecute(AUTOEXECUTE_MODE mode, Class<T> clazz, Object... fields) {
 		if (fields.length % 2 != 0) {
 			throw new IllegalArgumentException("Pair fieldnames and field values");
 		}
@@ -268,40 +284,61 @@ public final class DatastoreInterface {
 			placeholders.add(data == null ? "NULL" : "?");
 		}
 		
-		try (
-				PreparedStatement stmt = this.sqlConnection.prepareStatement("INSERT INTO " + tableName +" (" + StringUtils.join(columnNames, ", ") +") VALUES (" + StringUtils.join(placeholders, ", ") + ")", Statement.RETURN_GENERATED_KEYS);
-			) {
-				int nextPlaceholder = 1;
-				for (int i_data = 1; i_data < fields.length; i_data += 2) {
-					Object data = fields[i_data];
-					if (data instanceof String) {
-						stmt.setString(nextPlaceholder++, (String) data);
-					}
-					else if (data instanceof Integer) {
-						stmt.setInt(nextPlaceholder++, (Integer) data);
-					}
-					else if (data instanceof Long) {
-						stmt.setLong(nextPlaceholder++, (Long) data);
-					}
-					else if (data instanceof Date) {
-						stmt.setDate(nextPlaceholder++, (Date) data);
-					}
-					else if (data instanceof Time) {
-						stmt.setTime(nextPlaceholder++, (Time) data);
-					}
-					else if (data == null) {
-						// skip
-					}
-					else {
-						throw new UnsupportedOperationException("Type not supported: " + data.getClass());
-					}
-				}
-				
-				return getById(insert(stmt), clazz);
-			}  catch (SQLException e) {
-				e.printStackTrace();
-				return null;
+		try {
+			PreparedStatement stmt;
+			if (mode == AUTOEXECUTE_MODE.INSERT) {
+				stmt = this.sqlConnection.prepareStatement("INSERT INTO " + tableName +" (" + StringUtils.join(columnNames, ", ") +") VALUES (" + StringUtils.join(placeholders, ", ") + ")", Statement.RETURN_GENERATED_KEYS);
 			}
+			else {
+				StringBuilder sql = new StringBuilder();
+				sql.append("UPDATE ");
+				sql.append(tableName);
+				sql.append(" SET ");
+				for (int i = 0; i < columnNames.size() - 1; i++) {
+					if (i > 0) {
+						sql.append(", ");
+					}
+					sql.append(columnNames.get(i));
+					sql.append("=");
+					sql.append(placeholders.get(i));
+				}
+				sql.append(" WHERE ");
+				sql.append(columnNames.get(columnNames.size()-1));
+				sql.append("=");
+				sql.append(placeholders.get(placeholders.size()-1));
+				stmt = this.sqlConnection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
+			}
+			int nextPlaceholder = 1;
+			for (int i_data = 1; i_data < fields.length; i_data += 2) {
+				Object data = fields[i_data];
+				if (data instanceof String) {
+					stmt.setString(nextPlaceholder++, (String) data);
+				}
+				else if (data instanceof Integer) {
+					stmt.setInt(nextPlaceholder++, (Integer) data);
+				}
+				else if (data instanceof Long) {
+					stmt.setLong(nextPlaceholder++, (Long) data);
+				}
+				else if (data instanceof Date) {
+					stmt.setDate(nextPlaceholder++, (Date) data);
+				}
+				else if (data instanceof Time) {
+					stmt.setTime(nextPlaceholder++, (Time) data);
+				}
+				else if (data == null) {
+					// skip
+				}
+				else {
+					throw new UnsupportedOperationException("Type not supported: " + data.getClass());
+				}
+			}
+			
+			return getById(execute(stmt), clazz);
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
 	}
 	

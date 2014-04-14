@@ -48,7 +48,7 @@ public final class PoIDetailServlet extends HttpServlet {
 		try {
 
 			final Integer id = Integer.parseInt(idString);
-			final PoI poi = this.dbInterface.getById(id, PoI.class);
+			final PoI poi = this.dbInterface.getById(Long.valueOf(id), PoI.class);
 
 			
 			/*******************************************************

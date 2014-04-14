@@ -20,7 +20,6 @@ import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.UserManagement;
-
 import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
@@ -77,5 +76,20 @@ public class UserForm extends CreationForm<User> {
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 		session.setAttribute(UserManagement.SESSION_USER, result);
 		response.sendRedirect(WEB_ROOT + "User");
+	}
+
+	@Override
+	protected void onEditSuccess(User result, ServletContext servletContext,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected User processEditForm(List<Field> fields,
+			HashMap<String, String> values, HttpSession session) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

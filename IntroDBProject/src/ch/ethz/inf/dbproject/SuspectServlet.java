@@ -101,7 +101,7 @@ public final class SuspectServlet extends HttpServlet {
 			pois.addBeanColumn("Birthdate", "birthdate");
 			session.setAttribute("poisnotlinkted", "");
 			session.setAttribute("suspect", "");
-			final Case aCase = dbInterface.getById(id, Case.class);
+			final Case aCase = dbInterface.getById(Long.valueOf(id), Case.class);
 			if (UserManagement.isUserLoggedIn(session) && aCase.isOpen()) {
 				table.addLinkColumn("Remove Conviction", "Remove", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
 				table.addLinkColumn("Unlink", "Unlink", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");

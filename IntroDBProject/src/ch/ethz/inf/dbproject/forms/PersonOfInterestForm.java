@@ -74,4 +74,19 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
 		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getId());
 	}
+
+	@Override
+	protected void onEditSuccess(PoI result, ServletContext servletContext,
+			HttpServletRequest request, HttpServletResponse response,
+			HttpSession session) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected PoI processEditForm(List<Field> fields,
+			HashMap<String, String> values, HttpSession session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

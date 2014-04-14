@@ -41,10 +41,32 @@ public abstract class CreationForm<NewResult> extends Form {
 		}
 	}
 	
+	public void processEditForm(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+		HashMap<String, String> values = new HashMap<>();
+		List<Field> editFormFields = editFormFields();
+		for (Field field : editFormFields) {
+			values.put(field.getDisplayName(), request.getParameter(field.getDisplayName()));
+		}
+		
+		try {
+			validateFields(editFormFields, values);
+			NewResult result = processEditForm(editFormFields, values, session);
+			onEditSuccess(result, servletContext, request, response, session);
+		}
+		catch(UserInputException e) {
+			session.setAttribute(SESSION_FORM_FAIL_MSG, e.getMessage());
+			session.setAttribute(SESSION_FORM_FAIL, generateEditForm(values));
+			servletContext.getRequestDispatcher("/FormError.jsp").forward(request, response);
+		}
+	}
+	
 	protected abstract void onNewSuccess(NewResult result, ServletContext servletContext, HttpServletRequest request,
+			HttpServletResponse response, HttpSession session) throws ServletException, IOException;
+	protected abstract void onEditSuccess(NewResult result, ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException;
 
 	protected abstract NewResult processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession session);
+	protected abstract NewResult processEditForm(List<Field> fields, HashMap<String, String> values, HttpSession session);
 	
 	public String generateNewForm() {
 		return generateNewForm(new HashMap<String, String>());
@@ -55,7 +77,6 @@ public abstract class CreationForm<NewResult> extends Form {
 		for (Field field : fields) {
 			field.validate(values);
 		}
-
 	}
 	
 	public String generateNewFormWith(String key, String value) {
@@ -64,11 +85,17 @@ public abstract class CreationForm<NewResult> extends Form {
 		return generateNewForm(values);
 	}
 	
+	public String generateEditForm(HashMap<String, String> values, String buttonStr) {
+		return generateForm(getEditFormTitle(), buttonStr, editFormFields(), "edit", values);
+	}
 	public String generateNewForm(HashMap<String, String> values, String buttonStr) {
 		return generateForm(getNewFormTitle(), buttonStr, newFormFields(), "new", values);
 	}
 	public String generateNewForm(HashMap<String, String> values) {
 		return generateNewForm(values, "Create");
+	}
+	public String generateEditForm(HashMap<String, String> values) {
+		return generateEditForm(values, "Edit");
 	}
 	
 	@Override
@@ -80,7 +107,7 @@ public abstract class CreationForm<NewResult> extends Form {
 			processNewForm(servletContext, request, response, request.getSession());
 		}
 		else if ("edit".equals(action)) {
-			
+			processEditForm(servletContext, request, response, request.getSession());
 		}
 		else {
 			

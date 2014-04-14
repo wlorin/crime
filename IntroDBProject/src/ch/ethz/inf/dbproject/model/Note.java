@@ -16,7 +16,7 @@ public abstract class Note implements Entity {
 	private final Timestamp timestamp;
 	
 	public Note(ResultSet rs) throws SQLException {
-		username = new DatastoreInterface().getById(rs.getInt("UserId"), User.class).getName();
+		username = new DatastoreInterface().getById(rs.getLong("UserId"), User.class).getName();
 		note = rs.getString("Note");
 		timestamp = rs.getTimestamp("Timestamp");
 	}

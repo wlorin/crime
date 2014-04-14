@@ -51,7 +51,8 @@ public final class CaseServlet extends HttpServlet {
 		try {
 
 			final Integer id = Integer.parseInt(idString);
-			final Case aCase = this.dbInterface.getById(id, Case.class);
+			
+			final Case aCase = this.dbInterface.getById(Long.valueOf(id), Case.class);
 
 			
 			/*******************************************************
@@ -106,6 +107,7 @@ public final class CaseServlet extends HttpServlet {
 			session.setAttribute("caseNoteTable", (notes.size() == 0) ? "<i>No notes</i>" : caseNotes);
 
 			session.setAttribute("entity", aCase);
+			session.setAttribute("caseId", aCase.getId());
 			
 			
 			if (UserManagement.isUserLoggedIn(session)) {
