@@ -2,6 +2,7 @@ package ch.ethz.inf.dbproject.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
 
@@ -12,10 +13,12 @@ public abstract class Note implements Entity {
 
 	private final String username;
 	private final String note;
+	private final Timestamp timestamp;
 	
 	public Note(ResultSet rs) throws SQLException {
 		username = new DatastoreInterface().getById(rs.getInt("UserId"), User.class).getName();
 		note = rs.getString("Note");
+		timestamp = rs.getTimestamp("Timestamp");
 	}
 
 	public String getUsername() {
