@@ -554,4 +554,20 @@ public final class DatastoreInterface {
 			return null;
 		}
 	}
+
+	public String getPoiNameById(Integer id) {
+		String sql = "SELECT Name FROM PoI WHERE PoIId = '" + id + "';";
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement(sql);
+		) {
+		    ResultSet rs = stmt.executeQuery();
+			rs.next();
+		    return rs.getString(1);
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -47,6 +47,8 @@ public final class ConvictionServlet extends HttpServlet {
 
 			final Integer id = Integer.parseInt(idString);
 
+			session.setAttribute("poiname", this.dbInterface.getPoiNameById(id));
+			
 			final BeanTableHelper<Conviction> table = new BeanTableHelper<Conviction>(
 					"conviction" 		/* The table html id property */,
 					"casesTable" 		/* The table html class property */,

@@ -3,6 +3,11 @@
 
 <h1>Convictions</h1>
 
+<p> 
+List of convictions for 
+<%= session.getAttribute("poiname") %>
+</p>
+
 <hr/>
 
 <%= session.getAttribute("conviction") %>
