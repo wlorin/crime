@@ -13,11 +13,6 @@ public abstract class Note implements Entity {
 	private final String username;
 	private final String note;
 	
-	public Note(final String username, final String comment) {
-		this.username = username;
-		this.note = comment;
-	}
-	
 	public Note(ResultSet rs) throws SQLException {
 		username = new DatastoreInterface().getById(rs.getInt("UserId"), User.class).getName();
 		note = rs.getString("Note");
