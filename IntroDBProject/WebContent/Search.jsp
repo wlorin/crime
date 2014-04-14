@@ -37,6 +37,17 @@
 </form>
 
 <hr/>
+
+<form method="get" action="Search">
+<div>
+	<input type="hidden" name="filter" value="status" />
+	Search By Status:
+	<input type="text" name="status" />
+	<input type="submit" value="Search" title="Search by Status" />
+</div>
+</form>
+
+<hr/>
 <%=  
 	//TODO Display search results 
 	session.getAttribute("results")
