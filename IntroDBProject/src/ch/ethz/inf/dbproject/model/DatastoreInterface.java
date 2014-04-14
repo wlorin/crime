@@ -378,9 +378,6 @@ public final class DatastoreInterface {
 
 
 	public List<Conviction> getAllConvictions(Integer id) {
-		//	   TODO: annotate class Conviction with table name convicted according to database spec
-		//		String tableName = getTableName(Conviction.class);
-//		String tableName = "Convicted";
 		String sql = " SELECT Convicted.*                "
 		           + " FROM Convicted, PoI                "
 		           + " WHERE                              "
