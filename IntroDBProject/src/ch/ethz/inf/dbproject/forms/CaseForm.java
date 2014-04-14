@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.forms;
 
+import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
+
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
@@ -23,7 +25,6 @@ import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.forms.fields.TimeField;
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
-import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
 public class CaseForm extends CreationForm<Case> {

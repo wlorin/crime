@@ -3,8 +3,6 @@ package ch.ethz.inf.dbproject.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ch.ethz.inf.dbproject.model.meta.Entity;
-
 public class CaseNote extends Note {
 	
 	final int caseId;
