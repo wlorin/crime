@@ -38,7 +38,6 @@ public final class SuspectServlet extends HttpServlet {
 
 		final String idString = request.getParameter("id");
 		if (idString == null) {
-			System.out.println("No ID");
 			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
 			return;
 		}

@@ -11,31 +11,47 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
  */
 public class Conviction implements Entity {
 
+	private final int poIId;
+	private final int caseId;
+	private final int crimeId;
 	private final Date date;
-	private final Date endDate;
-	private final String type;
+	private final String sentence;
 
 	public Conviction(ResultSet rs) throws SQLException {
-		throw new UnsupportedOperationException("Constructor not yet implemented");
+		this.caseId = rs.getInt("caseId");
+		this.crimeId = rs.getInt("crimeId");
+		this.poIId = rs.getInt("poIId");
+		this.date = rs.getDate("date");
+		this.sentence = rs.getString("sentence");
 	}
 	
 	public Date getDate() {
 		return date;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    public int getPoIId(){
+    	return poIId;
+    }
+    
+    public int getCaseId(){
+    	return caseId;
+    }
+    
+    public int getCrimeId(){
+    	return crimeId;
+    }
 
-	public String getType() {
-		return type;
+	public String getSentence() {
+		return sentence;
 	}
 
 	
-	public Conviction(final Date date, final Date endDate, final String type) {
+	public Conviction(final Date date, final int poIId, final int caseId, final int crimeId, final String sentence) {
 		this.date = date;
-		this.endDate = endDate;
-		this.type = type;
+		this.sentence = sentence;
+		this.poIId = poIId;
+		this.caseId = caseId;
+		this.crimeId = crimeId;
 	}
 
 		

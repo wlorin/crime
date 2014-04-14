@@ -355,7 +355,8 @@ public final class DatastoreInterface {
 			e.printStackTrace();
 			return null;
 		}
-}
+	}
+
 
 	
 	public List<PoI> getAllSuspects(Integer id) {
@@ -371,5 +372,22 @@ public final class DatastoreInterface {
 			e.printStackTrace();
 			return null;
 		}
-}
+	}
+
+
+
+public List<Conviction> getAllConvictions(Integer id) {
+		String tableName = getTableName(Conviction.class);
+		try (
+			PreparedStatement stmt = 
+			this.sqlConnection.prepareStatement("SELECT Convicted.Date, Convicted.Sentence, Convicted.CaseId FROM" + 
+			tableName +  ", `PoI` WHERE PoI.PoIId = " + id + " and PoI.PoIId = Convicted.PoIId;");
+		) {
+			return all(stmt, Conviction.class);
+
+		}  catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
