@@ -53,9 +53,10 @@ public final class ConvictionServlet extends HttpServlet {
 					Conviction.class 	/* The class of the objects (rows) that will be displayed */
 			);
 
-			table.addBeanColumn("Date", "date");
-			table.addBeanColumn("CaseId", "caseId");		
+			table.addBeanColumn("Case", "casename");
+			table.addBeanColumn("Crime", "crime");
 			table.addBeanColumn("Sentence", "sentence");
+			table.addBeanColumn("Date", "date");
 			
 			session.setAttribute("conviction", table);		
 			
