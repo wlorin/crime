@@ -95,7 +95,7 @@ public final class CaseServlet extends HttpServlet {
 					CaseNote.class 	/* The class of the objects (rows) that will be displayed */
 			);
 
-			caseNotes.addBeanColumn("User", "username");
+			caseNotes.addBeanColumn("Author", "username");
 			caseNotes.addBeanColumn("Date", "timestamp");
 			caseNotes.addBeanColumn("Note", "note");
 
