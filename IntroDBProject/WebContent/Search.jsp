@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="Header.jsp" %>
 
-<h1>Search</h1>
+<h1>Search for Cases</h1>
 
 <hr/>
 
@@ -19,7 +19,7 @@
 <form method="get" action="Search">
 <div>
 	<input type="hidden" name="filter" value="poiname" />
-	Search By Person Name:
+	Search By Person Name:<br />(Convicts / Suspects)
 	<input type="text" name="poiname" />
 	<input type="submit" value="Search" title="Search by Person Name" />
 </div>

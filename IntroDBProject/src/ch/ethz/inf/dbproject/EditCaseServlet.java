@@ -45,12 +45,12 @@ public final class EditCaseServlet extends HttpServlet {
 		session.setAttribute("caseName", aCase.getName());
 		HashMap<String, String> initialValues = new HashMap<String, String>();
 		initialValues.put(CaseForm.crime, aCase.getCrime());
-		initialValues.put(CaseForm.date, aCase.getDate().toString());
+		initialValues.put(CaseForm.date, (aCase.getDate() == null ? "" : aCase.getDate().toString()));
 		initialValues.put(CaseForm.id, String.valueOf(aCase.getId()));
 		initialValues.put(CaseForm.location, aCase.getLocation());
 		initialValues.put(CaseForm.name, aCase.getName());
 		initialValues.put(CaseForm.status, aCase.getStatus());
-		initialValues.put(CaseForm.time, aCase.getTime().toString().substring(0, 5)); //pardom by dirty hack :(
+		initialValues.put(CaseForm.time, (aCase.getTime() == null ? "" : aCase.getTime().toString().substring(0, 5))); //pardon by dirty hack :(
 		request.setAttribute("initialValues", initialValues);
 		this.getServletContext().getRequestDispatcher("/EditCase.jsp").forward(request, response);
 		

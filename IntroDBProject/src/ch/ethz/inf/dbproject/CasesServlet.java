@@ -47,6 +47,13 @@ public final class CasesServlet extends HttpServlet {
 				"casesTable" /* The table html class property */,
 				Case.class 	/* The class of the objects (rows) that will be displayed */
 		);
+		
+		final String action = request.getParameter("action");
+		if ("delete".equals(action)) {
+			final String idString = request.getParameter("id");
+			Integer id = Integer.valueOf(idString);
+			dbInterface.deleteCase(id);
+		}
 
 		// Add columns to the new table
 
@@ -86,6 +93,7 @@ public final class CasesServlet extends HttpServlet {
 		final String category = request.getParameter("category");
 
 		if (UserManagement.isUserLoggedIn(session)) {
+			table.addLinkColumn("Delete Case", "Delete", "Cases?action=delete&id=", "id");
 			request.setAttribute("formNewCase", new CaseForm().generateNewForm());
 		}
 		

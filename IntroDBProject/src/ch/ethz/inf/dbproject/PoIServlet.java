@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
+import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -47,6 +48,13 @@ public final class PoIServlet extends HttpServlet {
 		);
 
 		// Add columns to the new table
+		
+		final String action = request.getParameter("action");
+		if ("delete".equals(action)) {
+			final String idString = request.getParameter("id");
+			Integer id = Integer.valueOf(idString);
+			dbInterface.deletePoI(id);
+		}
 
 		table.addBeanColumn("Name", "name");
 		table.addBeanColumn("Birthdate", "birthdate");
@@ -66,6 +74,10 @@ public final class PoIServlet extends HttpServlet {
 				"PoIDetail?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
 				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 		
+		
+		if (UserManagement.isUserLoggedIn(session)) {
+			table.addLinkColumn("Delete PoI", "Delete", "PoI?action=delete&id=","id");
+		}
 		
 		
 		// Pass the table to the session. This will allow the respective jsp page to display the table.

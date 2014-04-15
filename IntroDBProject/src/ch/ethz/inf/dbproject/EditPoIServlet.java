@@ -46,7 +46,7 @@ public final class EditPoIServlet extends HttpServlet {
 		session.setAttribute("poiName", poi.getName());
 		
 		HashMap<String, String> initialValues = new HashMap<String, String>();
-		initialValues.put(PersonOfInterestForm.date, poi.getBirthdate().toString());
+		initialValues.put(PersonOfInterestForm.date, (poi.getBirthdate() == null ? "" : poi.getBirthdate().toString()));
 		initialValues.put(PersonOfInterestForm.name, poi.getName());
 		initialValues.put(PersonOfInterestForm.id, String.valueOf(poi.getId()));
 		request.setAttribute("initialValues", initialValues);

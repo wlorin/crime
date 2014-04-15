@@ -116,6 +116,20 @@ public final class DatastoreInterface {
 			return clazz.getSimpleName();
 		}
 	}
+	
+	public void deleteCase(int caseId) {
+		runQuery("DELETE FROM Convicted WHERE CaseId=" + caseId);
+		runQuery("DELETE FROM Suspect WHERE CaseId=" + caseId);
+		runQuery("DELETE FROM CaseNote WHERE CaseId=" + caseId);
+		runQuery("DELETE FROM `Case` WHERE CaseId=" + caseId);
+	}
+	
+	public void deletePoI(int poiId) {
+		runQuery("DELETE from Convicted WHERE PoIId=" + poiId);
+		runQuery("DELETE from Suspect WHERE PoIId=" + poiId);
+		runQuery("DELETE FROM PoINote WHERE PoIId=" + poiId);
+		runQuery("DELETE FROM PoI WHERE PoIId=" + poiId);
+	}
 
 	public boolean isCaseClosed(int caseId) {
 		return !getById(Long.valueOf(caseId), Case.class).isOpen();
