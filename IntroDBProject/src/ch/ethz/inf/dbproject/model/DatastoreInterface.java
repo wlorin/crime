@@ -265,6 +265,12 @@ public final class DatastoreInterface {
 		);
 	}
 
+	public Crime insertCrime(String crimeName) {
+		return autoExecute(AUTOEXECUTE_MODE.INSERT, Crime.class, 
+				"Crime", crimeName 
+		);
+	}
+
 	public PoI insertPoI(String name, Date birthdate) {
 		return autoExecute(AUTOEXECUTE_MODE.INSERT, PoI.class, 
 				"Name", name, 

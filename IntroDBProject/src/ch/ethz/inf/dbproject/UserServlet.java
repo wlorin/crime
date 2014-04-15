@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.forms.CrimeForm;
 import ch.ethz.inf.dbproject.forms.PersonOfInterestForm;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.User;
@@ -56,6 +57,7 @@ public final class UserServlet extends HttpServlet {
 			session.setAttribute(SESSION_USER_DETAILS, userDetails);
 			
 			request.setAttribute("formNewPoI", new PersonOfInterestForm().generateNewForm());
+			request.setAttribute("formNewCrime", new CrimeForm().generateNewForm());
 		}
 
 		// TODO display registration

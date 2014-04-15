@@ -20,6 +20,8 @@ if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
 
 ${formNewPoI }
 
+${formNewCrime }
+
 <%
 //TODO: Display cases opened by the user
 	
