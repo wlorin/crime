@@ -10,7 +10,9 @@
 <h1>Case Details</h1>
 
 <%=session.getAttribute("caseTable") %>
-<a href="EditCase?id=${caseId}">edit case</a>
+<% if ((Boolean)session.getAttribute("isOpen") && UserManagement.isUserLoggedIn(session)) { %>
+	<a href="EditCase?id=${caseId}">edit case</a>
+<% } %>
 
 ${openCloseButton}
 

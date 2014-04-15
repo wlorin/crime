@@ -55,7 +55,7 @@ public final class EditCaseServlet extends HttpServlet {
 		initialValues.put(CaseForm.location, aCase.getLocation());
 		initialValues.put(CaseForm.name, aCase.getName());
 		initialValues.put(CaseForm.status, aCase.getStatus());
-		initialValues.put(CaseForm.time, aCase.getTime().toString());
+		initialValues.put(CaseForm.time, aCase.getTime().toString().substring(0, 5)); //pardom by dirty hack :(
 		request.setAttribute("initialValues", initialValues);
 		this.getServletContext().getRequestDispatcher("/EditCase.jsp").forward(request, response);
 		

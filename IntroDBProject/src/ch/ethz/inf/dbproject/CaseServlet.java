@@ -106,7 +106,7 @@ public final class CaseServlet extends HttpServlet {
 			session.setAttribute("caseTable", table);
 			session.setAttribute("caseNoteTable", (notes.size() == 0) ? "<i>No notes</i>" : caseNotes);
 
-			session.setAttribute("entity", aCase);
+			session.setAttribute("isOpen", aCase.isOpen());
 			session.setAttribute("caseId", aCase.getId());
 			
 			
