@@ -92,22 +92,22 @@ INSERT INTO `Case` (crimeId, date, time, status, location, name)
 --  User
 --
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Max", "password");
+  VALUES ("Max", md5('password'));
   
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Philipp", "password");
+  VALUES ("Philipp", md5('password'));
  
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Anna", "password");
+  VALUES ("Anna", md5('password'));
 
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Christian", "password");
+  VALUES ("Christian", md5('password'));
   
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Lorin", "password");
+  VALUES ("Lorin", md5('password'));
 
 INSERT INTO `User` (Name, Password)  
-  VALUES ("Nina", "password");  
+  VALUES ("Nina", md5('password'));  
   
 --  
 --  Persons of Interest
