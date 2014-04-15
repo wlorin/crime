@@ -100,7 +100,7 @@ public final class SuspectServlet extends HttpServlet {
 			pois.addBeanColumn("Name", "name");
 			pois.addBeanColumn("Birthdate", "birthdate");
 			session.setAttribute("poisnotlinkted", "");
-			session.setAttribute("suspect", "");
+			session.setAttribute("suspect", table);
 			final Case aCase = dbInterface.getById(Long.valueOf(id), Case.class);
 			if (UserManagement.isUserLoggedIn(session) && aCase.isOpen()) {
 				table.addLinkColumn("Remove Conviction", "Remove", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
@@ -109,7 +109,6 @@ public final class SuspectServlet extends HttpServlet {
 				pois.addLinkColumn("Link with Case", "Link", "Suspect?CaseId=" + id + "&action=link&id=", "id");
 				convicts.addLinkColumn("Delete Conviction", "Delete", "Suspect?action=delete&CaseId=" + id + "&poi-crime=", "poiCrime");
 				session.setAttribute("poisnotlinkted", pois);
-				session.setAttribute("suspect", table);
 			}
 			convicts.addObjects(dbInterface.getAllConvicts(id));
 			table.addObjects(this.dbInterface.getAllSuspects(id));
