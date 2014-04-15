@@ -4,7 +4,7 @@ import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import ch.ethz.inf.dbproject.forms.fields.DateField;
 import ch.ethz.inf.dbproject.forms.fields.Field;
+import ch.ethz.inf.dbproject.forms.fields.HiddenField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
 import ch.ethz.inf.dbproject.model.PoI;
@@ -25,25 +26,26 @@ import ch.ethz.inf.dbproject.model.PoI;
 
 public class PersonOfInterestForm extends CreationForm<PoI> {
 
-	final String name = "Name";
-	final String date = "Birthdate";
+	public static final String name = "Name";
+	public static final String date = "Birthdate";
+	public static final String id = "id";
 	
 	DateField fieldBirthdate = new DateField(date, true);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<Field> newFormFields() {
-		return (List<Field>) (List) Arrays.asList(new Field[]{
-				new StringField(name, false),
-				fieldBirthdate
-		});
+		List<Field> bla = new ArrayList<Field>();
+		bla.add(new StringField(name, false));
+		bla.add(fieldBirthdate);
+		return bla;
 	}
 	
 	@Override
 	protected PoI processNewForm(List<Field> fields, HashMap<String, String> values, HttpSession _) {
 		requireNotEmpty(name, values);
 		
-		String name = StringUtils.strip(values.get(this.name));
+		String name = StringUtils.strip(values.get(PersonOfInterestForm.name));
 		Date birthdate = fieldBirthdate.parse(values);
 
 		return new DatastoreInterface().insertPoI(name, birthdate);
@@ -51,7 +53,9 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 
 	@Override
 	public List<Field> editFormFields() {
-		throw new UnsupportedOperationException("Cannot edit PoI");
+		List<Field> bla = newFormFields();
+		bla.add(new HiddenField(id, false));
+		return bla;
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 
 	@Override
 	protected String getEditFormTitle() {
-		throw new UnsupportedOperationException("Cannot edit PoI");
+		return "Edit Person of Interest";
 	}
 
 	@Override
@@ -79,14 +83,19 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 	protected void onEditSuccess(PoI result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getId());
 		
 	}
 
 	@Override
 	protected PoI processEditForm(List<Field> fields,
 			HashMap<String, String> values, HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
+		// requireNotEmpty(name, values);
+		
+		String name = StringUtils.strip(values.get(PersonOfInterestForm.name));
+		Date birthdate = fieldBirthdate.parse(values);
+		Long id = Long.valueOf(values.get(PersonOfInterestForm.id));
+
+		return new DatastoreInterface().updatePoI(id, name, birthdate);
 	}
 }

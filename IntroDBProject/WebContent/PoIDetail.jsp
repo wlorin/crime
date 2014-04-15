@@ -14,6 +14,9 @@
 <hr/>
 
 <%= session.getAttribute("poi") %>
+<% if (UserManagement.isUserLoggedIn(session)) { %>
+	<a href="EditPoI?id=${poiId}">edit Person of Interest</a>
+<% } %>
 <h2>Notes</h2>
 ${poiNotes }
 <hr/>

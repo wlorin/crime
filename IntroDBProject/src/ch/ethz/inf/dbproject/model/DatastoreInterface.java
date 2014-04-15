@@ -257,6 +257,14 @@ public final class DatastoreInterface {
 				"Birthdate", birthdate
 		);
 	}
+	public PoI updatePoI(Long id, String name, Date birthdate) {
+		autoExecute(AUTOEXECUTE_MODE.UPDATE, PoI.class, 
+				"Name", name, 
+				"Birthdate", birthdate,
+				"PoIId", id
+		);
+		return getById(id, PoI.class);
+	}
 
 	public PoINote insertPoINote(String comment, int poiId, int userid) {
 		return autoExecute(AUTOEXECUTE_MODE.INSERT, PoINote.class, 

@@ -49,7 +49,7 @@ public final class PoIDetailServlet extends HttpServlet {
 
 			final Integer id = Integer.parseInt(idString);
 			final PoI poi = this.dbInterface.getById(Long.valueOf(id), PoI.class);
-
+			session.setAttribute("poiId", poi.getId());
 			
 			/*******************************************************
 			 * Construct a table to present all properties of a case

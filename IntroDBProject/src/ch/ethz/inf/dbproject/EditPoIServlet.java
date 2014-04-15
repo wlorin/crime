@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.forms.CaseForm;
-import ch.ethz.inf.dbproject.forms.CreationForm;
+import ch.ethz.inf.dbproject.forms.PersonOfInterestForm;
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.DatastoreInterface;
+import ch.ethz.inf.dbproject.model.PoI;
 
-@WebServlet(description = "Edits a specific case.", urlPatterns = { "/EditCase" })
-public final class EditCaseServlet extends HttpServlet {
+@WebServlet(description = "Edits a specific case.", urlPatterns = { "/EditPoI" })
+public final class EditPoIServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private final DatastoreInterface dbInterface = new DatastoreInterface();
@@ -24,7 +25,7 @@ public final class EditCaseServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public EditCaseServlet() {
+	public EditPoIServlet() {
 		super();
 	}
 
@@ -36,23 +37,20 @@ public final class EditCaseServlet extends HttpServlet {
 		final HttpSession session = request.getSession(true);
 		final String idString = request.getParameter("id");
 		if (idString == null) {
-			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
+			this.getServletContext().getRequestDispatcher("/PoI").forward(request, response);
 			return;
 		}
 		Long id = Long.valueOf(idString);
 		DatastoreInterface dbInterface = new DatastoreInterface();
-		Case aCase = dbInterface.getById(id, Case.class);
-		session.setAttribute("caseName", aCase.getName());
+		PoI poi = dbInterface.getById(id, PoI.class);
+		session.setAttribute("poiName", poi.getName());
+		
 		HashMap<String, String> initialValues = new HashMap<String, String>();
-		initialValues.put(CaseForm.crime, aCase.getCrime());
-		initialValues.put(CaseForm.date, aCase.getDate().toString());
-		initialValues.put(CaseForm.id, String.valueOf(aCase.getId()));
-		initialValues.put(CaseForm.location, aCase.getLocation());
-		initialValues.put(CaseForm.name, aCase.getName());
-		initialValues.put(CaseForm.status, aCase.getStatus());
-		initialValues.put(CaseForm.time, aCase.getTime().toString().substring(0, 5)); //pardom by dirty hack :(
+		initialValues.put(PersonOfInterestForm.date, poi.getBirthdate().toString());
+		initialValues.put(PersonOfInterestForm.name, poi.getName());
+		initialValues.put(PersonOfInterestForm.id, String.valueOf(poi.getId()));
 		request.setAttribute("initialValues", initialValues);
-		this.getServletContext().getRequestDispatcher("/EditCase.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher("/EditPoI.jsp").forward(request, response);
 		
 	}
 }
