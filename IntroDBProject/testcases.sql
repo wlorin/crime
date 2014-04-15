@@ -18,7 +18,7 @@ INSERT INTO `Crime` (Crime)
 -- Testdaten Case
 --  
 INSERT INTO `Case` (crimeId, date, time, status, location, name)
-  SELECT Crime.CrimeId, '2014-03-11', '12:31:00', "open", "Zurich", "Diebstahl 1"
+  SELECT Crime.CrimeId, '2014-03-11', '12:31:00', "open", "Zürich", "Diebstahl 1"
   FROM Crime
   WHERE Crime.Crime = "Diebstahl";
 
@@ -43,7 +43,7 @@ INSERT INTO `Case` (crimeId, date, time, status, location, name)
   WHERE Crime.Crime = "Mord";
   
 INSERT INTO `Case` (crimeId, date, time, status, location, name)
-  SELECT Crime.CrimeId, '2012-08-23', '23:00:00', "closed", "Aarau", "SchlÃ¤gerei"
+  SELECT Crime.CrimeId, '2012-08-23', '23:00:00', "closed", "Aarau", "Schlägerei"
   FROM Crime
   WHERE Crime.Crime = "Koerperverletzung";  
   
@@ -58,7 +58,7 @@ INSERT INTO `Case` (crimeId, date, time, status, location, name)
   WHERE Crime.Crime = "Bankraub";
   
 INSERT INTO `Case` (crimeId, date, time, status, location, name)
-  SELECT Crime.CrimeId, '2014-04-08', '01:00:00', "open", "DÃ¼bendorf", "Case 4"
+  SELECT Crime.CrimeId, '2014-04-08', '01:00:00', "open", "Dübendorf", "Case 4"
   FROM Crime
   WHERE Crime.Crime = "Einbruch";  
   
@@ -116,7 +116,7 @@ INSERT INTO `PoI` (Name, Birthdate)
   VALUES ("Sarah Meier", '1980-08-25'); 
   
 INSERT INTO `PoI` (Name, Birthdate)  
-  VALUES ("Hans MÃ¼ller", '1953-09-21'); 
+  VALUES ("Hans Müller", '1953-09-21'); 
   
   INSERT INTO `PoI` (Name, Birthdate)  
   VALUES ("Oliver Sieber", '1991-02-12'); 
@@ -128,13 +128,13 @@ INSERT INTO `PoI` (Name, Birthdate)
   VALUES ("Fabienne Neuwirth", '1985-04-18'); 
   
   INSERT INTO `PoI` (Name, Birthdate)  
-  VALUES ("Peter MÃ¼ller", '1968-03-09'); 
+  VALUES ("Peter Müller", '1968-03-09'); 
   
   INSERT INTO `PoI` (Name, Birthdate)  
   VALUES ("Urs Gerold", '1961-06-03') ;
   
   INSERT INTO `PoI` (Name, Birthdate)  
-  VALUES ("Tamara JÃ¤ger", '1980-08-25'); 
+  VALUES ("Tamara Jäger", '1980-08-25'); 
   
   INSERT INTO `PoI` (Name, Birthdate)  
   VALUES ("Michael Peters", '1972-12-16'); 
@@ -169,12 +169,12 @@ INSERT INTO `CaseNote` (CaseId, Note, UserId)
   WHERE Case.Name = "Diebstahl 2" and User.Name = "Christian";  
   
 INSERT INTO `CaseNote` (CaseId, Note, UserId)  
-  SELECT Case.CaseId, "durch BalkontÃ¼re ins Haus eingebrochen, Bargeld und Schmuck gestohlen", User.UserId
+  SELECT Case.CaseId, "durch Balkontüre ins Haus eingebrochen, Bargeld und Schmuck gestohlen", User.UserId
   FROM `Case`, User
   WHERE Case.Name = "Case 5" and User.Name = "Anna";
   
 INSERT INTO `CaseNote` (CaseId, Note, UserId)  
-  SELECT Case.CaseId, "TÃ¤ter gefasst", User.UserId
+  SELECT Case.CaseId, "Täter gefasst", User.UserId
   FROM `Case`, User
   WHERE Case.Name = "Bankraub 2" and User.Name = "Anna";  
   
