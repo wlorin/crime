@@ -1,3 +1,4 @@
+<%@page import="ch.ethz.inf.dbproject.util.UserManagement"%>
 <%@page import="ch.ethz.inf.dbproject.forms.PersonOfInterestForm"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="Header.jsp" %>
@@ -11,7 +12,7 @@
 <hr/>
 
 <% 
-if ((Boolean) session.getAttribute(UserServlet.SESSION_USER_LOGGED_IN)) {
+if (UserManagement.isUserLoggedIn(session)) {
 	// User is logged in. Display the details:
 %>
 
