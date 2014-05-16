@@ -1,7 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 public class As extends Operator {
 
