@@ -51,4 +51,12 @@ public abstract class Operator {
 	public final RightJoin joinRight(Operator rightOp, Condition condition) {
 		return new RightJoin(this, rightOp, condition);
 	}
+	
+	public final Sort sortAsc(String column) {
+		return new Sort(this, column, true);
+	}
+	
+	public final Sort sortDesc(String column) {
+		return new Sort(this, column, false);
+	}
 }
