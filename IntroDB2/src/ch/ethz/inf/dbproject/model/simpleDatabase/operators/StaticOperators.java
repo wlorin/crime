@@ -77,9 +77,7 @@ public class StaticOperators {
 		HashMap<Integer, Integer> updateMap = new HashMap<Integer, Integer>();
 		for (int i = 0; i < columns.length; i++) {
 			int pos = schema.getIndex(columns[i]);
-			if (pos > 0) {
-				updateMap.put(pos, i);
-			}
+			updateMap.put(pos, i);
 		}
 		for (Tuple t : deleted) {
 			String[] newValues = new String[schema.types.length];
