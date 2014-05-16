@@ -89,6 +89,33 @@ public class Part2Test {
 		assertEquals("On TRUE", 4, countAll);
 	}
 	
+	
+	@Test
+	public void testLeftJoin() {
+		testInsert();
+		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
+		testInsert();
+		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), all()));
+		int countNone = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), none()));
+		assertEquals("On = ", 2, countEq);
+		assertEquals("On TRUE", 4, countAll);
+		assertEquals("On NONE", 4, countAll);
+	}
+
+	@Test
+	public void testLeftRight() {
+		testInsert();
+		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
+		testInsert();
+		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), all()));
+		int countNone = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), none()));
+		assertEquals("On = ", 2, countEq);
+		assertEquals("On TRUE", 4, countAll);
+		assertEquals("On NONE", 4, countAll);
+	}
+	
 	@Test
 	public void testScan() {
 		testInsert();

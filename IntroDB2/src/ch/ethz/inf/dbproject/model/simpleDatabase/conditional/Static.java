@@ -40,4 +40,14 @@ public class Static {
 		};
 	}
 	
+	public static Condition none() {
+		return new Condition() {
+			
+			@Override
+			public boolean matches(Tuple t) {
+				return false;
+			}
+		};
+	}
+	
 }
