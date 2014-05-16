@@ -10,7 +10,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 public class Tuple {
 
 	private final TupleSchema schema;
-	private final String[] values;
+	public final String[] values;
 
 	public Tuple(
 		final TupleSchema schema, 

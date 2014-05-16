@@ -26,6 +26,7 @@ public class Scan extends Operator {
 	 */
 	
 	public Scan(final String fileName, final TupleSchema schema) {
+		super(schema);
 		
 		// create schema
 		

@@ -38,6 +38,7 @@ public class Select extends Operator {
 	 * @param compareValue value that must be matched
 	 */
 	public Select(final Operator op, Condition c) {
+		super(op.schema);
 		this.op = op;
 		this.c = c;
 	}

@@ -1,7 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -24,6 +23,7 @@ public class Sort extends Operator implements Comparator<Tuple> {
 		final String column,
 		final boolean ascending
 	) {
+		super(op.schema);
 		this.op = op;
 		this.column = column;
 		this.ascending = ascending;

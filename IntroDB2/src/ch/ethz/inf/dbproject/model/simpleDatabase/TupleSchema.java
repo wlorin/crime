@@ -3,6 +3,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
@@ -149,6 +150,13 @@ public class TupleSchema implements Serializable {
 		public TupleSchema build() {
 			if (built) {
 				throw new IllegalStateException("Schema already built");
+			}
+			HashSet<String> names = new HashSet<>();
+			for (SchemaColumn column : columns) {
+				if (names.contains(column.name)) {
+					throw new IllegalStateException("Duplicate names detected: " + column.name);
+				}
+				names.add(column.name);
 			}
 			
 			built = true;

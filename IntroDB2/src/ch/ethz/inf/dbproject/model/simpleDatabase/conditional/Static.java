@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.conditional;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeVarChar;
 
@@ -27,6 +28,16 @@ public class Static {
 	
 	public static Equals eq(ConditionalSource a, ConditionalSource b) {
 		return new Equals(a, b);
+	}
+	
+	public static Condition all() {
+		return new Condition() {
+			
+			@Override
+			public boolean matches(Tuple t) {
+				return true;
+			}
+		};
 	}
 	
 }

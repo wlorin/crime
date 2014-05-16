@@ -13,49 +13,38 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 public final class Case extends Operator {
 
 	private final Operator op;
-	private TupleSchema newSchema = null;
-	private final String[] columns;
 	
-	public Case(final Operator op, final String column) {
+	public Case(final Operator op, final String... columns) {
+		super(makeNewSchema(op.schema, columns));
 		this.op = op;
-		this.columns = new String[] {column};
 	}
-	
-	public Case(final Operator op, final String[] columns) {
+	public Case (TupleSchema schema, final Operator op, final TupleSchema newSchema) {
+		super(newSchema);
 		this.op = op;
-		this.columns = columns;
-	}
-	public Case (final Operator op, final TupleSchema newSchema) {
-		this.op = op;
-		this.newSchema = newSchema;
-		this.columns = null;
 	}
 	
 	@Override
 	public boolean moveNext() {
 		if (op.moveNext()) {
-			if (newSchema == null) {
-				makeNewSchema();
-			}
 			Tuple current = op.current();
-			String[] values = new String[newSchema.types.length];
+			String[] values = new String[schema.types.length];
 			int i = 0;
-			for (SchemaColumn column : newSchema.columns) {
+			for (SchemaColumn column : schema.columns) {
 				values[i] = current.get(column.name);
 				i++;
 			}
-			this.current = new Tuple(newSchema, values);
+			this.current = new Tuple(schema, values);
 			return true;
 		}
 		return false;
 	}
 
-	private void makeNewSchema() {
+	private static TupleSchema makeNewSchema(TupleSchema schema, String[] columns) {
 		TupleSchemaBuilder builder = TupleSchema.build();
 		for (String columnName : columns) {
-			Type type = op.current.getSchema().getType(columnName);
+			Type type = schema.getType(columnName);
 			builder.with(columnName, type);
 		}
-		newSchema = builder.build();
+		return builder.build();
 	}
 }

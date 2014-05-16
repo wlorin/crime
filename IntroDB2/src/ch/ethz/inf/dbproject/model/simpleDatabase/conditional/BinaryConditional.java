@@ -14,7 +14,7 @@ public abstract class BinaryConditional implements Condition {
 	
 	@Override
 	public boolean matches(Tuple t) {
-		if (a.valueType(t).getClass() != b.valueType(t).getClass()) return false;
+		if (a.valueType(t).getClass() != b.valueType(t).getClass()) throw new IllegalArgumentException("Incompatible types: " + a.valueType(t).getClass().getSimpleName() + " " + b.valueType(t).getClass().getSimpleName());
 		
 		String aValue = a.value(t);
 		String bValue = b.value(t);

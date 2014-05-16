@@ -31,7 +31,7 @@ public class StaticOperators {
 					condition = newCondition;
 				}
 			}
-			Operator op = new Select(new Scan(fileName, schema), condition);
+			Operator op = select(new Scan(fileName, schema), condition);
 			if (!op.moveNext()) {
 				return true;
 			}
@@ -63,11 +63,17 @@ public class StaticOperators {
 		return true;
 	}
 	
-	public static int update(final String fileName, final TupleSchema schema, final String[] columns, final String[] values) {
+	public static int update(final String fileName, final TupleSchema schema, final String[] columns, final String[] values, Condition condition) {
 		int updated = 0;
-		int last = columns.length-1;
-		assert(columns.length == values.length && values.length > 1);
-		List<Tuple> deleted = delete(fileName, schema, columns[last], values[last]);
+		if(columns.length != values.length) {
+			throw new IllegalArgumentException("Columns and values don't pair up.");
+		}
+		
+		if (columns.length == 0 || values.length == 0) {
+			throw new IllegalArgumentException("Must provide at least one column/value-pair to update");
+		}
+		
+		List<Tuple> deleted = delete(fileName, schema, condition);
 		HashMap<Integer, Integer> updateMap = new HashMap<Integer, Integer>();
 		for (int i = 0; i < columns.length; i++) {
 			int pos = schema.getIndex(columns[i]);
@@ -91,11 +97,11 @@ public class StaticOperators {
 		return updated;
 	}
 	
-	public static List<Tuple> delete(final String fileName, final TupleSchema schema, final String column, final String compareValue) {
+	public static List<Tuple> delete(final String fileName, final TupleSchema schema, Condition condition) {
 		List<Tuple> res = new ArrayList<Tuple>();
 		List<Long> posToDelete = new ArrayList<Long>();
 		Scan scan = new Scan(fileName, schema);
-		Select select = new Select(scan, eq(col(column), val(compareValue)));
+		Select select = new Select(scan, condition);
 		while (select.moveNext()) {
 			res.add(select.current());
 			posToDelete.add(scan.getBufferPosition() - select.current().getTupleSize());
@@ -119,5 +125,25 @@ public class StaticOperators {
 			count++;
 		}
 		return count;
+	}
+	
+	public static Select select(Operator operator, Condition condition) {
+		return new Select(operator, condition);
+	}
+	
+	public static Case project(Operator operator, String... column) {
+		return new Case(operator, column);
+	}
+	
+	public static InnerJoin innerJoin(Operator leftOp, Operator rightOp, Condition condition) {
+		return new InnerJoin(leftOp, rightOp, condition);
+	}
+	
+	public static Sort sortAsc(Operator operator, String column) {
+		return new Sort(operator, column, true);
+	}
+	
+	public static Sort sortDesc(Operator operator, String column) {
+		return new Sort(operator, column, false);
 	}
 }
