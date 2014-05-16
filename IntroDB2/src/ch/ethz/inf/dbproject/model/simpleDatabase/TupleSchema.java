@@ -1,5 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
@@ -7,26 +8,27 @@ import java.util.HashMap;
  * each column. Other meta data, such cardinalities, indexes, etc. could be
  * specified here.
  */
-public class TupleSchema {
+public class TupleSchema implements Serializable {
 
-	private final String[] columnNames;
+	public final Type[] types;
 	private final HashMap<String, Integer> columnNamesMap;
+	private Type primaryKey = null;
 	
-	/**
-	 * Constructs a new tuple schema.
-	 * @param columnNames column names
-	 */
-	public TupleSchema(
-		final String[] columnNames
-	) {
-		this.columnNames = columnNames;
-		
+	public Type getPrimaryKey() {
+		return primaryKey;
+	}
+	
+	public TupleSchema(final Type[] types) {
+		this.types = types;
 		this.columnNamesMap = new HashMap<String, Integer>();
-		for (int i = 0; i < columnNames.length; ++i) {
-			this.columnNamesMap.put(this.columnNames[i].toUpperCase(), i);
+		for (int i = 0; i < types.length; ++i) {
+			this.columnNamesMap.put(this.types[i].name.toUpperCase(), i);
+			if (types[i].isPrimaryKey) {
+				primaryKey = types[i];
+			}
 		}
 	}
-
+	
 	/**
 	 * Given the name of a column, returns the index in the respective tuple.
 	 * 
@@ -44,4 +46,7 @@ public class TupleSchema {
 		
 	}
 	
+	public Type getType(int index) {
+		return types[index];
+	}
 }

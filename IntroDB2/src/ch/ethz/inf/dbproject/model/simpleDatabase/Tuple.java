@@ -51,6 +51,8 @@ public class Tuple {
 	public final String toString() {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
+			buf.append(schema.types[i].name);
+			buf.append("=");
 			buf.append(values[i]);
 			if (i < values.length - 1) {
 				buf.append(",");
@@ -58,5 +60,18 @@ public class Tuple {
 		}
 		return buf.toString();
 	}
-
+	
+	public final int getTupleSize() {
+		int size = 1; //deleted marker
+		for (int i = 0; i < schema.types.length; i++) {
+			if (schema.types[i].variableSize) {
+				size += 4;
+				size += values[i].length();
+			}
+			else {
+				size += schema.types[i].size;
+			}
+		}
+		return size;
+	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
 
@@ -22,16 +24,9 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		/**
 		 * TODO this method should return the case with the given id
 		 */
-		final Scan scan = new Scan("cases.txt", 
-			new String[] {
-				"id",
-				"name",
-				"field2",
-				"field3"
-			}
-		);
+		final Scan scan = new Scan("bla", new Type[] { new TypeInt("blubb")});
 		
-		final Select<Integer> select = new Select<Integer>(scan, "id", id);
+		final Select select = new Select(scan, "id", String.valueOf(id));
 		
 		if (select.moveNext()) {
 			

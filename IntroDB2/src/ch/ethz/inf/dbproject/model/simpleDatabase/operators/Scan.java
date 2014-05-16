@@ -1,12 +1,15 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
 
 
 /**
@@ -16,24 +19,27 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 public class Scan extends Operator {
 
 	private final TupleSchema schema;
-	private final BufferedReader reader;
+	private final BufferedInputStream reader;
+	private long myBufferPosition = 0;
 
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
 	 */
-	public Scan(
-		final String fileName, 
-		final String[] columnNames
-	) {
+	public Scan(final String fileName,	final Type[] columns) {
+		// create schema
+		this(fileName, new TupleSchema(columns));
+	}
+	public Scan(final String fileName, final TupleSchema schema) {
 		
 		// create schema
-		this.schema = new TupleSchema(columnNames);
+		
+		this.schema = schema;
 
 		// read from file
-		BufferedReader reader = null;
+		BufferedInputStream reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(fileName));
+			reader = new BufferedInputStream(new FileInputStream(fileName));
 		} catch (final FileNotFoundException e) {
 			throw new RuntimeException("could not find file " + fileName);
 		}
@@ -46,33 +52,56 @@ public class Scan extends Operator {
 	 * @param columns column names
 	 */
 	public Scan(
-		final Reader reader, 
-		final String[] columnNames
+		final InputStream reader, 
+		final Type[] columns
 	) {
-		this.reader = new BufferedReader(reader);
-		this.schema = new TupleSchema(columnNames);
+		this.reader = new BufferedInputStream(reader);
+		this.schema = new TupleSchema(columns);
 	}
 
 	@Override
 	public boolean moveNext() {
 		
 		try {
-			
-			// TODO
-			// a) read next line
-			// b) check if we are at the end of the file (line would be null)
-			//   b1. if we reached end of the file, close the buffered reader
-			// c) split up comma separated values
-			// d) create new tuple using schema and values
-			throw new IOException("NOT IMPLEMENTED");
+			int deleted = reader.read();
+			myBufferPosition++;
+			if (deleted == -1) {
+				reader.close();
+				return false;
+			}
+			String[] values = new String[schema.types.length];
+			TypeInt intConv = new TypeInt("dummy");
+			for (int i = 0; i < schema.types.length; i++) {
+				int size = 0;
+				if (schema.types[i].variableSize) {
+					byte[] sizeByte = new byte[4];
+					reader.read(sizeByte);
+					myBufferPosition += sizeByte.length;
+					size = intConv.getIntFromByteArr(sizeByte);
+				}
+				else {
+					size = schema.types[i].size;
+				}
+				byte[] buf = new byte[size];
+				reader.read(buf);
+				myBufferPosition += buf.length;
+				values[i] = schema.types[i].fromByteArr(buf);
+			}
+			if (deleted != 0) {
+				return moveNext();
+			}
+			this.current = new Tuple(schema, values);
+			return true;
 			
 		} catch (final IOException e) {
 			
 			throw new RuntimeException("could not read: " + this.reader + 
 				". Error is " + e);
-			
 		}
 		
+	}
+	public long getBufferPosition() {
+		return myBufferPosition;
 	}
 
 }
