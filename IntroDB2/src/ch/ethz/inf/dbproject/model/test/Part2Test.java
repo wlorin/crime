@@ -74,7 +74,7 @@ public class Part2Test {
 		assertTrue("No tuples", 0 == oldCount);
 		testInsert();
 		StaticOperators.update(testTable, schema, new String[] { "name" }, new String[] {"after Update"}, eq(col("id"), val(1)));
-		int count = StaticOperators.Count(new Select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
+		int count = StaticOperators.Count(new Select(new Scan(testTable, schema).as("prefix"), eq(col("prefix.name"), val("after Update"))));
 		assertTrue(count > oldCount);
 	}
 	

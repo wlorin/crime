@@ -59,7 +59,7 @@ public class TupleSchema implements Serializable {
 
 		final Integer index = this.columnNamesMap.get(column.toUpperCase());
 		if (index == null) {
-			return -1; // error
+			throw new IllegalArgumentException("Column " + column + " does not exist");
 		} else {
 			return index;
 		}
@@ -78,8 +78,8 @@ public class TupleSchema implements Serializable {
 		for (int i = 0; i < types.length; i++) {
 			String name = names[i];
 			Type type = types[i];
-			String newName = name;
-			if (name.contains(".")) {
+			String newName = prefix + "." + name;
+			if (name.contains("\\.")) {
 				newName = prefix + "." + name.split("\\.")[1];
 			}
 			tupleSchemaBuilder.with(newName, type);
