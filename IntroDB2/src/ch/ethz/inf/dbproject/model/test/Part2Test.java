@@ -79,6 +79,17 @@ public class Part2Test {
 	}
 	
 	@Test
+	public void testInnerJoin() {
+		testInsert();
+		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
+		testInsert();
+		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), all()));
+		assertEquals("On = ", 2, countEq);
+		assertEquals("On TRUE", 4, countAll);
+	}
+	
+	@Test
 	public void testScan() {
 		testInsert();
 		Operator op = new Scan(testTable, schema);

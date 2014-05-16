@@ -7,8 +7,8 @@ public class As extends Operator {
 
 	private final Operator op;
 
-	public As(TupleSchema schema, Operator op, String prefix) {
-		super(schema.prefixed(prefix));
+	public As(Operator op, String prefix) {
+		super(op.schema.prefixed(prefix));
 		this.op = op;
 	}
 
