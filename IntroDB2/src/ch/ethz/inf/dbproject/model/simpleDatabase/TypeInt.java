@@ -1,12 +1,11 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 
 public class TypeInt extends Type {
 
-	public TypeInt(String name) {
-		super(name, (char)4, false);
+	public TypeInt() {
+		super((char)4, false);
 	}
 
 	@Override

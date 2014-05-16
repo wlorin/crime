@@ -1,7 +1,14 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * The schema contains meta data about a tuple. So far we only store the name of
@@ -12,21 +19,33 @@ public class TupleSchema implements Serializable {
 
 	public final Type[] types;
 	private final HashMap<String, Integer> columnNamesMap;
-	private Type primaryKey = null;
+	private final HashMap<String, Type> nameToType;
+	public ImmutableList<SchemaColumn> primaryKeys = null;
+	String[] names;
+	public final List<SchemaColumn> columns;
 	
-	public Type getPrimaryKey() {
-		return primaryKey;
-	}
-	
-	public TupleSchema(final Type[] types) {
-		this.types = types;
+	private TupleSchema(List<SchemaColumn> columns) {		
+		this.columns = ImmutableList.copyOf(columns);
 		this.columnNamesMap = new HashMap<String, Integer>();
+		this.nameToType = new HashMap<>();
+		names= new String[columns.size()];
+		types = new Type[columns.size()];
+		
+		List<SchemaColumn> keys = Lists.newArrayList();
 		for (int i = 0; i < types.length; ++i) {
-			this.columnNamesMap.put(this.types[i].name.toUpperCase(), i);
+			final SchemaColumn column = columns.get(i);
+			names[i] = column.name;
+			types[i] = column.type;
+			nameToType.put(names[i], types[i]);
+			this.columnNamesMap.put(names[i].toUpperCase(), i);
 			if (types[i].isPrimaryKey) {
-				primaryKey = types[i];
+				keys.add(column);
 			}
 		}
+		
+		primaryKeys = ImmutableList.copyOf(keys);
+		
+		
 	}
 	
 	/**
@@ -43,10 +62,120 @@ public class TupleSchema implements Serializable {
 		} else {
 			return index;
 		}
-		
 	}
 	
 	public Type getType(int index) {
 		return types[index];
+	}
+	
+	public TupleSchema prefixed(String prefix) {
+		if (prefix.contains("\\.")) {
+			throw new IllegalArgumentException("Prefix must not contain '.'");
+		}
+		
+		TupleSchemaBuilder tupleSchemaBuilder = new TupleSchemaBuilder();
+		for (int i = 0; i < types.length; i++) {
+			String name = names[i];
+			Type type = types[i];
+			String newName = name;
+			if (name.contains(".")) {
+				newName = prefix + "." + name.split("\\.")[1];
+			}
+			tupleSchemaBuilder.with(newName, type);
+		}
+		
+		return tupleSchemaBuilder.build();
+	}
+	
+	public static TupleSchemaBuilder build() {
+		return new TupleSchemaBuilder();
+	}
+	
+	public static class TupleSchemaBuilder {
+		List<SchemaColumn> columns = new ArrayList<>();
+		TupleSchema tupleSchema;
+		
+		boolean built = false;
+		
+		public TupleSchemaBuilder with(String name, Type type) {
+			if (built) {
+				throw new IllegalStateException("Schema already built");
+			}
+			columns.add(new SchemaColumn(name, type));
+			return this;
+		}
+		
+		public TupleSchemaBuilder intCol(String name) {
+			return with(name, new TypeInt());
+		}
+		
+		public TupleSchemaBuilder varcharCol(String name, int size) {
+			return with(name, new TypeVarChar(size));
+		}
+		
+		public TupleSchemaBuilder dateCol(String name) {
+			return with(name, new TypeDate());
+		}
+		
+		public TupleSchemaBuilder timeCol(String name) {
+			return with(name, new TypeTime());
+		}
+		
+		public TupleSchemaBuilder asPrimary() {
+			if (built) {
+				throw new IllegalStateException("Schema already built");
+			}
+			columns.get(columns.size() - 1).type.isPrimaryKey = true;
+			return this;
+		}
+		
+		public TupleSchemaBuilder markPrimary(String... columnsToMark) {
+			if (built) {
+				throw new IllegalStateException("Schema already built");
+			}
+			nextColumn:
+			for (String name : columnsToMark) {
+				for (SchemaColumn schemaColumn : columns) {
+					if (schemaColumn.name.equals(name)) {
+						schemaColumn.type.isPrimaryKey = true;
+						continue nextColumn;
+					}
+				}
+				throw new IllegalArgumentException("Column " + name + " does not exist");
+			}
+			return this;
+		}
+		
+		public TupleSchema build() {
+			if (built) {
+				throw new IllegalStateException("Schema already built");
+			}
+			
+			built = true;
+			tupleSchema = new TupleSchema(columns);
+			return tupleSchema;
+		}
+		
+		public class SchemaColumn {
+			public final String name;
+			public final Type type;
+
+			public SchemaColumn(String name, Type type) {
+				this.name = name;
+				this.type = type;
+			}
+			
+			public TupleSchema getSchema() {
+				if (!TupleSchemaBuilder.this.built) {
+					throw new IllegalStateException("Schema has not yet been built");
+				}
+				
+				return TupleSchemaBuilder.this.tupleSchema;
+			}
+		}
+	}
+
+	public Type getType(String columnName) {
+		return getType(getIndex(columnName));
 	}
 }

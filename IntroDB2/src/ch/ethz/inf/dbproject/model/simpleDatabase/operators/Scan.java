@@ -4,11 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
 
 
@@ -26,10 +24,7 @@ public class Scan extends Operator {
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
 	 */
-	public Scan(final String fileName,	final Type[] columns) {
-		// create schema
-		this(fileName, new TupleSchema(columns));
-	}
+	
 	public Scan(final String fileName, final TupleSchema schema) {
 		
 		// create schema
@@ -51,13 +46,6 @@ public class Scan extends Operator {
 	 * @param reader reader to read lines from
 	 * @param columns column names
 	 */
-	public Scan(
-		final InputStream reader, 
-		final Type[] columns
-	) {
-		this.reader = new BufferedInputStream(reader);
-		this.schema = new TupleSchema(columns);
-	}
 
 	@Override
 	public boolean moveNext() {
@@ -70,7 +58,7 @@ public class Scan extends Operator {
 				return false;
 			}
 			String[] values = new String[schema.types.length];
-			TypeInt intConv = new TypeInt("dummy");
+			TypeInt intConv = new TypeInt();
 			for (int i = 0; i < schema.types.length; i++) {
 				int size = 0;
 				if (schema.types[i].variableSize) {

@@ -2,8 +2,8 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 public class TypeVarChar extends Type {
 
-	public TypeVarChar(String name, int size) {
-		super(name, size, true);
+	public TypeVarChar(int size) {
+		super(size, true);
 	}
 
 	@Override

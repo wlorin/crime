@@ -1,29 +1,24 @@
 package ch.ethz.inf.dbproject.model.test;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.StringReader;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TypeVarChar;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Case;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators;
-
 /**
  * Unit tests for Part 2.
  * @author Martin Hentschel
  */
 public class Part2Test {
 	
-	private TupleSchema schema = new TupleSchema(new Type[] {new TypeInt("id"), new TypeVarChar("name", 20), new TypeVarChar("status", 20)});
+	private TupleSchema schema = TupleSchema.build().intCol("id").varcharCol("name", 20).varcharCol("status", 20).build();
 	
 	@Test
 	public void testInsert() {
@@ -42,10 +37,10 @@ public class Part2Test {
 	}
 	@Test
 	public void testUpdate() {
-		int oldCount = StaticOperators.Count(new Select(new Scan("test", schema), "name", "after Update"));
+		int oldCount = StaticOperators.Count(new Select(new Scan("test", schema), eq(col("name"), val("after Update"))));
 		testInsert();
 		StaticOperators.update("test", schema, new String[] { "name",  "id" }, new String[] {"after Update", "1"});
-		int count = StaticOperators.Count(new Select(new Scan("test", schema), "name", "after Update"));
+		int count = StaticOperators.Count(new Select(new Scan("test", schema), eq(col("name"), val("after Update"))));
 		assert(count > oldCount);
 	}
 	
@@ -62,7 +57,7 @@ public class Part2Test {
 
 	@Test
 	public void testSelect() {
-		Operator op = new Select(new Scan("test", schema), "status", "closed");
+		Operator op = new Select(new Scan("test", schema), eq(col("status"), val("closed")));
 		String expected = "2,Fiscal fraud,closed";
 		String actual = concatTuples(op);
 		assertEquals(expected, actual);

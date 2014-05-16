@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
+
 import java.io.FileOutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -8,16 +10,28 @@ import java.util.List;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
+import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
+
+import com.google.common.collect.ImmutableList;
 
 public class StaticOperators {
 	
 	public static boolean checkKey(final String fileName, final TupleSchema schema, final String[] values) {
-		Type primaryKey = schema.getPrimaryKey();
-		if (primaryKey != null) {
-			int pos = schema.getIndex(primaryKey.name);
-			Operator op = new Select(new Scan(fileName, schema), primaryKey.name, values[pos]);
+		ImmutableList<SchemaColumn> primaryKeys = schema.primaryKeys;
+		if (!primaryKeys.isEmpty()) {
+			Condition condition = null;
+			for (SchemaColumn primaryKey : primaryKeys) {
+				Condition newCondition = eq(col(primaryKey.name), val(values[schema.getIndex(primaryKey.name)]));
+				if (condition != null) {
+					condition = and(condition, newCondition);
+				}
+				else {
+					condition = newCondition;
+				}
+			}
+			Operator op = new Select(new Scan(fileName, schema), condition);
 			if (!op.moveNext()) {
 				return true;
 			}
@@ -28,7 +42,7 @@ public class StaticOperators {
 		assert(schema.types.length == values.length);
 		assert(checkKey(fileName, schema, values));
 		FileOutputStream writer = null;
-		TypeInt myIntConv = new TypeInt("dummy");
+		TypeInt myIntConv = new TypeInt();
 		try {
 			writer = new FileOutputStream(fileName, true);
 			writer.write(0);
@@ -81,7 +95,7 @@ public class StaticOperators {
 		List<Tuple> res = new ArrayList<Tuple>();
 		List<Long> posToDelete = new ArrayList<Long>();
 		Scan scan = new Scan(fileName, schema);
-		Select select = new Select(scan, column, compareValue);
+		Select select = new Select(scan, eq(col(column), val(compareValue)));
 		while (select.moveNext()) {
 			res.add(select.current());
 			posToDelete.add(scan.getBufferPosition() - select.current().getTupleSize());

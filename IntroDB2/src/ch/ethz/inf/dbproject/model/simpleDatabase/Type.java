@@ -5,16 +5,14 @@ import java.nio.charset.Charset;
 public abstract class Type {
 	public final int size;
 	public final boolean variableSize;
-	public final String name;
 	public boolean isPrimaryKey = false;
 	
-	public Type (String name, int size, boolean variableSize) {
+	public Type (int size, boolean variableSize) {
 		this.size = size;
 		this.variableSize = variableSize;
-		this.name = name;
 	}
-	public Type (String name, int size, boolean variableSize, boolean isPrimary) {
-		this(name, size, variableSize);
+	public Type (int size, boolean variableSize, boolean isPrimary) {
+		this(size, variableSize);
 		this.isPrimaryKey = isPrimary;
 	}
 	public abstract String getType();

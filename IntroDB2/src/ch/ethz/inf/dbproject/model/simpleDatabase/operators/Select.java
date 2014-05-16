@@ -1,7 +1,6 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
-import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
+import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
 
 
 /**
@@ -30,8 +29,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 public class Select extends Operator {
 
 	private final Operator op;
-	private final String column;
-	private final String compareValue;
+	private final Condition c;
 
 	/**
 	 * Contructs a new selection operator.
@@ -39,30 +37,19 @@ public class Select extends Operator {
 	 * @param column column name that gets compared
 	 * @param compareValue value that must be matched
 	 */
-	public Select(final Operator op, final String column, final String compareValue) {
+	public Select(final Operator op, Condition c) {
 		this.op = op;
-		this.column = column;
-		this.compareValue = compareValue;
-	}
-
-	private final boolean accept(final Tuple tuple) {
-		final int columnIndex = tuple.getSchema().getIndex(this.column);
-		if (tuple.get(columnIndex).equals(this.compareValue.toString())) {
-			return true;
-		}
-		return false;
-		
+		this.c = c;
 	}
 	
 	@Override
 	public boolean moveNext() {
 		while (op.moveNext()) {
-			if(accept(op.current())) {
+			if(c.matches(op.current)) {
 				this.current = op.current();
 				return true;
 			}
 		}
 		return false;
 	}
-
 }

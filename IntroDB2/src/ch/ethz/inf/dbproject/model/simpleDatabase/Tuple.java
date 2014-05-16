@@ -27,6 +27,10 @@ public class Tuple {
 	public final String get(final int index) {
 		return this.values[index];
 	}
+	
+	public final String get(String key) {
+		return get(schema.getIndex(key));
+	}
 
 	public final short getShort(final int index) {
 		return Short.parseShort(this.values[index]);
@@ -51,7 +55,7 @@ public class Tuple {
 	public final String toString() {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
-			buf.append(schema.types[i].name);
+			buf.append(schema.names[i]);
 			buf.append("=");
 			buf.append(values[i]);
 			if (i < values.length - 1) {
@@ -73,5 +77,9 @@ public class Tuple {
 			}
 		}
 		return size;
+	}
+
+	public Type getType(String name) {
+		return schema.getType(schema.getIndex(name));
 	}
 }
