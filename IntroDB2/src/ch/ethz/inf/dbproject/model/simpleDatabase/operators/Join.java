@@ -67,9 +67,9 @@ public abstract class Join extends Operator {
 		TreeSet<Integer> unusedLeftIndices = leftIndices;
 		TreeSet<Integer> unusedRightIndices = rightIndices;
 		
-		List<Tuple> unprocessedLeft = unprocessed(lefts, unusedLeftIndices);
+		List<Tuple> unprocessedLeft = unprocessedLeft(lefts, unusedLeftIndices, schema, leftOp.schema.columns.size());
 		handleUnprocessedLeft(joined, unprocessedLeft);
-		List<Tuple> unprocessedRight = unprocessed(rights, unusedRightIndices);
+		List<Tuple> unprocessedRight = unprocessedRight(rights, unusedRightIndices, schema, rightOp.schema.columns.size());
 		handleUnprocessedRight(joined, unprocessedRight);
 	}
 
@@ -79,10 +79,22 @@ public abstract class Join extends Operator {
 	protected abstract void handleUnprocessedRight(List<Tuple> joined, List<Tuple> unprocessedRight);
 
 
-	private List<Tuple> unprocessed(List<Tuple> ts, TreeSet<Integer> unusedIndices) {
+	private List<Tuple> unprocessedLeft(List<Tuple> ts, TreeSet<Integer> unusedIndices, TupleSchema schema, int emptyColumns) {
 		ArrayList<Tuple> unprocessed = new ArrayList<>();
 		for (Integer index : unusedIndices) {
-			unprocessed.add(ts.get(index));
+			final String[] values = ts.get(index).values;
+			final String[] emptyValues = new String[emptyColumns];
+			unprocessed.add(new Tuple(schema, ObjectArrays.concat(values, emptyValues, String.class)));
+		}
+		return unprocessed;
+	}
+
+	private List<Tuple> unprocessedRight(List<Tuple> ts, TreeSet<Integer> unusedIndices, TupleSchema schema, int emptyColumns) {
+		ArrayList<Tuple> unprocessed = new ArrayList<>();
+		for (Integer index : unusedIndices) {
+			final String[] emptyValues = new String[emptyColumns];
+			final String[] values = ts.get(index).values;
+			unprocessed.add(new Tuple(schema, ObjectArrays.concat(emptyValues, values, String.class)));
 		}
 		return unprocessed;
 	}
