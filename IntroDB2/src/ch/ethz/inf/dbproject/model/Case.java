@@ -2,36 +2,50 @@ package ch.ethz.inf.dbproject.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.util.Date;
+import java.util.List;
 
-public final class Case {
+import ch.ethz.inf.dbproject.model.meta.Entity;
+
+public final class Case implements Entity {
 	
 	/**
 	 * TODO The properties of the case should be added here
 	 */
 	private final int id;
-	private final String name;
-	private final String field2;
-	private final int field3;
+	final private String name;
+	private final int crimeId;
+	private final String status;
+	private final String location;
+	private final Date date;
+	private final Time time;
 	
 	/**
 	 * Construct a new case.
 	 * 
-	 * @param name		The name of the case
+	 * @param description		The name of the case
 	 */
-	public Case(	final int id, final String name, final String field2, final int field3) {
+	public Case(	final int id, final String name, final int crimeId, final String status, final String location, final Date date, final Time time) {
 		this.id = id;
 		this.name = name;
-		this.field2 = field2;
-		this.field3 = field3;
+		this.crimeId = crimeId;
+		this.status = status;
+		this.location = location;
+		this.date = date;
+		this.time = time;
 	}
 	
 	public Case(	final ResultSet rs) throws SQLException {
 		// TODO These need to be adapted to your schema
 		// TODO Extra properties need to be added
-		this.id = rs.getInt("id");
-		this.name = rs.getString("name");
-		this.field2 = rs.getString("field2");
-		this.field3  = rs.getInt("field3");
+		this.id = rs.getInt("caseId");
+		this.name = rs.getString("Name");
+		this.crimeId = rs.getInt("crimeId");
+		this.status = rs.getString("status");
+		this.location = rs.getString("location");
+		this.date = rs.getDate("date");
+		this.time = rs.getTime("time");
 	}
 
 	/**
@@ -39,19 +53,44 @@ public final class Case {
 	 * "Generate Getters and Setters to auto-magically generate
 	 * the getters. 
 	 */
+	public int getCrimeId() {
+		return crimeId;
+	}
+
 	public String getName() {
 		return name;
+	}
+
+	public String getCrime() {
+		final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+		return dbInterface.getCrimeById(crimeId);
+	}
+	
+	public String getStatus() {
+		return status;
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	public String getField2() {
-		return field2;
+	public String getLocation() {
+		return location;
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+	
+	public Date getTime() {
+		return time;
 	}
 
-	public int getField3() {
-		return field3;
-	}	
+	public List<CaseNote> getCaseNotes() {
+		return new DatastoreInterfaceMySQL().getCaseNotesFrom(this.getId());
+	}
+
+	public boolean isOpen() {
+		return "open".equals(getStatus());
+	}
 }

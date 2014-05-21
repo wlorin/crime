@@ -32,13 +32,8 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		if (select.moveNext()) {
 			
 			final Tuple tuple = select.current();
-			final Case p = new Case(
-				tuple.getInt(0), 
-				tuple.get(1),
-				tuple.get(2),
-				tuple.getInt(3)
-			);
-			return p;
+			
+			return null;
 			
 		} else {
 			
