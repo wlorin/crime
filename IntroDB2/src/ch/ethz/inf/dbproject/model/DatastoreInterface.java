@@ -1,6 +1,10 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
+
+import ch.ethz.inf.dbproject.model.meta.Entity;
 
 /**
  * This class should be the interface between the web application

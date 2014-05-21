@@ -1,5 +1,8 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
+import java.sql.Time;
+import java.util.Date;
+
 /**
  * A tuple in our database. A tuple consists of a schema (describing the names
  * of the columns) and values. A tuple is created and modified by operators.
@@ -85,5 +88,15 @@ public class Tuple {
 
 	public Type getType(String name) {
 		return schema.getType(schema.getIndex(name));
+	}
+
+	public final Date getDate(final int index) {
+		// TODO Convert String to Date
+		return null;
+	}
+
+	public final Time getTime(final int index) {
+		// TODO Convert String to Time
+		return null;
 	}
 }
