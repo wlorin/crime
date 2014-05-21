@@ -9,25 +9,74 @@ import java.util.List;
  */
 public interface DatastoreInterface {
 
-	public abstract Case getCaseById(final int id);
+	public abstract <T extends Entity> T getById(final Long id, Class<T> clazz);
 
-	public abstract List<Case> getAllCases();
+	public abstract <T extends Entity> List<T> getAll(Class<T> clazz);
 	
-	public abstract List<Case> getCaseByName(final String name);
+	public abstract List<Case> getByStatus(String status);
 
-	public abstract List<Case> getCasesByCategory(final Category category);
-
-	public abstract List<Case> getCasesByCity(final String city);
-
-	public abstract List<Case> getMostRecentCases();
+	public abstract List<Case> getMostRecentCases(int number);
 	
-	public abstract List<Case> getOldestUnsolvedCases();
+	public abstract List<Case> getOldestUnsolvedCases(int number);
 			
-	public abstract List<Comment> getCaseComments(final int caseId);
+	public abstract User tryGetUserFromCredentials(String name, String password);
 
-	public abstract List<Category> getAllCategories();
+	public abstract void removeSuspect(int caseId, int poiId);
 	
-	public abstract User getUser(final String username, final String password);
+	public abstract User insertUser(String name, String password);
 	
-	public abstract List<Case> getCaseByOwner(final int userId);
+	public abstract Suspect insertSuspect(int caseId, int poiId);
+	
+	public abstract Case insertCase(String name, String state, int crimeId, String location, Date date, Time time);
+	
+	public abstract Case updateCase(int CaseId, String name, String state, int crimeId, String location, Date date, Time time);
+	
+	public abstract CaseNote insertComment(String comment, int caseId, int userid);
+	
+	public abstract Crime insertCrime(String crimeName);
+	
+	public abstract PoI insertPoI(String name, Date birthdate);
+	
+	public abstract PoI updatePoI(Long id, String name, Date birthdate);
+	
+	public abstract PoINote insertPoINote(String comment, int poiId, int userid);
+	
+	public abstract String getCrimeById(int id);
+	
+	public abstract String getCasenameById(int id);
+	
+	public abstract List<Case> getProjectsByCategory(String category);
+	
+	public abstract List<Case> getProjectsWithoutCategory();
+	
+	public abstract List<Case> searchByName(String string);
+	
+	public abstract List<CaseNote> getCaseNotesFrom(int caseId);
+	
+	public abstract List<PoI> getAllSuspects(Integer id);
+	
+	public abstract List<Convict> getAllConvicts(Integer caseId);
+	
+	public abstract List<PoI> getAllPoIsNotLinked(Integer id);
+	
+	public abstract List<Conviction> getAllConvictions(Integer id);
+	
+	public abstract void closeCase(int caseId);
+	
+	public abstract void openCase(int caseId);
+	
+	public abstract Conviction insertConviction(int caseId, int poiId, Date convictionDate, String sentence, int crimeId);
+	
+	public abstract List<PoINote> getPoINote(int id);
+	
+	public abstract String getPoiNameById(Integer id);
+	
+	public abstract List<Case> getInvolvedPoI(String poiname);
+	
+	public abstract void deleteCase(int caseId);
+	
+	public abstract void deletePoI(int poiId);
+	
+	public abstract boolean isCaseClosed(int caseId);
+	
 }
