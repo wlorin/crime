@@ -24,7 +24,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators;
  */
 public class Part2Test {
 	
-	private TupleSchema schema = TupleSchema.build().intCol("id").varcharCol("name", 20).varcharCol("status", 20).build();
+	private TupleSchema schema = TupleSchema.build().intCol("id").asPrimary().asAutoIncrement().varcharCol("name", 20).varcharCol("status", 20).build();
 	String testTable;
 	File tempFile;
 	
@@ -39,12 +39,11 @@ public class Part2Test {
 	public void tearDown() {
 		tempFile.deleteOnExit();
 	}
-	
 	@Test
 	public void testInsert() {
 		StaticOperators.insert(testTable, schema, new String[] {"1", "asdfgäöü", "closed"});
 	}
-	
+
 	@Test
 	public void testDelete() {
 		testInsert();
@@ -118,16 +117,44 @@ public class Part2Test {
 	
 	@Test
 	public void testScan() {
-		testInsert();
+		String[] values = new String[] { "1", "test", "Test2" };
+		StaticOperators.insert(testTable, schema, values);
 		Operator op = new Scan(testTable, schema);
 		op.moveNext();
 		Tuple res = op.current();
 		System.out.println(res.toString());
-		String expected = "id=1,name=asdfgäöü,status=closed";
+		String expected = "id=1,name=test,status=Test2";
 		assertEquals(expected, res.toString());
 	}
-
-
+	@Test
+	public void testScanWithNull() {
+		String[] values = new String[] { "1", null, "Test2" };
+		StaticOperators.insert(testTable, schema, values);
+		Operator op = new Scan(testTable, schema);
+		op.moveNext();
+		Tuple res = op.current();
+		System.out.println(res.toString());
+		String expected = "id=1,name=null,status=Test2";
+		assertEquals(expected, res.toString());
+		assert(res.isNull(1));
+	}
+	@Test
+	public void testAutoIncrement() {
+		StaticOperators.insert(testTable, schema, new String[] { null, "1", "1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "2", "2" });
+		StaticOperators.insert(testTable, schema, new String[] { "3", "3", "3" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "4", "4" });
+		Scan scan = new Scan(testTable, schema);
+		scan.moveNext();
+		assertEquals(scan.current().toString(), "id=1,name=1,status=1");
+		scan.moveNext();
+		assertEquals(scan.current().toString(), "id=2,name=2,status=2");
+		scan.moveNext();
+		assertEquals(scan.current().toString(), "id=3,name=3,status=3");
+		scan.moveNext();
+		assertEquals(scan.current().toString(), "id=4,name=4,status=4");
+	}
+	
 	@Test
 	public void testSelect() {
 		testInsert();
@@ -145,25 +172,6 @@ public class Part2Test {
 		Tuple t = op.current();
 		assertTrue(t.getSchema().types.length == 2);
 	}
-
-	/*
-	@Test
-	public void testProjectByIdStatus() {
-		String[] columns = new String[] { "status", "id" };
-		Operator op = new Case(new Scan(new StringReader(relation), schema), columns);
-		String expected = "open,1 closed,2 open,3";
-		String actual = concatTuples(op);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void testSelectProject() {
-		Operator op = new Case(new Select<String>(new Scan(new StringReader(relation), schema), "status", "closed"), "name");
-		String expected = "Fiscal fraud";
-		String actual = concatTuples(op);
-		assertEquals(expected, actual);
-	}
-	*/
 
 	/**
 	 * Concatenates all tuples returned by the operator. The tuples are separated

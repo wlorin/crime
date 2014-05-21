@@ -65,6 +65,18 @@ public class TupleSchema implements Serializable {
 		}
 	}
 	
+	public int getAutoIncrementColumn() {
+		for (int i = 0; i < types.length; i++) {
+			if (types[i].isPrimaryKey && types[i] instanceof TypeInt) {
+				TypeInt typeint = (TypeInt)types[i];
+				if (typeint.isAutoIncrement) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+	
 	public Type getType(int index) {
 		return types[index];
 	}
@@ -127,6 +139,19 @@ public class TupleSchema implements Serializable {
 				throw new IllegalStateException("Schema already built");
 			}
 			columns.get(columns.size() - 1).type.isPrimaryKey = true;
+			return this;
+		}
+		
+		public TupleSchemaBuilder asAutoIncrement() {
+			if (built) {
+				throw new IllegalStateException("Schema already built");
+			}
+			Type type = columns.get(columns.size() - 1).type;
+			if (!(type instanceof TypeInt)) {
+				throw new IllegalStateException("Can only set TypeInt type to autoincrement");
+			}
+			TypeInt typeInt = (TypeInt) type;
+			typeInt.isAutoIncrement = true;
 			return this;
 		}
 		

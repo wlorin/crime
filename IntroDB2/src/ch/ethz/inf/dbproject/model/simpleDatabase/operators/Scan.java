@@ -50,14 +50,22 @@ public class Scan extends Operator {
 
 	@Override
 	public boolean moveNext() {
+		/* the first bit signalises whether the row is deleted. 
+		 * The folowing [schema.types.length] bits signal whether the field is NULL
+		 * the following 8 - (schema.types.length % 8 + 1) bits are disregarded
+		 */
 		
 		try {
-			int deleted = reader.read();
-			myBufferPosition++;
-			if (deleted == -1) {
-				reader.close();
-				return false;
+			int flags[] = new int[schema.types.length / 8 + 1];
+			for (int i = 0; i < flags.length; i++) {
+				flags[i] = reader.read();
+				myBufferPosition++;
+				if (flags[i] == -1) {
+					reader.close();
+					return false;
+				}
 			}
+			
 			String[] values = new String[schema.types.length];
 			TypeInt intConv = new TypeInt();
 			for (int i = 0; i < schema.types.length; i++) {
@@ -71,19 +79,26 @@ public class Scan extends Operator {
 				else {
 					size = schema.types[i].size;
 				}
-				byte[] buf = new byte[size];
-				reader.read(buf);
-				myBufferPosition += buf.length;
-				values[i] = schema.types[i].fromByteArr(buf);
+				
+				int index = (i + 1) / 8;
+				int mask = 0b10000000 >> ((i + 1) % 8);
+				if ((flags[index] & mask) == 1) {
+					values[i] = null;
+				}
+				else if (size > 0) {
+					byte[] buf = new byte[size];
+					reader.read(buf);
+					myBufferPosition += buf.length;
+					values[i] = schema.types[i].fromByteArr(buf);
+				}
 			}
-			if (deleted != 0) {
+			if (flags[0] >> 7 == 1) { //record is deleted
 				return moveNext();
 			}
 			this.current = new Tuple(schema, values);
 			return true;
 			
 		} catch (final IOException e) {
-			
 			throw new RuntimeException("could not read: " + this.reader + 
 				". Error is " + e);
 		}

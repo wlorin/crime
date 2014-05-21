@@ -3,6 +3,8 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 import java.nio.ByteBuffer;
 
 public class TypeInt extends Type {
+	
+	public boolean isAutoIncrement = false;
 
 	public TypeInt() {
 		super((char)4, false);

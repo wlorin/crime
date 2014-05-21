@@ -47,6 +47,10 @@ public class Tuple {
 	public final double getDouble(final int index) {
 		return Double.parseDouble(this.values[index]);
 	}
+	
+	public final boolean isNull(final int index) {
+		return this.values[index] == null;
+	}
 
 	// TODO 
 	// You may add other custom type getters here
@@ -66,7 +70,7 @@ public class Tuple {
 	}
 	
 	public final int getTupleSize() {
-		int size = 1; //deleted marker
+		int size = schema.types.length / 8 + 1; //flags
 		for (int i = 0; i < schema.types.length; i++) {
 			if (schema.types[i].variableSize) {
 				size += 4;

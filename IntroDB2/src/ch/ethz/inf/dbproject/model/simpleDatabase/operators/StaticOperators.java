@@ -38,21 +38,51 @@ public class StaticOperators {
 		}
 		return false;
 	}
+	private static int getNextAutoIncrement(final String fileName, final TupleSchema schema) {
+		int res = 0;
+		int autoIncIndex = schema.getAutoIncrementColumn();
+		assert(autoIncIndex >= 0);
+		Scan scan = new Scan(fileName, schema);
+		while (scan.moveNext()) {
+			res = Math.max(res, scan.current().getInt(autoIncIndex));
+		}
+		return res + 1;
+	}
 	public static boolean insert(final String fileName, final TupleSchema schema, final String[] values) {
 		assert(schema.types.length == values.length);
 		assert(checkKey(fileName, schema, values));
 		FileOutputStream writer = null;
 		TypeInt myIntConv = new TypeInt();
 		try {
+			byte flags[] = new byte[values.length / 8 + 1];
+			int autoIncIndex = schema.getAutoIncrementColumn();
+			for (int i = 0; i < values.length; i++) {
+				int idx = (i + 1) / 8;
+				if (values[i] == null) {
+					if (autoIncIndex >= 0 && i == autoIncIndex) {
+						values[i] = String.valueOf(getNextAutoIncrement(fileName, schema));
+					}
+					else {
+						flags[idx] = (byte) (flags[idx] | (0b10000000 >> ((i+1) % 8)));
+					}
+				}
+			}
 			writer = new FileOutputStream(fileName, true);
-			writer.write(0);
+			writer.write(flags);
 			for (int i = 0; i < values.length; i++) {
 				int size = schema.types[i].size;
 				if (schema.types[i].variableSize) {
-					size = Math.min(values[i].length(), size);
+					if (values[i] == null) {
+						size = 0;
+					}
+					else {
+						size = Math.min(values[i].length(), size);
+					}
 					writer.write(myIntConv.toByteArr(size));
 				}
-				writer.write(schema.types[i].toByteArr(values[i]));
+				if (values[i] != null) {
+					writer.write(schema.types[i].toByteArr(values[i]));
+				}
 			}
 			writer.flush();
 			writer.close();
@@ -108,7 +138,9 @@ public class StaticOperators {
 			RandomAccessFile rand = new RandomAccessFile(fileName, "rw");
 			for (Long i : posToDelete) {
 				rand.seek(i);
-				rand.writeByte(1);
+				int flag = rand.read() | 0b10000000;
+				rand.seek(i);
+				rand.writeByte(flag);
 			}
 			rand.close();
 		} catch (Exception e) {
