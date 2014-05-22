@@ -455,12 +455,12 @@ public final class DatastoreInterfaceMySQL {
 
 
 	
-	public List<PoI> getAllSuspects(Integer id) {
+	public List<PoI> getAllSuspects(Integer caseId) {
 		String tableName = getTableName(PoI.class);
 		try (
 			PreparedStatement stmt = 
 			this.sqlConnection.prepareStatement("SELECT PoI.* FROM" + 
-			tableName +  ", `Suspect` WHERE Suspect.CaseId = " + id + " and PoI.PoIId = Suspect.PoIId;");
+			tableName +  ", `Suspect` WHERE Suspect.CaseId = " + caseId + " and PoI.PoIId = Suspect.PoIId;");
 		) {
 			return all(stmt, PoI.class);
 
@@ -504,11 +504,11 @@ public final class DatastoreInterfaceMySQL {
 
 
 
-	public List<Conviction> getAllConvictions(Integer id) {
+	public List<Conviction> getAllConvictions(Integer poiId) {
 		String sql = " SELECT Convicted.*                "
 		           + " FROM Convicted, PoI                "
 		           + " WHERE                              "
-		           + "     PoI.PoIId = " + id
+		           + "     PoI.PoIId = " + poiId
 		           + "     AND Convicted.PoIId = PoI.PoIId";
 		try (
 				PreparedStatement stmt = this.sqlConnection.prepareStatement(sql);

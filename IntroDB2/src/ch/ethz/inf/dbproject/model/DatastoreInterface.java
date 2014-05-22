@@ -57,13 +57,13 @@ public interface DatastoreInterface {
 	
 	public abstract List<CaseNote> getCaseNotesFrom(int caseId);
 	
-	public abstract List<PoI> getAllSuspects(Integer id);
+	public abstract List<PoI> getAllSuspects(Integer caseId);
 	
 	public abstract List<Convict> getAllConvicts(Integer caseId);
 	
 	public abstract List<PoI> getAllPoIsNotLinked(Integer id);
 	
-	public abstract List<Conviction> getAllConvictions(Integer id);
+	public abstract List<Conviction> getAllConvictions(Integer poiId);
 	
 	public abstract void closeCase(int caseId);
 	

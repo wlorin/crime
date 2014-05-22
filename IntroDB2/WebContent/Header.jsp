@@ -27,7 +27,7 @@
 		<table id="masterTable" cellpadding="0" cellspacing="0">
 			<tr>
 				<th id="masterHeader" colspan="2">
-					<h1>Law Enforcement Project$ASDIFJAILSDFJLAKSJDFLKASDJF</h1>
+					<h1>Law Enforcement Project</h1>
 					Project by Christian, Lorin & Nina
 				</th>
 			</tr>
