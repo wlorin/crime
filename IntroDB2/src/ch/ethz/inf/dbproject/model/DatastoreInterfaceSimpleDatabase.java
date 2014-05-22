@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,11 +20,23 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Sort;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
 
 
 public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterface {
 
+	/*
+	 * Files
+	 */
+	String caseFile = "caseFile";
+	String userFile = "userFile";
+	String convictedFile = "convictedFile";
+	String crimeFile = "crimeFile";
+	String poiFile = "poiFile";
+	String suspectFile = "suspectFile";
+	
+	
 	/*
 	 * Schema
 	 */
@@ -158,61 +171,124 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getByStatus(String status) {
-		// TODO Auto-generated method stub
-		return null;
+		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Select select = new Select(scan, eq(col("Status"), val(status)));
+		List<Case> cases = new ArrayList<Case>();
+		while (select.moveNext()){
+			final Tuple tuple = select.current();					
+			Case c = new Case(
+				tuple.getInt(0),
+				tuple.get(1),
+				tuple.getInt(2),
+				tuple.get(3),
+				tuple.get(4),
+				tuple.getDate(5),
+				tuple.getTime(6)
+				);
+			cases.add(c);
+		}
+		return cases;
 	}
 
 	@Override
 	public List<Case> getMostRecentCases(int number) {
-		// TODO Auto-generated method stub
-		return null;
+		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
+		final Sort sort = new Sort(select, "Date", true);
+		List<Case> cases = new ArrayList<Case>();
+		for (int i = 0; i < number; i++) {
+			if (sort.moveNext()) {			
+				final Tuple tuple = sort.current();
+				Case c = new Case(
+						tuple.getInt(0),
+						tuple.get(1),
+						tuple.getInt(2),
+						tuple.get(3),
+						tuple.get(4),
+						tuple.getDate(5),
+						tuple.getTime(6)
+						);
+				cases.add(c);
+			}
+		}
+		return cases;
 	}
 
 	@Override
 	public List<Case> getOldestUnsolvedCases(int number) {		
-		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
-		final Sort sort = new Sort(scan, "Date", false);
+		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
+		final Sort sort = new Sort(select, "Date", false);
 		List<Case> cases = new ArrayList<Case>();
-		
-		for (int i = 0; i < number; i++ ){
-			if (sort.moveNext()) {	
+		for (int i = 0; i < number; i++) {
+			if (sort.moveNext()) {			
 				final Tuple tuple = sort.current();
 				Case c = new Case(
 						tuple.getInt(0),
-						tuple.getString(1),
+						tuple.get(1),
 						tuple.getInt(2),
-						tuple.getString(3),
-						tuple.getString(4),
+						tuple.get(3),
+						tuple.get(4),
 						tuple.getDate(5),
 						tuple.getTime(6)
 						);
+				cases.add(c);
 			}
 		}
-		return null;
+		return cases;
 	}
 
+	/**
+	 * Will return null if users with given credentials does not exist.
+	 * @param number
+	 * @return
+	 */
 	@Override
 	public User tryGetUserFromCredentials(String name, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		final Scan scan = new Scan(userFile, getSchema(User.class));
+		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
+		User user = null;
+		if (select.moveNext()) {
+			Tuple tuple = select.current();
+			user = new User(tuple.getInt(0), name, password);
+		}
+		return user;
 	}
 
 	@Override
 	public void removeSuspect(int caseId, int poiId) {
-		// TODO Auto-generated method stub
+		StaticOperators.delete(suspectFile, getSchema(Suspect.class), and(eq(col("CaseId"), val(caseId)), eq(col("PoIId"), val(poiId))));		
+	}
+
+	@Override
+	public void deleteCase(int caseId) {
+		StaticOperators.delete(caseFile, getSchema(Case.class), eq(col("CaseId"), val(caseId)));
+		
+	}
+
+	@Override
+	public void deletePoI(int poiId) {
+		StaticOperators.delete(poiFile, getSchema(PoI.class), eq(col("PoIId"), val(poiId)));
 		
 	}
 
 	@Override
 	public User insertUser(String name, String password) {
-		// TODO Auto-generated method stub
+		StaticOperators.insert(userFile, getSchema(User.class), new String[] {null, name, password});
+		Scan scan = new Scan(userFile, getSchema(User.class));
+		Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
+		if (select.moveNext()) {
+			Tuple tuple = select.current();
+			return new User(tuple.getInt(0), name, password);
+		}
 		return null;
 	}
 
 	@Override
 	public Suspect insertSuspect(int caseId, int poiId) {
-		// TODO Auto-generated method stub
-		return null;
+		StaticOperators.insert(suspectFile, getSchema(Suspect.class), new String[] {Integer.toString(caseId), Integer.toString(poiId)});
+
+		return new Suspect(caseId, poiId);
 	}
 
 	@Override
@@ -222,14 +298,17 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
+	// TODO return Crime
 	public Crime insertCrime(String crimeName) {
-		// TODO Auto-generated method stub
+		StaticOperators.insert(crimeFile, getSchema(Crime.class), new String[] {null, crimeName});
 		return null;
 	}
 
 	@Override
 	public PoI insertPoI(String name, Date birthdate) {
-		// TODO Auto-generated method stub
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String birth = format.format(birthdate);
+		StaticOperators.insert(poiFile, getSchema(PoI.class), new String[] {null, name, birth , null});
 		return null;
 	}
 
@@ -247,26 +326,76 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public String getCrimeById(int id) {
-		// TODO Auto-generated method stub
+		Scan scan = new Scan(crimeFile, getSchema(Crime.class));
+		Select select = new Select(scan, eq(col("CrimeId"), val(id)));
+		if (select.moveNext()) {
+			Tuple tuple = select.current();
+			return tuple.get(1);
+		}
 		return null;
 	}
 
 	@Override
 	public String getCasenameById(int id) {
-		// TODO Auto-generated method stub
+		Scan scan = new Scan(caseFile, getSchema(Case.class));
+		Select select = new Select(scan, eq(col("CaseId"), val(id)));
+		if (select.moveNext()) {
+			Tuple tuple = select.current();
+			return tuple.get(1);
+		}
 		return null;
 	}
 
+	public int getCrimeIdByName(String name) {
+		Scan scan = new Scan(crimeFile, getSchema(Crime.class));
+		Select select = new Select(scan, eq(col("Crime"), val(name)));
+		if (select.moveNext()) {
+			return select.current().getInt(0);
+		}
+		return -1;
+	}
+	
 	@Override
 	public List<Case> getProjectsByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
+		int id = getCrimeIdByName(category);
+		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Select select = new Select(scan, eq(col("CrimeId"), val(id))); 
+		List<Case> cases = new ArrayList<Case>();
+		while (select.moveNext()) {			
+			final Tuple tuple = select.current();
+			Case c = new Case(
+					tuple.getInt(0),
+					tuple.get(1),
+					tuple.getInt(2),
+					tuple.get(3),
+					tuple.get(4),
+					tuple.getDate(5),
+					tuple.getTime(6)
+					);
+				cases.add(c);
+			}
+		return cases;
 	}
 
 	@Override
 	public List<Case> getProjectsWithoutCategory() {
-		// TODO Auto-generated method stub
-		return null;
+		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Select select = new Select(scan, eq(col("CrimeId"), val(null))); 
+		List<Case> cases = new ArrayList<Case>();
+		while (select.moveNext()) {			
+			final Tuple tuple = select.current();
+			Case c = new Case(
+					tuple.getInt(0),
+					tuple.get(1),
+					tuple.getInt(2),
+					tuple.get(3),
+					tuple.get(4),
+					tuple.getDate(5),
+					tuple.getTime(6)
+					);
+				cases.add(c);
+			}
+		return cases;
 	}
 
 	@Override
@@ -282,15 +411,51 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
-	public List<PoI> getAllSuspects(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	// TODO Duplikate entfernen?
+	public List<PoI> getAllSuspects(Integer caseId) {
+		Scan scan = new Scan(suspectFile, getSchema(Suspect.class));
+		List<PoI> suspects = new ArrayList<PoI>();
+		while (scan.moveNext()) {
+			Tuple tuple = scan.current();
+			PoI poi = new PoI (
+					tuple.getInt(0),
+					tuple.get(1),
+					tuple.getDate(2)
+					);
+			suspects.add(poi);
+		}
+		
+		return suspects;
 	}
 
 	@Override
+	// TODO Use join
 	public List<Convict> getAllConvicts(Integer caseId) {
-		// TODO Auto-generated method stub
-		return null;
+		Scan scan = new Scan(convictedFile, getSchema(Convict.class));
+		List<Convict> convicts = new ArrayList<Convict>();
+		Scan scanpers = new Scan(poiFile, getSchema(PoI.class));
+		while (scan.moveNext()) {
+			Tuple tuple = scan.current();
+			Select select = new Select(scanpers, eq(col("PoIId"), val(Integer.toString(tuple.getInt(0)))));
+			if (select.moveNext()) {
+				Tuple tpers = select.current();
+				String poiname = tpers.get(1);
+				Date birthdate = tpers.getDate(2);
+				Convict c = new Convict (
+						tuple.getInt(1),
+						tuple.getInt(0),
+						tuple.getInt(2),
+						getCrimeById(tuple.getInt(2)),
+						poiname,
+						birthdate,
+						tuple.getDate(3),
+						tuple.get(4)
+						);
+				convicts.add(c);
+			}
+		}
+		
+		return convicts;
 	}
 
 	@Override
@@ -300,9 +465,22 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
-	public List<Conviction> getAllConvictions(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Conviction> getAllConvictions(Integer poiId) {
+		Scan scan = new Scan("test", getSchema(Convict.class));
+		Select select = new Select(scan, eq(col("PoIId"), val(poiId)));
+		List<Conviction> convictions = new ArrayList<Conviction>();
+		while (select.moveNext()) {
+			Tuple tuple = select.current();
+			Conviction c = new Conviction(
+					tuple.getDate(3),
+					poiId,
+					tuple.getInt(1),
+					tuple.getInt(2),
+					tuple.get(4)
+					);
+			convictions.add(c);
+		}
+		return convictions;
 	}
 
 	@Override
@@ -342,17 +520,6 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		return null;
 	}
 
-	@Override
-	public void deleteCase(int caseId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deletePoI(int poiId) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean isCaseClosed(int caseId) {
@@ -374,6 +541,6 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 
 }
