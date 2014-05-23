@@ -60,8 +60,10 @@ public class StaticOperators {
 	 */
 	public static int insert(final String fileName, final TupleSchema schema, final String[] values) {
 		int result = 0;
-		assert(schema.types.length == values.length);
-		assert(checkKey(fileName, schema, values));
+		if (schema.types.length != values.length)
+			throw new RuntimeException("number of column in schema must match size of values");
+		if (!checkKey(fileName, schema, values))
+				throw new RuntimeException("PrimaryKey violation");
 		FileOutputStream writer = null;
 		TypeInt myIntConv = new TypeInt();
 		try {

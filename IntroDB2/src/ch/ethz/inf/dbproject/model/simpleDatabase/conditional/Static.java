@@ -22,8 +22,7 @@ public class Static {
 	}
 	
 	public static Value val(String s) {
-		// TODO Fix length
-		return new Value(s, new TypeVarChar(255));
+		return new Value(s, new TypeVarChar(s != null ? s.length() : 1));
 	}
 	
 	public static Equals eq(ConditionalSource a, ConditionalSource b) {

@@ -39,9 +39,12 @@ public final class User extends Entity {
 	public String getName() {
 		return name;
 	}
+	public String getPassword() {
+		return password;
+	}
 	
 	@Override
 	public String toString() {
-		return String.format("<User: userid=%d, name='%s'>", getUserid(), getName());
+		return String.format("<User: userid=%d, name='%s', password='%s'>", getUserid(), getName(), getPassword());
 	}
 }

@@ -14,7 +14,8 @@ public abstract class BinaryConditional implements Condition {
 	
 	@Override
 	public boolean matches(Tuple t) {
-		if (a.valueType(t).getClass() != b.valueType(t).getClass()) throw new IllegalArgumentException("Incompatible types: " + a.valueType(t).getClass().getSimpleName() + " " + b.valueType(t).getClass().getSimpleName());
+		//TODO: This check is nice in theroy, but it makes dynamic conditions impossible (i.e. keyCheck in StaticOperators - keyCheck does not know the type of it's key columns)
+		//if (a.valueType(t).getClass() != b.valueType(t).getClass()) throw new IllegalArgumentException("Incompatible types: " + a.valueType(t).getClass().getSimpleName() + " " + b.valueType(t).getClass().getSimpleName());
 		
 		String aValue = a.value(t);
 		String bValue = b.value(t);

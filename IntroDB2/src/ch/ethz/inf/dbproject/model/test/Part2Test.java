@@ -5,6 +5,7 @@ import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.none;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.or;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators.select;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -144,7 +145,7 @@ public class Part2Test {
 		System.out.println(res.toString());
 		String expected = "id=1,name=null,status=Test2";
 		assertEquals(expected, res.toString());
-		assert(res.isNull(1));
+		assertTrue("result must be null", res.isNull(1));
 	}
 	@Test
 	public void testAutoIncrement() {
@@ -187,15 +188,30 @@ public class Part2Test {
 		TupleSchema schema = intf.getSchema(clazz);
 		String tableName = intf.getTableName(clazz);
 		String idCol = intf.getIdColName(clazz);
-		int id = StaticOperators.insert(tableName, schema, new String[] { null, "TestUser"});
-		assert(id > 0);
-		User user = intf.getById(id, clazz);
-		List<Tuple> del = StaticOperators.delete(tableName, schema, eq(col(idCol), val(id)));
-		assert(del.size() == 1);
-		String expected = "UserId=" + id + ",Name=TestUser";
-		String result = "UserId=" + user.getUserid() + ",Name=" + user.getName();
+		int id1 = StaticOperators.insert(tableName, schema, new String[] { null, "TestUser1", "pwd"});
+		int id2 = StaticOperators.insert(tableName, schema, new String[] { null, "TestUser" + (id1 + 1), "pwd"});
+		int id3 = StaticOperators.insert(tableName, schema, new String[] { null, "TestUser3", "pwd"});
+		assertTrue("id must be > 0", id2 > 0);
+		User user = intf.getById(id2, clazz);
+		List<Tuple> del = StaticOperators.delete(tableName, schema, eq(col(idCol), val(id2)));
+		assertTrue("must have deleted exactly one row", del.size() == 1);
+		String expected = "UserId=" + id2 + ",Name=TestUser" + id2 + ",Password=pwd";
+		String result = "UserId=" + user.getUserid() + ",Name=" + user.getName() + ",Password=" + user.getPassword();
 		assertEquals(expected, result);
 		assertEquals(result, del.get(0).toString());
+		StaticOperators.delete(tableName,  schema, or(eq(col(idCol), val(id1)), eq(col(idCol), val(id3))));
+	}
+	
+	@Test
+	public void TestKeyRestriction() {
+		testInsert();
+		boolean success = false;
+		try {
+			testInsert();
+		} catch (RuntimeException e) {
+			success = true;
+		}
+		assertTrue(success);
 	}
 	
 

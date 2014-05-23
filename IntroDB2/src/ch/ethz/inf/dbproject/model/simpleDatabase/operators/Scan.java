@@ -82,7 +82,7 @@ public class Scan extends Operator {
 				
 				int index = (i + 1) / 8;
 				int mask = 0b10000000 >> ((i + 1) % 8);
-				if ((flags[index] & mask) == 1) {
+				if ((flags[index] & mask) > 1) {
 					values[i] = null;
 				}
 				else if (size > 0) {
