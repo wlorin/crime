@@ -23,12 +23,14 @@ public abstract class Join extends Operator {
 	
 	public Join(Operator leftOp, Operator rightOp, Condition condition) {
 		super(mergeSchema(leftOp.schema, rightOp.schema));
+		joined = Lists.newArrayList();
+		
 		lefts = new ArrayList<Tuple>();
 		while (leftOp.moveNext()) {
 			lefts.add(leftOp.current());
 		}
-		rights = new ArrayList<Tuple>();
 
+		rights = new ArrayList<Tuple>();
 		while (rightOp.moveNext()) {
 			rights.add(rightOp.current());
 		}
@@ -48,7 +50,6 @@ public abstract class Join extends Operator {
 		
 		int leftIndex = 0;
 		
-		joined = Lists.newArrayList();
 		for (Tuple left : lefts) {
 			
 			int rightIndex = 0;
