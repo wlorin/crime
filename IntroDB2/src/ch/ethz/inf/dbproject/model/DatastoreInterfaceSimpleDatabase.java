@@ -1,10 +1,11 @@
 package ch.ethz.inf.dbproject.model;
 
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.and;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,8 +17,11 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.meta.TableName;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Sort;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators;
 
 
 public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterface {

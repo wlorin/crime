@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import ch.ethz.inf.dbproject.model.ResetToDemoData;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
