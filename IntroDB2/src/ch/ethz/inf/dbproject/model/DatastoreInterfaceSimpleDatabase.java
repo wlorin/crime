@@ -353,8 +353,15 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> searchByName(String string) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Case> cases = new ArrayList<Case>();
+		Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
+		while (scan.moveNext()) {
+			Tuple tuple = scan.current();
+			if (tuple.getString(1).matches("%" + string + "%")) {
+				cases.add(new Case(tuple));
+			}
+		}
+		return cases;
 	}
 	
 	
