@@ -490,7 +490,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		
 		while (poiSuspect.moveNext()) {
 			Tuple tuple = poiSuspect.current();
-			pois.add(getById(tuple.getInt("PoIId"), PoI.class));
+			pois.add(getById(tuple.getInt("poi.PoIId"), PoI.class));
 		}
 			
 			
