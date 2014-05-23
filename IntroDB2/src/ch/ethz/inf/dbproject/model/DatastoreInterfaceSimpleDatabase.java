@@ -364,6 +364,18 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		return cases;
 	}
 	
+	public List<PoI> searchPoIByName(String name) {
+		List<PoI> pois = new ArrayList<PoI>();
+		Scan scan = new Scan(getTableName(PoI.class), getSchema(PoI.class));
+		while (scan.moveNext()) {
+			Tuple tuple = scan.current();
+			if (tuple.getString(1).matches("%" + name + "%")) {
+				pois.add(new PoI(tuple));
+			}
+		}
+		return pois;
+	}
+	
 	
 	@Override
 	public List<CaseNote> getCaseNotesFrom(int caseId) {
@@ -455,10 +467,22 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		return convicts;
 	}
 
+
 	@Override
+	/*
+	String sql = "SELECT poi.* FROM " +
+			tableName +  " poi LEFT JOIN Suspect s ON (poi.PoIId = s.PoIId AND s.CaseId=" + id + ") " +
+			"WHERE IsNull(s.CaseId);";
+	 */
+	// TODO 
 	public List<PoI> getAllPoIsNotLinked(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<PoI> pois = new ArrayList<PoI>();
+		Operator suspect = new Scan(getTableName(Suspect.class), getSchema(Suspect.class)).as("s");
+		Operator poi = new Scan(getTableName(PoI.class), getSchema(PoI.class)).as("poi");
+
+			
+			
+		return pois;
 	}
 
 	@Override
@@ -528,11 +552,25 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
-	// TODO
 	public List<Case> getInvolvedPoI(String poiname) {
 		List<Case> cases = new ArrayList<Case>();
-		
-		return null;
+		List<PoI> pois = searchPoIByName(poiname);
+		Scan susp = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
+
+		Scan conv = new Scan(getTableName(Convict.class), getSchema(Convict.class));
+		PoI poi = pois.get(0);
+		Select s1 = new Select(susp, eq(col("PoIId"), val(poi.getId())));
+		while (s1.moveNext()) {
+			Tuple t = s1.current();
+			cases.add(getById(t.getInt(1), Case.class));
+		}
+		Select s2 = new Select(conv, eq(col("PoIId"), val(poi.getId())));
+		while (s2.moveNext()) {
+			Tuple t = s2.current();
+			cases.add(getById(t.getInt(1), Case.class));
+		}
+				
+		return cases;
 	}
 
 
