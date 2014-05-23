@@ -51,7 +51,7 @@ public final class Case extends Entity {
 		this.time = rs.getTime("time");
 	}
 	
-	public Case(final Tuple tuple) throws Exception {
+	public Case(final Tuple tuple) {
 		this.id = tuple.getInt("caseId");
 		this.name = tuple.getString("Name");
 		this.crimeId = tuple.getInt("crimeId");

@@ -27,15 +27,8 @@ import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
 public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterface {
 
 	/*
-	 * Files
+	 * Files should be received with getTableName(Class)
 	 */
-	String caseFile = "caseFile";
-	String userFile = "userFile";
-	String convictedFile = "convictedFile";
-	String crimeFile = "crimeFile";
-	String poiFile = "poiFile";
-	String suspectFile = "suspectFile";
-	
 	
 	/*
 	 * Schema
@@ -171,20 +164,12 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getByStatus(String status) {
-		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("Status"), val(status)));
 		List<Case> cases = new ArrayList<Case>();
 		while (select.moveNext()){
 			final Tuple tuple = select.current();					
-			Case c = new Case(
-				tuple.getInt(0),
-				tuple.get(1),
-				tuple.getInt(2),
-				tuple.get(3),
-				tuple.get(4),
-				tuple.getDate(5),
-				tuple.getTime(6)
-				);
+			Case c = new Case(tuple);
 			cases.add(c);
 		}
 		return cases;
@@ -192,22 +177,14 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getMostRecentCases(int number) {
-		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
 		final Sort sort = new Sort(select, "Date", true);
 		List<Case> cases = new ArrayList<Case>();
 		for (int i = 0; i < number; i++) {
 			if (sort.moveNext()) {			
 				final Tuple tuple = sort.current();
-				Case c = new Case(
-						tuple.getInt(0),
-						tuple.get(1),
-						tuple.getInt(2),
-						tuple.get(3),
-						tuple.get(4),
-						tuple.getDate(5),
-						tuple.getTime(6)
-						);
+				Case c = new Case(tuple);
 				cases.add(c);
 			}
 		}
@@ -216,22 +193,14 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getOldestUnsolvedCases(int number) {		
-		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
 		final Sort sort = new Sort(select, "Date", false);
 		List<Case> cases = new ArrayList<Case>();
 		for (int i = 0; i < number; i++) {
 			if (sort.moveNext()) {			
 				final Tuple tuple = sort.current();
-				Case c = new Case(
-						tuple.getInt(0),
-						tuple.get(1),
-						tuple.getInt(2),
-						tuple.get(3),
-						tuple.get(4),
-						tuple.getDate(5),
-						tuple.getTime(6)
-						);
+				Case c = new Case(tuple);
 				cases.add(c);
 			}
 		}
@@ -245,48 +214,45 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	 */
 	@Override
 	public User tryGetUserFromCredentials(String name, String password) {
-		final Scan scan = new Scan(userFile, getSchema(User.class));
+		final Scan scan = new Scan(getTableName(User.class), getSchema(User.class));
 		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
 		User user = null;
 		if (select.moveNext()) {
 			Tuple tuple = select.current();
-			user = new User(tuple.getInt(0), name, password);
+			user = new User(tuple);
 		}
 		return user;
 	}
 
 	@Override
 	public void removeSuspect(int caseId, int poiId) {
-		StaticOperators.delete(suspectFile, getSchema(Suspect.class), and(eq(col("CaseId"), val(caseId)), eq(col("PoIId"), val(poiId))));		
+		StaticOperators.delete(getTableName(Suspect.class), getSchema(Suspect.class), and(eq(col("CaseId"), val(caseId)), eq(col("PoIId"), val(poiId))));		
 	}
 
 	@Override
 	public void deleteCase(int caseId) {
-		StaticOperators.delete(caseFile, getSchema(Case.class), eq(col("CaseId"), val(caseId)));
+		StaticOperators.delete(getTableName(Case.class), getSchema(Case.class), eq(col("CaseId"), val(caseId)));
 		
 	}
 
 	@Override
 	public void deletePoI(int poiId) {
-		StaticOperators.delete(poiFile, getSchema(PoI.class), eq(col("PoIId"), val(poiId)));
+		StaticOperators.delete(getTableName(PoI.class), getSchema(PoI.class), eq(col("PoIId"), val(poiId)));
 		
 	}
 
 	@Override
 	public User insertUser(String name, String password) {
-		StaticOperators.insert(userFile, getSchema(User.class), new String[] {null, name, password});
-		Scan scan = new Scan(userFile, getSchema(User.class));
-		Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
-		if (select.moveNext()) {
-			Tuple tuple = select.current();
-			return new User(tuple.getInt(0), name, password);
+		int userid = StaticOperators.insert(getTableName(User.class), getSchema(User.class), new String[] {null, name, password});
+		if (userid > 0) {
+			return getById(userid, User.class);
 		}
 		return null;
 	}
 
 	@Override
 	public Suspect insertSuspect(int caseId, int poiId) {
-		StaticOperators.insert(suspectFile, getSchema(Suspect.class), new String[] {Integer.toString(caseId), Integer.toString(poiId)});
+		StaticOperators.insert(getTableName(Suspect.class), getSchema(Suspect.class), new String[] {Integer.toString(caseId), Integer.toString(poiId)});
 
 		return new Suspect(caseId, poiId);
 	}
@@ -300,7 +266,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	// TODO return Crime
 	public Crime insertCrime(String crimeName) {
-		StaticOperators.insert(crimeFile, getSchema(Crime.class), new String[] {null, crimeName});
+		StaticOperators.insert(getTableName(Crime.class), getSchema(Crime.class), new String[] {null, crimeName});
 		return null;
 	}
 
@@ -308,7 +274,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public PoI insertPoI(String name, Date birthdate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String birth = format.format(birthdate);
-		StaticOperators.insert(poiFile, getSchema(PoI.class), new String[] {null, name, birth , null});
+		StaticOperators.insert(getTableName(PoI.class), getSchema(PoI.class), new String[] {null, name, birth , null});
 		return null;
 	}
 
@@ -326,28 +292,28 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public String getCrimeById(int id) {
-		Scan scan = new Scan(crimeFile, getSchema(Crime.class));
+		Scan scan = new Scan(getTableName(Crime.class), getSchema(Crime.class));
 		Select select = new Select(scan, eq(col("CrimeId"), val(id)));
 		if (select.moveNext()) {
 			Tuple tuple = select.current();
-			return tuple.get(1);
+			return tuple.getString("Crime");
 		}
 		return null;
 	}
 
 	@Override
 	public String getCasenameById(int id) {
-		Scan scan = new Scan(caseFile, getSchema(Case.class));
+		Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
 		Select select = new Select(scan, eq(col("CaseId"), val(id)));
 		if (select.moveNext()) {
 			Tuple tuple = select.current();
-			return tuple.get(1);
+			return tuple.getString("Case");
 		}
 		return null;
 	}
 
 	public int getCrimeIdByName(String name) {
-		Scan scan = new Scan(crimeFile, getSchema(Crime.class));
+		Scan scan = new Scan(getTableName(Crime.class), getSchema(Crime.class));
 		Select select = new Select(scan, eq(col("Crime"), val(name)));
 		if (select.moveNext()) {
 			return select.current().getInt(0);
@@ -358,20 +324,12 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public List<Case> getProjectsByCategory(String category) {
 		int id = getCrimeIdByName(category);
-		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("CrimeId"), val(id))); 
 		List<Case> cases = new ArrayList<Case>();
 		while (select.moveNext()) {			
 			final Tuple tuple = select.current();
-			Case c = new Case(
-					tuple.getInt(0),
-					tuple.get(1),
-					tuple.getInt(2),
-					tuple.get(3),
-					tuple.get(4),
-					tuple.getDate(5),
-					tuple.getTime(6)
-					);
+			Case c = new Case(tuple);
 				cases.add(c);
 			}
 		return cases;
@@ -379,20 +337,12 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getProjectsWithoutCategory() {
-		final Scan scan = new Scan(caseFile, getSchema(Case.class));	
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("CrimeId"), val(null))); 
 		List<Case> cases = new ArrayList<Case>();
 		while (select.moveNext()) {			
 			final Tuple tuple = select.current();
-			Case c = new Case(
-					tuple.getInt(0),
-					tuple.get(1),
-					tuple.getInt(2),
-					tuple.get(3),
-					tuple.get(4),
-					tuple.getDate(5),
-					tuple.getTime(6)
-					);
+			Case c = new Case(tuple);
 				cases.add(c);
 			}
 		return cases;
@@ -413,15 +363,11 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	// TODO Duplikate entfernen?
 	public List<PoI> getAllSuspects(Integer caseId) {
-		Scan scan = new Scan(suspectFile, getSchema(Suspect.class));
+		Scan scan = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
 		List<PoI> suspects = new ArrayList<PoI>();
 		while (scan.moveNext()) {
 			Tuple tuple = scan.current();
-			PoI poi = new PoI (
-					tuple.getInt(0),
-					tuple.get(1),
-					tuple.getDate(2)
-					);
+			PoI poi = new PoI (tuple);
 			suspects.add(poi);
 		}
 		
@@ -431,9 +377,36 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	// TODO Use join
 	public List<Convict> getAllConvicts(Integer caseId) {
-		Scan scan = new Scan(convictedFile, getSchema(Convict.class));
+		/*String sql = "SELECT poi.*, cr.CrimeId, cr.Crime, c.CaseId, c.Date as ConvictionDate, c.Sentence  
+			FROM PoI poi " +
+			"INNER JOIN Convicted c ON (poi.PoIId = c.PoIId AND c.CaseId=" + caseId + ") " +
+			"INNER JOIN Crime cr ON (cr.CrimeId=c.CrimeId)";
+		*/
+		
 		List<Convict> convicts = new ArrayList<Convict>();
-		Scan scanpers = new Scan(poiFile, getSchema(PoI.class));
+		
+		Operator poi = new Scan(getTableName(PoI.class), getSchema(PoI.class)).as("poi");
+		Operator conviction = new Scan(getTableName(Conviction.class), getSchema(Conviction.class)).as("c");
+		Operator crime = new Scan(getTableName(Crime.class), getSchema(Crime.class)).as("cr");
+		Operator poiConviction = poi.join(conviction, and(eq(col("poi.PoIId"), col("c.PoIId")), eq(col("c.CaseId"), val(caseId))));
+		Operator totalJoin = poiConviction.join(crime, eq(col("cr.CrimeId"), col("c.CrimeId")));
+		
+		while (totalJoin.moveNext()) {
+			Tuple t = totalJoin.current();
+			Convict c = new Convict(t.getInt("c.CaseId"), 
+					t.getInt("poi.PoIId"), 
+					t.getInt("cr.CrimeId"), 
+					t.getString("cr.Crime"), 
+					t.getString("poi.Name"), 
+					t.getDate("poi.birthDate"), 
+					t.getDate("c.Date"), 
+					t.getString("c.Sentence"));
+			convicts.add(c);
+		}
+		/*
+		Scan scan = new Scan(convictedFile, getSchema(Convict.class));
+		
+		Scan scanpers = new Scan(getTableName(PoI.class), getSchema(PoI.class));
 		while (scan.moveNext()) {
 			Tuple tuple = scan.current();
 			Select select = new Select(scanpers, eq(col("PoIId"), val(Integer.toString(tuple.getInt(0)))));
@@ -454,7 +427,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 				convicts.add(c);
 			}
 		}
-		
+		*/
 		return convicts;
 	}
 
@@ -471,13 +444,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		List<Conviction> convictions = new ArrayList<Conviction>();
 		while (select.moveNext()) {
 			Tuple tuple = select.current();
-			Conviction c = new Conviction(
-					tuple.getDate(3),
-					poiId,
-					tuple.getInt(1),
-					tuple.getInt(2),
-					tuple.get(4)
-					);
+			Conviction c = new Conviction(tuple);
 			convictions.add(c);
 		}
 		return convictions;

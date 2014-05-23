@@ -31,7 +31,7 @@ public final class Convict extends PoI {
 		convictionDate = rs.getDate("ConvictionDate");
 		sentence = rs.getString("Sentence");
 	}
-	public Convict(Tuple t) throws Exception {
+	public Convict(Tuple t) {
 		super(t);
 		crimeId = t.getInt("CrimeId");
 		caseId = t.getInt("CaseId");

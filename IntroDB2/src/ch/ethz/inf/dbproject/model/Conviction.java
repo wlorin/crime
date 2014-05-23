@@ -27,7 +27,7 @@ public class Conviction extends Entity {
 		this.date = rs.getDate("date");
 		this.sentence = rs.getString("sentence");
 	}
-	public Conviction(Tuple rs) throws Exception {
+	public Conviction(Tuple rs) {
 		this.caseId = rs.getInt("caseId");
 		this.crimeId = rs.getInt("crimeId");
 		this.poIId = rs.getInt("poIId");

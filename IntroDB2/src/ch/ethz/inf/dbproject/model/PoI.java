@@ -25,7 +25,7 @@ public class PoI extends Entity {
 		this.name = rs.getString("name");
 		this.birthdate = rs.getDate("birthdate");
 	}
-	public PoI(final Tuple rs) throws Exception {
+	public PoI(final Tuple rs) {
 		this.id = rs.getInt("PoIId");
 		this.name = rs.getString("name");
 		this.birthdate = rs.getDate("birthdate");
