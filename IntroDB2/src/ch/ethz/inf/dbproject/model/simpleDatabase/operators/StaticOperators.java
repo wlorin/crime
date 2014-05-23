@@ -1,9 +1,15 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.and;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 
 public class StaticOperators {
 	
-	public static boolean checkKey(final String fileName, final TupleSchema schema, final String[] values) {
+	private static boolean checkKey(final String fileName, final TupleSchema schema, final String[] values) {
 		ImmutableList<SchemaColumn> primaryKeys = schema.primaryKeys;
 		if (!primaryKeys.isEmpty()) {
 			Condition condition = null;
@@ -35,6 +41,24 @@ public class StaticOperators {
 			return !op.moveNext();
 		}
 		return true;
+	}
+	
+	public static void optimiseTable(final String fileName, final TupleSchema schema) {
+		List<Tuple> tuples = new ArrayList<Tuple>();
+		Scan scan = new Scan(fileName, schema, false);
+		while (scan.moveNext()) {
+			tuples.add(scan.current());
+		}
+		try {
+			(new File(fileName + "tmp")).createNewFile();
+			for (Tuple t : tuples) {
+				insert(fileName + "tmp", schema, t.values);
+			}
+			java.nio.file.Files.move(Paths.get(fileName + "tmp"), Paths.get(fileName), java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private static int getNextAutoIncrement(final String fileName, final TupleSchema schema) {
 		int res = 0;
@@ -143,7 +167,7 @@ public class StaticOperators {
 	public static List<Tuple> delete(final String fileName, final TupleSchema schema, Condition condition) {
 		List<Tuple> res = new ArrayList<Tuple>();
 		List<Long> posToDelete = new ArrayList<Long>();
-		Scan scan = new Scan(fileName, schema);
+		Scan scan = new Scan(fileName, schema, false);
 		Select select = new Select(scan, condition);
 		while (select.moveNext()) {
 			res.add(select.current());
@@ -164,7 +188,7 @@ public class StaticOperators {
 		return res;
 	}
 	
-	public static int Count(Operator op) {
+	public static int count(Operator op) {
 		int count = 0;
 		while (op.moveNext()) {
 			count++;

@@ -4,14 +4,15 @@ import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.all;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.none;
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.or;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators.select;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -56,33 +57,33 @@ public class Part2Test {
 	@Test
 	public void testDelete() {
 		testInsert();
-		int oldCount = StaticOperators.Count(new Scan(testTable, schema));
+		int oldCount = StaticOperators.count(new Scan(testTable, schema));
 		StaticOperators.delete(testTable, schema, eq(col("id"), val(2)));
 		assertTrue("Nothing inserted: " + oldCount, oldCount == 1);
-		int afterEmptyDelete = StaticOperators.Count(new Scan(testTable, schema));
+		int afterEmptyDelete = StaticOperators.count(new Scan(testTable, schema));
 		StaticOperators.delete(testTable, schema, eq(col("id"), val(1)));
-		int afterOneDelete = StaticOperators.Count(new Scan(testTable, schema));
+		int afterOneDelete = StaticOperators.count(new Scan(testTable, schema));
 		assertEquals("Count different after deleting nothing", oldCount, afterEmptyDelete);
 		assertEquals("Didn't delete tuple", oldCount -1, afterOneDelete);
 	}
 	@Test
 	public void testUpdate() {
 		testInsert();
-		int oldCount = StaticOperators.Count(new Select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
+		int oldCount = StaticOperators.count(new Select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
 		StaticOperators.update(testTable, schema, new String[] { "name" }, new String[] {"after Update"}, eq(col("id"), val(1)));
 		Scan op = new Scan(testTable, schema);
 		System.out.println(concatTuples(op));
-		int count = StaticOperators.Count(new Select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
+		int count = StaticOperators.count(new Select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
 		assertEquals("Didn't update tuple", 1, count);
 	}
 	
 	@Test
 	public void testAs() {
-		int oldCount = StaticOperators.Count(select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
+		int oldCount = StaticOperators.count(select(new Scan(testTable, schema), eq(col("name"), val("after Update"))));
 		assertTrue("No tuples", 0 == oldCount);
 		testInsert();
 		StaticOperators.update(testTable, schema, new String[] { "name" }, new String[] {"after Update"}, eq(col("id"), val(1)));
-		int count = StaticOperators.Count(new Select(new Scan(testTable, schema).as("prefix"), eq(col("prefix.name"), val("after Update"))));
+		int count = StaticOperators.count(new Select(new Scan(testTable, schema).as("prefix"), eq(col("prefix.name"), val("after Update"))));
 		assertTrue(count > oldCount);
 	}
 	
@@ -91,8 +92,8 @@ public class Part2Test {
 		testInsert();
 		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
 		testInsert();
-		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
-		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), all()));
+		int countEq = StaticOperators.count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.count(new Scan(testTable, schema).as("t1").join(new Scan(testTable, schema).as("t2"), all()));
 		assertEquals("On = ", 2, countEq);
 		assertEquals("On TRUE", 4, countAll);
 	}
@@ -103,9 +104,9 @@ public class Part2Test {
 		testInsert();
 		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
 		testInsert();
-		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
-		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), all()));
-		int countNone = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), none()));
+		int countEq = StaticOperators.count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), all()));
+		int countNone = StaticOperators.count(new Scan(testTable, schema).as("t1").joinLeft(new Scan(testTable, schema).as("t2"), none()));
 		assertEquals("On = ", 2, countEq);
 		assertEquals("On TRUE", 4, countAll);
 		assertEquals("On NONE", 4, countAll);
@@ -116,9 +117,9 @@ public class Part2Test {
 		testInsert();
 		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
 		testInsert();
-		int countEq = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
-		int countAll = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), all()));
-		int countNone = StaticOperators.Count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), none()));
+		int countEq = StaticOperators.count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), eq(col("t1.id"), col("t2.id"))));
+		int countAll = StaticOperators.count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), all()));
+		int countNone = StaticOperators.count(new Scan(testTable, schema).as("t1").joinRight(new Scan(testTable, schema).as("t2"), none()));
 		assertEquals("On = ", 2, countEq);
 		assertEquals("On TRUE", 4, countAll);
 		assertEquals("On NONE", 4, countAll);
@@ -204,14 +205,38 @@ public class Part2Test {
 	
 	@Test
 	public void TestKeyRestriction() {
-		testInsert();
 		boolean success = false;
+		testInsert();
 		try {
 			testInsert();
 		} catch (RuntimeException e) {
 			success = true;
 		}
 		assertTrue(success);
+	}
+	
+	@Test
+	public void TestTableOptimiser() {
+		List<Integer> ids = new ArrayList<Integer>();
+		for (int i = 0; i < 100; i++) {
+			int id =StaticOperators.insert(testTable, schema, new String[] { null, "name" + i, "status" });
+			if (id % 2 == 0) {
+				ids.add(id);
+			}
+		}
+		Long oldsize = tempFile.length();
+		int delCount = 0;
+		for (Integer i : ids) {
+			delCount++;
+			List<Tuple> res = StaticOperators.delete(testTable, schema, eq(col("id"), val(i)));
+			assertTrue("expect one delete for id " + i, res.size() == 1);
+		}
+		//this scan should now trigger the optimiser
+		int count = StaticOperators.count(new Scan(testTable, schema));
+		System.out.println("cleaned up " + (oldsize - tempFile.length()) + ", about " + ((float)tempFile.length() * 100 / oldsize) + "%");
+		assertTrue("delCount should be 50", delCount == 50);
+		assertTrue("expected 50 results, found " + count, count == 50);
+		assertTrue(tempFile.length() < oldsize);
 	}
 	
 

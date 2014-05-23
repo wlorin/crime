@@ -16,20 +16,28 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
  */
 public class Scan extends Operator {
 
+	private final String fileName;
 	private final TupleSchema schema;
 	private final BufferedInputStream reader;
+	private boolean optimise = true;
 	private long myBufferPosition = 0;
+	private int delCounter = 0;
+	private int recordCounter = 0;
 
 	/**
 	 * Contructs a new scan operator.
 	 * @param fileName file to read tuples from
 	 */
+	public Scan(final String fileName, final TupleSchema schema, final boolean optimize) {
+		this(fileName, schema);
+		this.optimise = optimize;
+	}
 	
 	public Scan(final String fileName, final TupleSchema schema) {
 		super(schema);
 		
 		// create schema
-		
+		this.fileName = fileName;
 		this.schema = schema;
 
 		// read from file
@@ -40,6 +48,18 @@ public class Scan extends Operator {
 			throw new RuntimeException("could not find file " + fileName);
 		}
 		this.reader = reader;
+	}
+	
+	private void cleanUp() {
+		try {
+			reader.close();
+		} catch (final IOException e) {
+			throw new RuntimeException("could not read: " + this.reader + 
+				". Error is " + e);
+		}
+		if (optimise && recordCounter > 10 && (float)delCounter / recordCounter > 0.3) {
+			StaticOperators.optimiseTable(fileName, schema);
+		}
 	}
 
 	/**
@@ -61,7 +81,8 @@ public class Scan extends Operator {
 				flags[i] = reader.read();
 				myBufferPosition++;
 				if (flags[i] == -1) {
-					reader.close();
+					//EOF
+					cleanUp();
 					return false;
 				}
 			}
@@ -93,16 +114,17 @@ public class Scan extends Operator {
 				}
 			}
 			if (flags[0] >> 7 == 1) { //record is deleted
+				delCounter++;
 				return moveNext();
 			}
 			this.current = new Tuple(schema, values);
+			recordCounter++;
 			return true;
 			
 		} catch (final IOException e) {
 			throw new RuntimeException("could not read: " + this.reader + 
 				". Error is " + e);
 		}
-		
 	}
 	public long getBufferPosition() {
 		return myBufferPosition;
