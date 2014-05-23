@@ -278,7 +278,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public PoI insertPoI(String name, Date birthdate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String birth = format.format(birthdate);
+		String birth = (birthdate == null) ? null : format.format(birthdate);
 		int poiId = StaticOperators.insert(getTableName(PoI.class), getSchema(PoI.class), new String[] {null, name, birth , null});
 		return getById(poiId, PoI.class);
 	}
@@ -286,7 +286,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public PoI updatePoI(Long id, String name, Date birthdate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String sdate = format.format(birthdate);
+		String sdate = (birthdate == null) ? null : format.format(birthdate);
 		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
 				new String[] {"PoIId", "Name", "Birthdate"}, 
 				new String[] {Long.toString(id), name, sdate},
@@ -528,7 +528,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public Conviction insertConviction(int caseId, int poiId,
 			Date convictionDate, String sentence, int crimeId) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String sdate = format.format(convictionDate);
+		String sdate = (convictionDate == null) ? null : format.format(convictionDate);
 		StaticOperators.insert(getTableName(Conviction.class), 
 				getSchema(Conviction.class), new String[] {Integer.toString(caseId), Integer.toString(poiId),
 			sdate, sentence, Integer.toString(crimeId)});
@@ -602,8 +602,8 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public Case insertCase(String name, String state, int crimeId,
 			String location, Date date, Time time) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String sdate = format.format(date);
-		String stime = new SimpleDateFormat("hh:mm:ss").format(time);
+		String sdate = (date == null) ? null : format.format(date);
+		String stime = (time == null) ? null : new SimpleDateFormat("hh:mm:ss").format(time);
 		int caseid = StaticOperators.insert(getTableName(Case.class), 
 				getSchema(Case.class), new String[] {null, name, state, Integer.toString(crimeId), location, sdate, stime});
 		
@@ -614,8 +614,8 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public Case updateCase(int CaseId, String name, String state, int crimeId,
 			String location, Date date, Time time) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String sdate = format.format(date);
-		String stime = new SimpleDateFormat("hh:mm:ss").format(time);
+		String sdate = (date == null) ? null : format.format(date);
+		String stime = (time == null) ? null : new SimpleDateFormat("hh:mm:ss").format(time);
 		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
 				new String[] {"CaseId", "Name", "CrimeId", "Status", "Date", "Time", "Location"}, 
 				new String[] {String.valueOf(CaseId), name, String.valueOf(crimeId), state, sdate, stime, location},
