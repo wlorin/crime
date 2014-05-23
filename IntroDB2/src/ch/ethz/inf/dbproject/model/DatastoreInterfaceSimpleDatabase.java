@@ -478,12 +478,16 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			tableName +  " poi LEFT JOIN Suspect s ON (poi.PoIId = s.PoIId AND s.CaseId=" + id + ") " +
 			"WHERE IsNull(s.CaseId);";
 	 */
-	// TODO 
 	public List<PoI> getAllPoIsNotLinked(Integer id) {
 		List<PoI> pois = new ArrayList<PoI>();
 		Operator suspect = new Scan(getTableName(Suspect.class), getSchema(Suspect.class)).as("s");
 		Operator poi = new Scan(getTableName(PoI.class), getSchema(PoI.class)).as("poi");
-
+		Operator poiSuspect = suspect.joinLeft(poi, and(eq(col("poi.PoIId"), val("s.PoIId")), eq(col("s.CaseId"), val(id))));
+		
+		while (poiSuspect.moveNext()) {
+			Tuple tuple = poiSuspect.current();
+			pois.add(getById(tuple.getInt("PoIId"), PoI.class));
+		}
 			
 			
 		return pois;
