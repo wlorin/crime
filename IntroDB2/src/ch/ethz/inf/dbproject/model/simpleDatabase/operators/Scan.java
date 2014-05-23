@@ -46,13 +46,7 @@ public class Scan extends Operator {
 		try {
 			reader = new BufferedInputStream(new FileInputStream(fileName));
 		} catch (final FileNotFoundException e) {
-			ResetToDemoData d = new ResetToDemoData();
-			d.resetToDemoData();
-			try {
-				reader = new BufferedInputStream(new FileInputStream(fileName));
-			} catch (final FileNotFoundException e2) {
-				throw new RuntimeException("2: could not find file " + fileName);
-			}
+			throw new RuntimeException("2: could not find file " + fileName);
 		}
 		this.reader = reader;
 	}
