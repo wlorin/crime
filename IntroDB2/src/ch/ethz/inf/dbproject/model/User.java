@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
 /**
  * Object that represents a registered in user.
@@ -20,6 +20,10 @@ public final class User extends Entity {
 	}
 	
 	public User(ResultSet rs) throws SQLException {
+		userid = rs.getInt("UserId");
+		name = rs.getString("Name");
+	}
+	public User(Tuple rs) {
 		userid = rs.getInt("UserId");
 		name = rs.getString("Name");
 	}

@@ -1,16 +1,24 @@
 package ch.ethz.inf.dbproject.model.test;
 
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
-import static ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators.*;
-import static org.junit.Assert.*;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.all;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.none;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators.select;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
+import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Case;
@@ -172,6 +180,24 @@ public class Part2Test {
 		Tuple t = op.current();
 		assertTrue(t.getSchema().types.length == 2);
 	}
+	@Test
+	public void testGetById() {
+		DatastoreInterfaceSimpleDatabase intf = new DatastoreInterfaceSimpleDatabase();
+		Class<User> clazz = User.class;
+		TupleSchema schema = intf.getSchema(clazz);
+		String tableName = intf.getTableName(clazz);
+		String idCol = intf.getIdColName(clazz);
+		int id = StaticOperators.insert(tableName, schema, new String[] { null, "TestUser"});
+		assert(id > 0);
+		User user = intf.getById(id, clazz);
+		List<Tuple> del = StaticOperators.delete(tableName, schema, eq(col(idCol), val(id)));
+		assert(del.size() == 1);
+		String expected = "UserId=" + id + ",Name=TestUser";
+		String result = "UserId=" + user.getUserid() + ",Name=" + user.getName();
+		assertEquals(expected, result);
+		assertEquals(result, del.get(0).toString());
+	}
+	
 
 	/**
 	 * Concatenates all tuples returned by the operator. The tuples are separated

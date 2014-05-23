@@ -1,5 +1,10 @@
 package ch.ethz.inf.dbproject.model;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,7 +17,9 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Sort;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
 
 
 public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterface {
@@ -72,7 +79,6 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		schemas.put(getTableName(User.class), TupleSchema.build()
 			.intCol("UserId").asPrimary().asAutoIncrement()
 			.varcharCol("Name", 50)
-			.dateCol("Birthdate")
 			.build());
 		
 		schemas.put(getTableName(PoI.class), TupleSchema.build()
@@ -83,14 +89,14 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			.build());
 	}
 	
-	private <T extends Entity> TupleSchema getSchema(Class<T> clazz) {
+	public <T extends Entity> TupleSchema getSchema(Class<T> clazz) {
 		return schemas.get(clazz.getSimpleName());
 	}
-	private <T extends Entity> String getTableName(Class<T> clazz) {
+	public <T extends Entity> String getTableName(Class<T> clazz) {
 		return getRawTableName(clazz);
 	}
 	
-	private <T extends Entity> String getIdColName(Class<T> clazz) {
+	public <T extends Entity> String getIdColName(Class<T> clazz) {
 		return getRawTableName(clazz) + "Id";
 	}
 	
@@ -104,21 +110,48 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		}
 	}
 	
+	@Override
+	public final <T extends Entity> List<T> getAll(Class<T> clazz) {
+		String tableName = getTableName(clazz);
+		Scan scan = new Scan(tableName, getSchema(clazz));
+		return all(scan, clazz);
+	}
+	
 	private <T extends Entity> List<T> all(Operator op, Class<T> clazz) {
-		return null;
+		try {
+			Constructor<T> constructor = clazz.getConstructor(Tuple.class);
+			List<T> ts = new ArrayList<T>();
+			while (op.moveNext()) {
+				ts.add(constructor.newInstance(op.current()));
+			}
+			return ts;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	@Override
 	public <T extends Entity> T getById(Long id, Class<T> clazz) {
 		return getById(id.intValue(), clazz);
 	}
-	public <T extends Entity> T getById(Integer id, Class<T> clazz) {
-		return null;
-	}
-
-	@Override
-	public <T extends Entity> List<T> getAll(Class<T> clazz) {
-		// TODO Auto-generated method stub
+	public final <T extends Entity> T getById(final Integer id, Class<T> clazz) {
+		if (id == null) {
+			return null;
+		}
+		String idColName = getIdColName(clazz);
+		Scan scan = new Scan(getTableName(clazz), getSchema(clazz));
+		Select select = new Select(scan, eq(col(idColName), val(id)));
+		List<T> all = all(select, clazz);
+		if (all.size() == 1) {
+			return all.get(0);
+		}
+		
+		if (all.size() > 1) {
+			throw new IllegalStateException("Expected at most one result for this select: column=" + idColName + ", value=" + id);
+		}
+		
 		return null;
 	}
 

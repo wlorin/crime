@@ -40,13 +40,26 @@ public class StaticOperators {
 		int res = 0;
 		int autoIncIndex = schema.getAutoIncrementColumn();
 		assert(autoIncIndex >= 0);
-		Scan scan = new Scan(fileName, schema);
-		while (scan.moveNext()) {
-			res = Math.max(res, scan.current().getInt(autoIncIndex));
+		try {
+			Scan scan = new Scan(fileName, schema);
+			while (scan.moveNext()) {
+				res = Math.max(res, scan.current().getInt(autoIncIndex));
+			}
+		}
+		catch (RuntimeException e) {
+			//table does not exist yet, we return 1
 		}
 		return res + 1;
 	}
-	public static boolean insert(final String fileName, final TupleSchema schema, final String[] values) {
+	
+	/**
+	 * @param fileName
+	 * @param schema
+	 * @param values
+	 * @return Returns -1 on error, 0 on success if there was no autoIncrementId, or the generated autoIncrementId
+	 */
+	public static int insert(final String fileName, final TupleSchema schema, final String[] values) {
+		int result = 0;
 		assert(schema.types.length == values.length);
 		assert(checkKey(fileName, schema, values));
 		FileOutputStream writer = null;
@@ -58,7 +71,9 @@ public class StaticOperators {
 				int idx = (i + 1) / 8;
 				if (values[i] == null) {
 					if (autoIncIndex >= 0 && i == autoIncIndex) {
-						values[i] = String.valueOf(getNextAutoIncrement(fileName, schema));
+						int autoId = getNextAutoIncrement(fileName, schema);
+						values[i] = String.valueOf(autoId);
+						result = autoId;
 					}
 					else {
 						flags[idx] = (byte) (flags[idx] | (0b10000000 >> ((i+1) % 8)));
@@ -88,7 +103,7 @@ public class StaticOperators {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return true;
+		return result;
 	}
 	
 	public static int update(final String fileName, final TupleSchema schema, final String[] columns, final String[] values, Condition condition) {
