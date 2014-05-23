@@ -13,19 +13,23 @@ public final class User extends Entity {
 
 	private final int userid;
 	private final String name;
+	private final String password;
 	
-	public User(final int userid, final String username, final String name) {
+	public User(final int userid, final String username, final String name, final String password) {
 		this.userid = userid;
 		this.name = name;
+		this.password = password;
 	}
 	
 	public User(ResultSet rs) throws SQLException {
 		userid = rs.getInt("UserId");
 		name = rs.getString("Name");
+		password = rs.getString("Password");
 	}
 	public User(Tuple rs) {
 		userid = rs.getInt("UserId");
 		name = rs.getString("Name");
+		password = rs.getString("Password");
 	}
 
 	public int getUserid() {

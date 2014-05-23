@@ -38,7 +38,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			.varcharCol("Status", 6)
 			.dateCol("Date")
 			.timeCol("Time")
-			.varcharCol("Location", 40)
+			.varcharCol("Location", 50)
 			.build());
 		schemas.put(getTableName(CaseNote.class), TupleSchema.build()
 			.intCol("CaseNoteId").asPrimary().asAutoIncrement()
@@ -48,18 +48,18 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			.intCol("UserId")
 			.build());
 		
-		schemas.put(getTableName(Convict.class), TupleSchema.build()
+		schemas.put(getTableName(Conviction.class), TupleSchema.build()
 			.intCol("PoIId")
 			.intCol("CaseId")
 			.intCol("CrimeId")
 			.dateCol("Date")
-			.varcharCol("Sentence", 100)
+			.varcharCol("Sentence", 50)
 			.markPrimary("PoIId", "CaseId", "CrimeId")
 			.build());
 		
 		schemas.put(getTableName(Crime.class), TupleSchema.build()
 			.intCol("CrimeId").asPrimary().asAutoIncrement()
-			.varcharCol("Crime", 100)
+			.varcharCol("Crime", 50)
 			.build());
 		
 		schemas.put(getTableName(PoINote.class), TupleSchema.build()
@@ -79,6 +79,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		schemas.put(getTableName(User.class), TupleSchema.build()
 			.intCol("UserId").asPrimary().asAutoIncrement()
 			.varcharCol("Name", 50)
+			.varcharCol("Password", 32)
 			.build());
 		
 		schemas.put(getTableName(PoI.class), TupleSchema.build()
@@ -169,12 +170,12 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getOldestUnsolvedCases(int number) {		
-		final Scan scan = new Scan("bla", getSchema(Case.class));
+		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
 		final Sort sort = new Sort(scan, "Date", false);
 		List<Case> cases = new ArrayList<Case>();
 		
 		for (int i = 0; i < number; i++ ){
-			if (sort.moveNext()) {			
+			if (sort.moveNext()) {	
 				final Tuple tuple = sort.current();
 				Case c = new Case(
 						tuple.getInt(0),
