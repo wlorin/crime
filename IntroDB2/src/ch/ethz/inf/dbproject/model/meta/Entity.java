@@ -1,4 +1,7 @@
 package ch.ethz.inf.dbproject.model.meta;
 
-public interface Entity {
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+
+public abstract class Entity {
+	public static TupleSchema schema;
 }

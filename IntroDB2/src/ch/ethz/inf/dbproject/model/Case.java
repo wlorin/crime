@@ -7,8 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
-public final class Case implements Entity {
+public final class Case extends Entity {
+	
+	//schema
+	
 	
 	/**
 	 * TODO The properties of the case should be added here
@@ -37,8 +42,6 @@ public final class Case implements Entity {
 	}
 	
 	public Case(	final ResultSet rs) throws SQLException {
-		// TODO These need to be adapted to your schema
-		// TODO Extra properties need to be added
 		this.id = rs.getInt("caseId");
 		this.name = rs.getString("Name");
 		this.crimeId = rs.getInt("crimeId");
@@ -46,6 +49,16 @@ public final class Case implements Entity {
 		this.location = rs.getString("location");
 		this.date = rs.getDate("date");
 		this.time = rs.getTime("time");
+	}
+	
+	public Case(final Tuple tuple) throws Exception {
+		this.id = tuple.getInt("caseId");
+		this.name = tuple.getString("Name");
+		this.crimeId = tuple.getInt("crimeId");
+		this.status = tuple.getString("status");
+		this.location = tuple.getString("location");
+		this.date = tuple.getDate("date");
+		this.time = tuple.getTime("time");
 	}
 
 	/**

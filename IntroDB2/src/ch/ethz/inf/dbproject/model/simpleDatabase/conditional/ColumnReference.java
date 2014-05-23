@@ -12,7 +12,7 @@ public class ColumnReference implements ConditionalSource {
 	
 	@Override
 	public String value(Tuple t) {
-		return t.get(name);
+		return t.getString(name);
 	}
 
 	@Override

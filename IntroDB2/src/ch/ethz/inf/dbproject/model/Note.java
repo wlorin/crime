@@ -5,11 +5,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
 /**
  * Object that represents a user comment.
  */
-public abstract class Note implements Entity {
+public abstract class Note extends Entity {
 
 	private final String username;
 	private final String note;
@@ -17,6 +18,11 @@ public abstract class Note implements Entity {
 	
 	public Note(ResultSet rs) throws SQLException {
 		username = new DatastoreInterfaceMySQL().getById(rs.getLong("UserId"), User.class).getName();
+		note = rs.getString("Note");
+		timestamp = rs.getTimestamp("Timestamp");
+	}
+	public Note(Tuple rs) throws Exception {
+		username = new DatastoreInterfaceSimpleDatabase().getById(rs.getInt("UserId"), User.class).getName();
 		note = rs.getString("Note");
 		timestamp = rs.getTimestamp("Timestamp");
 	}

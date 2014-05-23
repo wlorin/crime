@@ -32,11 +32,9 @@ public class StaticOperators {
 				}
 			}
 			Operator op = select(new Scan(fileName, schema), condition);
-			if (!op.moveNext()) {
-				return true;
-			}
+			return !op.moveNext();
 		}
-		return false;
+		return true;
 	}
 	private static int getNextAutoIncrement(final String fileName, final TupleSchema schema) {
 		int res = 0;
@@ -116,7 +114,7 @@ public class StaticOperators {
 					newValues[i] = values[updateMap.get(i)];
 				}
 				else {
-					newValues[i] = t.get(i);
+					newValues[i] = t.getString(i);
 				}
 			}
 			insert(fileName, schema, newValues);

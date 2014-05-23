@@ -4,7 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
+
 public final class Convict extends PoI {
+	
 	
 	final private int crimeId;
 	final private String crime;
@@ -27,7 +30,14 @@ public final class Convict extends PoI {
 		crime = rs.getString("Crime");
 		convictionDate = rs.getDate("ConvictionDate");
 		sentence = rs.getString("Sentence");
-		// TODO Auto-generated constructor stub
+	}
+	public Convict(Tuple t) throws Exception {
+		super(t);
+		crimeId = t.getInt("CrimeId");
+		caseId = t.getInt("CaseId");
+		crime = t.getString("Crime");
+		convictionDate = t.getDate("ConvictionDate");
+		sentence = t.getString("Sentence");
 	}
 
 	public int getCrimeId() {

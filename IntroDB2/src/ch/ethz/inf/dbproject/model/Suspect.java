@@ -4,9 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
-public class Suspect implements Entity {
-	
+public class Suspect extends Entity {
 	final int caseId;
 	final int poiId;
 

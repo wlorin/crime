@@ -6,12 +6,13 @@ import java.util.Date;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.meta.TableName;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
 /**
  * Object that represents a conviction.
  */
 @TableName("Convicted")
-public class Conviction implements Entity {
+public class Conviction extends Entity {
 
 	private final int poIId;
 	private final int caseId;
@@ -20,6 +21,13 @@ public class Conviction implements Entity {
 	private final String sentence;
 
 	public Conviction(ResultSet rs) throws SQLException {
+		this.caseId = rs.getInt("caseId");
+		this.crimeId = rs.getInt("crimeId");
+		this.poIId = rs.getInt("poIId");
+		this.date = rs.getDate("date");
+		this.sentence = rs.getString("sentence");
+	}
+	public Conviction(Tuple rs) throws Exception {
 		this.caseId = rs.getInt("caseId");
 		this.crimeId = rs.getInt("crimeId");
 		this.poIId = rs.getInt("poIId");

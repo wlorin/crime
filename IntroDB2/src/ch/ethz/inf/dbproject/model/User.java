@@ -4,11 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 /**
  * Object that represents a registered in user.
  */
-public final class User implements Entity {
+public final class User extends Entity {
 
 	private final int userid;
 	private final String name;

@@ -30,7 +30,7 @@ public final class Case extends Operator {
 			String[] values = new String[schema.types.length];
 			int i = 0;
 			for (SchemaColumn column : schema.columns) {
-				values[i] = current.get(column.name);
+				values[i] = current.getString(column.name);
 				i++;
 			}
 			this.current = new Tuple(schema, values);

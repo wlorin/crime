@@ -133,6 +133,9 @@ public class TupleSchema implements Serializable {
 		public TupleSchemaBuilder timeCol(String name) {
 			return with(name, new TypeTime());
 		}
+		public TupleSchemaBuilder timestampCol(String name) {
+			return with(name, new TypeTimestamp());
+		}
 		
 		public TupleSchemaBuilder asPrimary() {
 			if (built) {

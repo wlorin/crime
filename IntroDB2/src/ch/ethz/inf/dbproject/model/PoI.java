@@ -1,15 +1,14 @@
 package ch.ethz.inf.dbproject.model;
 
 import java.sql.ResultSet;
-
 import java.sql.SQLException;
-
 import java.util.Date;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 
-public class PoI implements Entity {
-
+public class PoI extends Entity {
+	
 	private final int id;
 	private final String name;
 	private final Date birthdate;
@@ -22,6 +21,11 @@ public class PoI implements Entity {
 	}
 	
 	public PoI(	final ResultSet rs) throws SQLException {
+		this.id = rs.getInt("PoIId");
+		this.name = rs.getString("name");
+		this.birthdate = rs.getDate("birthdate");
+	}
+	public PoI(final Tuple rs) throws Exception {
 		this.id = rs.getInt("PoIId");
 		this.name = rs.getString("name");
 		this.birthdate = rs.getDate("birthdate");

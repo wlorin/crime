@@ -1,85 +1,118 @@
 package ch.ethz.inf.dbproject.model;
 
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
-
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
-import ch.ethz.inf.dbproject.model.Case;
+import ch.ethz.inf.dbproject.model.meta.TableName;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Sort;
 
 
 public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterface {
 
-	public DatastoreInterfaceSimpleDatabase() {
-	}
-	
 	/*
 	 * Schema
 	 */
+	private final HashMap<String, TupleSchema> schemas;
 	
-	private TupleSchema schemaCase = TupleSchema.build().
-			intCol("CaseId").asPrimary().asAutoIncrement().
-			varcharCol("Name", 100).
-			intCol("CrimeId").
-			varcharCol("Status", 20).
-			dateCol("Date").
-			timeCol("Time").
-			varcharCol("Location", 50).
-			build();
-	
-	/* (non-Javadoc)
-	 * @see ch.ethz.inf.dbproject.model.DatastoreInterface#getCaseById(int)
-	 */
-
-	public final Case getCaseById(final int id) {
-	
-		/**
-		 * TODO this method should return the case with the given id
-		 */
-		final Scan scan = new Scan("bla", TupleSchema.build().intCol("blubb").build());
+	public DatastoreInterfaceSimpleDatabase() {
+		schemas = new HashMap<String, TupleSchema>();
+		schemas.put(getTableName(Case.class), TupleSchema.build()
+			.intCol("CaseId").asPrimary().asAutoIncrement()
+			.varcharCol("Name", 100)
+			.intCol("CrimeId")
+			.varcharCol("Status", 6)
+			.dateCol("Date")
+			.timeCol("Time")
+			.varcharCol("Location", 40)
+			.build());
+		schemas.put(getTableName(CaseNote.class), TupleSchema.build()
+			.intCol("CaseNoteId").asPrimary().asAutoIncrement()
+			.intCol("CaseId")
+			.timestampCol("Timestamp")
+			.varcharCol("Note", 4096)
+			.intCol("UserId")
+			.build());
 		
-		final Select select = new Select(scan, eq(col("id"), val(id)));
+		schemas.put(getTableName(Convict.class), TupleSchema.build()
+			.intCol("PoIId")
+			.intCol("CaseId")
+			.intCol("CrimeId")
+			.dateCol("Date")
+			.varcharCol("Sentence", 100)
+			.markPrimary("PoIId", "CaseId", "CrimeId")
+			.build());
 		
-		if (select.moveNext()) {
-			
-			final Tuple tuple = select.current();
-			
-			return null;
-			
-		} else {
-			
-			return null;
-			
-		}		
+		schemas.put(getTableName(Crime.class), TupleSchema.build()
+			.intCol("CrimeId").asPrimary().asAutoIncrement()
+			.varcharCol("Crime", 100)
+			.build());
+		
+		schemas.put(getTableName(PoINote.class), TupleSchema.build()
+			.intCol("PoINoteId").asPrimary().asAutoIncrement()
+			.intCol("PoIId")
+			.timestampCol("Timestamp")
+			.varcharCol("Note", 4096)
+			.intCol("UserId")
+			.build());
+		
+		schemas.put(getTableName(Suspect.class), TupleSchema.build()
+			.intCol("PoIId")
+			.intCol("CaseId")
+			.markPrimary("PoIId", "CaseId")
+			.build());
+		
+		schemas.put(getTableName(User.class), TupleSchema.build()
+			.intCol("UserId").asPrimary().asAutoIncrement()
+			.varcharCol("Name", 50)
+			.dateCol("Birthdate")
+			.build());
+		
+		schemas.put(getTableName(PoI.class), TupleSchema.build()
+			.intCol("PoiId").asPrimary().asAutoIncrement()
+			.varcharCol("Name", 50)
+			.dateCol("Birthdate")
+			.intCol("UserId")
+			.build());
 	}
-
-
-	public final List<Category> getAllCategories() {
-
-		/**
-		 * TODO This method should return all the different categories in the
-		 * database.
-		 * 
-		 * For the time being we return some random values.
-		 */
-		final List<Category> categories = new ArrayList<Category>();
-		categories.add(new Category("Theft"));
-		categories.add(new Category("Fraud"));
-		return categories;
+	
+	private <T extends Entity> TupleSchema getSchema(Class<T> clazz) {
+		return schemas.get(clazz.getSimpleName());
 	}
-
-
+	private <T extends Entity> String getTableName(Class<T> clazz) {
+		return getRawTableName(clazz);
+	}
+	
+	private <T extends Entity> String getIdColName(Class<T> clazz) {
+		return getRawTableName(clazz) + "Id";
+	}
+	
+	private <T extends Entity> String getRawTableName(Class<T> clazz) {
+		TableName tableAnnotation = clazz.getAnnotation(TableName.class);
+		if (tableAnnotation != null) {
+			return tableAnnotation.value();
+		}
+		else {
+			return clazz.getSimpleName();
+		}
+	}
+	
+	private <T extends Entity> List<T> all(Operator op, Class<T> clazz) {
+		return null;
+	}
+	
 	@Override
 	public <T extends Entity> T getById(Long id, Class<T> clazz) {
-		// TODO Auto-generated method stub
+		return getById(id.intValue(), clazz);
+	}
+	public <T extends Entity> T getById(Integer id, Class<T> clazz) {
 		return null;
 	}
 
@@ -103,7 +136,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Case> getOldestUnsolvedCases(int number) {		
-		final Scan scan = new Scan("bla", schemaCase);
+		final Scan scan = new Scan("bla", getSchema(Case.class));
 		final Sort sort = new Sort(scan, "Date", false);
 		List<Case> cases = new ArrayList<Case>();
 		
@@ -112,10 +145,10 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 				final Tuple tuple = sort.current();
 				Case c = new Case(
 						tuple.getInt(0),
-						tuple.get(1),
+						tuple.getString(1),
 						tuple.getInt(2),
-						tuple.get(3),
-						tuple.get(4),
+						tuple.getString(3),
+						tuple.getString(4),
 						tuple.getDate(5),
 						tuple.getTime(6)
 						);

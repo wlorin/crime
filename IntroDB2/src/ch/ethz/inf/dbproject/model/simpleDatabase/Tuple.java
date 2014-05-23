@@ -1,7 +1,10 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * A tuple in our database. A tuple consists of a schema (describing the names
@@ -27,38 +30,29 @@ public class Tuple {
 		return this.schema;
 	}
 
-	public final String get(final int index) {
+	public final String getString(final int index) {
 		return this.values[index];
 	}
 	
-	public final String get(String key) {
-		return get(schema.getIndex(key));
+	public final String getString(String key) {
+		return getString(schema.getIndex(key));
+	}
+	
+	public final Integer getInt(final String index) {
+		return getInt(schema.getIndex(index));
 	}
 
-	public final short getShort(final int index) {
-		return Short.parseShort(this.values[index]);
-	}
-	
-	public final int getInt(final int index) {
+	public final Integer getInt(final int index) {
+		if (isNull(index)) {
+			return null;
+		}
 		return Integer.parseInt(this.values[index]);
-	}
-	
-	public final float getFloat(final int index) {
-		return Float.parseFloat(this.values[index]);
-	}
-	
-	public final double getDouble(final int index) {
-		return Double.parseDouble(this.values[index]);
 	}
 	
 	public final boolean isNull(final int index) {
 		return this.values[index] == null;
 	}
 
-	// TODO 
-	// You may add other custom type getters here
-	// i.e. Date, Time
-	
 	public final String toString() {
 		final StringBuilder buf = new StringBuilder();
 		for (int i = 0; i < values.length; i++) {
@@ -89,14 +83,46 @@ public class Tuple {
 	public Type getType(String name) {
 		return schema.getType(schema.getIndex(name));
 	}
-
-	public final Date getDate(final int index) {
-		// TODO Convert String to Date
-		return null;
+	
+	public final Date getDate(final String index) {
+		return getDate(schema.getIndex(index));
 	}
-
+	public final Date getDate(final int index) {
+		if (isNull(index)) {
+			return null;
+		}
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd").parse(values[index]);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public final Time getTime(final String index) {
+		return getTime(schema.getIndex(index));
+	}
 	public final Time getTime(final int index) {
-		// TODO Convert String to Time
-		return null;
+		if (isNull(index)) {
+			return null;
+		}
+		try {
+			return (Time)new SimpleDateFormat("hh:mm:ss").parse(values[index]);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public final Timestamp getTimestamp(final String index) {
+		return getTimestamp(schema.getIndex(index));
+	}
+	public final Timestamp getTimestamp(final int index) {
+		if (isNull(index)) {
+			return null;
+		}
+		return Timestamp.valueOf(values[index]);
 	}
 }
