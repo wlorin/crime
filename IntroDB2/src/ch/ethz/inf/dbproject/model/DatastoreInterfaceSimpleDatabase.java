@@ -93,7 +93,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 	
 	public <T extends Entity> TupleSchema getSchema(Class<T> clazz) {
-		return schemas.get(clazz.getSimpleName());
+		return schemas.get(getTableName(clazz));
 	}
 	public <T extends Entity> String getTableName(Class<T> clazz) {
 		return getRawTableName(clazz);

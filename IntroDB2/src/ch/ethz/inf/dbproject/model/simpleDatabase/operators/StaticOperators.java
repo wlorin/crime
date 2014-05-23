@@ -37,8 +37,13 @@ public class StaticOperators {
 					condition = newCondition;
 				}
 			}
-			Operator op = select(new Scan(fileName, schema), condition);
-			return !op.moveNext();
+			try {
+				Operator op = select(new Scan(fileName, schema), condition);
+				return !op.moveNext();
+			} catch (RuntimeException e) {
+				//file not found, which is fine
+				return true;
+			}
 		}
 		return true;
 	}
