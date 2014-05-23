@@ -538,7 +538,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<PoINote> getPoINote(int id) {
-		Scan scan = new Scan(getTableName(PoI.class), getSchema(PoI.class));
+		Scan scan = new Scan(getTableName(PoINote.class), getSchema(PoINote.class));
 		Select select = new Select(scan, eq(col("PoIId"), val(id)));
 		List<PoINote> notes = new ArrayList<PoINote>();
 		while (select.moveNext()) {
