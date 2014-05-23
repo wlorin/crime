@@ -3,6 +3,7 @@ package ch.ethz.inf.dbproject.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 public class PoINote extends Note {
@@ -13,6 +14,12 @@ public class PoINote extends Note {
 		super(rs);
 		poiId = rs.getInt("PoIId");
 		id = rs.getInt("PoINoteId");
+	}
+	
+	public PoINote(Tuple t) throws Exception {
+		super(t);
+		poiId = t.getInt("PoIId");
+		id = t.getInt("PoINoteId");
 	}
 
 	public int getId() {

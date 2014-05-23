@@ -16,11 +16,7 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.meta.TableName;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Sort;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.StaticOperators;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.*;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.*;
 
 
@@ -252,42 +248,49 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public Suspect insertSuspect(int caseId, int poiId) {
-		StaticOperators.insert(getTableName(Suspect.class), getSchema(Suspect.class), new String[] {Integer.toString(caseId), Integer.toString(poiId)});
+		StaticOperators.insert(getTableName(Suspect.class), getSchema(Suspect.class), 
+				new String[] {Integer.toString(caseId), Integer.toString(poiId)});
 
 		return new Suspect(caseId, poiId);
 	}
 
 	@Override
 	public CaseNote insertComment(String comment, int caseId, int userid) {
-		// TODO Auto-generated method stub
-		return null;
+		int noteid = StaticOperators.insert(getTableName(CaseNote.class), getSchema(CaseNote.class), 
+				new String[] {comment, Integer.toString(caseId), Integer.toString(userid)});		
+		return getById(noteid, CaseNote.class);
 	}
 
 	@Override
-	// TODO return Crime
 	public Crime insertCrime(String crimeName) {
-		StaticOperators.insert(getTableName(Crime.class), getSchema(Crime.class), new String[] {null, crimeName});
-		return null;
+		int crimeid = StaticOperators.insert(getTableName(Crime.class), getSchema(Crime.class), new String[] {null, crimeName});
+		return getById(crimeid, Crime.class);
 	}
 
 	@Override
 	public PoI insertPoI(String name, Date birthdate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String birth = format.format(birthdate);
-		StaticOperators.insert(getTableName(PoI.class), getSchema(PoI.class), new String[] {null, name, birth , null});
-		return null;
+		int poiId = StaticOperators.insert(getTableName(PoI.class), getSchema(PoI.class), new String[] {null, name, birth , null});
+		return getById(poiId, PoI.class);
 	}
 
 	@Override
 	public PoI updatePoI(Long id, String name, Date birthdate) {
-		// TODO Auto-generated method stub
-		return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String sdate = format.format(birthdate);
+		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
+				new String[] {"PoIId", "Name", "Birthdate"}, 
+				new String[] {Long.toString(id), name, sdate},
+				 eq(col("PoIId"), val(Long.toString(id))));
+		return getById(id, PoI.class);
 	}
 
 	@Override
 	public PoINote insertPoINote(String comment, int poiId, int userid) {
-		// TODO Auto-generated method stub
-		return null;
+		int noteid = StaticOperators.insert(getTableName(PoINote.class), getSchema(PoINote.class), 
+				new String[] {comment, Integer.toString(poiId), Integer.toString(userid)});		
+		return getById(noteid, PoINote.class);
 	}
 
 	@Override
@@ -353,20 +356,34 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	
 	@Override
 	public List<CaseNote> getCaseNotesFrom(int caseId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<CaseNote> notes = new ArrayList<CaseNote>();
+		Scan scan = new Scan(getTableName(CaseNote.class), getSchema(CaseNote.class));
+		Select select = new Select(scan, eq(col("CaseId"), val(caseId)));
+		while (select.moveNext()) {
+			Tuple tuple = select.current();
+			CaseNote note = null;
+			try {
+				note = new CaseNote(tuple);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			notes.add(note);
+		}
+		return notes;
 	}
 
 	@Override
 	// TODO Duplikate entfernen?
 	public List<PoI> getAllSuspects(Integer caseId) {
 		Scan scan = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
+		Select select = new Select(scan, eq(col("CaseId"), val(caseId)));
 		List<PoI> suspects = new ArrayList<PoI>();
-		while (scan.moveNext()) {
-			Tuple tuple = scan.current();
+		while (select.moveNext()) {
+			Tuple tuple = select.current();
 			PoI poi = new PoI (tuple);
 			suspects.add(poi);
 		}
@@ -439,7 +456,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public List<Conviction> getAllConvictions(Integer poiId) {
-		Scan scan = new Scan("test", getSchema(Convict.class));
+		Scan scan = new Scan(getTableName(Conviction.class), getSchema(Conviction.class));
 		Select select = new Select(scan, eq(col("PoIId"), val(poiId)));
 		List<Conviction> convictions = new ArrayList<Conviction>();
 		while (select.moveNext()) {
@@ -449,50 +466,77 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		}
 		return convictions;
 	}
-	
-	
 
 	@Override
 	public void closeCase(int caseId) {
-		// TODO Auto-generated method stub
+		Case c = getById(caseId, Case.class);
+		updateCase(c.getId(), c.getName(), "closed", c.getCrimeId(), c.getLocation(), c.getDate(), (Time) c.getTime() );
 		
 	}
 
 	@Override
 	public void openCase(int caseId) {
-		// TODO Auto-generated method stub
+		Case c = getById(caseId, Case.class);
+		updateCase(c.getId(), c.getName(), "open", c.getCrimeId(), c.getLocation(), c.getDate(), (Time) c.getTime() );
 		
 	}
 
 	@Override
 	public Conviction insertConviction(int caseId, int poiId,
 			Date convictionDate, String sentence, int crimeId) {
-		// TODO Auto-generated method stub
-		return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String sdate = format.format(convictionDate);
+		StaticOperators.insert(getTableName(Conviction.class), 
+				getSchema(Conviction.class), new String[] {Integer.toString(caseId), Integer.toString(poiId),
+			sdate, sentence, Integer.toString(crimeId)});
+		
+		return new Conviction(convictionDate, caseId, poiId, crimeId, sentence);
 	}
 
 	@Override
 	public List<PoINote> getPoINote(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Scan scan = new Scan(getTableName(PoI.class), getSchema(PoI.class));
+		Select select = new Select(scan, eq(col("PoIId"), val(id)));
+		List<PoINote> notes = new ArrayList<PoINote>();
+		while (select.moveNext()) {
+			PoINote note = null;
+			try {
+				note = new PoINote(select.current());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			notes.add(note);
+		}
+		return notes;
 	}
 
 	@Override
 	public String getPoiNameById(Integer id) {
-		// TODO Auto-generated method stub
+		Scan scan = new Scan(getTableName(PoI.class), getSchema(PoI.class));
+		Select select = new Select(scan, eq(col("PoIId"), val(id)));
+		if (select.moveNext()) {
+			return select.current().getString(1);
+		}
 		return null;
 	}
 
 	@Override
+	// TODO
 	public List<Case> getInvolvedPoI(String poiname) {
-		// TODO Auto-generated method stub
+		List<Case> cases = new ArrayList<Case>();
+		
 		return null;
 	}
 
 
 	@Override
 	public boolean isCaseClosed(int caseId) {
-		// TODO Auto-generated method stub
+		Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
+		Select select = new Select(scan, eq(col("CaseId"), val(caseId)));
+		if (select.moveNext()) {
+		 if (select.current().getString(3).equals("false"))
+			return true;	
+		}
 		return false;
 	}
 	
@@ -500,15 +544,26 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public Case insertCase(String name, String state, int crimeId,
 			String location, Date date, Time time) {
-		// TODO Auto-generated method stub
-		return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String sdate = format.format(date);
+		String stime = new SimpleDateFormat("hh:mm:ss").format(time);
+		int caseid = StaticOperators.insert(getTableName(Case.class), 
+				getSchema(Case.class), new String[] {null, name, state, Integer.toString(crimeId), location, sdate, stime});
+		
+		return getById(caseid, Case.class);
 	}
-
+	
 	@Override
 	public Case updateCase(int CaseId, String name, String state, int crimeId,
 			String location, Date date, Time time) {
-		// TODO Auto-generated method stub
-		return null;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String sdate = format.format(date);
+		String stime = new SimpleDateFormat("hh:mm:ss").format(time);
+		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
+				new String[] {"CaseId", "Name", "CrimeId", "Status", "Date", "Time", "Location"}, 
+				new String[] {null, name, state, Integer.toString(crimeId), sdate, stime, location},
+				 eq(col("CaseId"), val(CaseId)));
+		return getById(CaseId, Case.class);
 	}
 	
 
