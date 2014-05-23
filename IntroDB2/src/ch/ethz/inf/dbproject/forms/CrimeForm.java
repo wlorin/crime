@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.Crime;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 
 public class CrimeForm extends CreationForm<Crime> {
 	final String crime = "Crime";
@@ -60,7 +60,7 @@ public class CrimeForm extends CreationForm<Crime> {
 		requireNotEmpty(this.crime, values);
 		
 		String crimeName = StringUtils.strip(values.get(this.crime));
-		return new DatastoreInterfaceMySQL().insertCrime(crimeName);
+		return new DatastoreInterfaceSimpleDatabase().insertCrime(crimeName);
 	}
 
 	@Override

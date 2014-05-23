@@ -10,17 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ch.ethz.inf.dbproject.forms.CaseForm;
 import ch.ethz.inf.dbproject.forms.PersonOfInterestForm;
-import ch.ethz.inf.dbproject.model.Case;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.PoI;
 
 @WebServlet(description = "Edits a specific case.", urlPatterns = { "/EditPoI" })
 public final class EditPoIServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -41,7 +39,6 @@ public final class EditPoIServlet extends HttpServlet {
 			return;
 		}
 		Long id = Long.valueOf(idString);
-		DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
 		PoI poi = dbInterface.getById(id, PoI.class);
 		session.setAttribute("poiName", poi.getName());
 		

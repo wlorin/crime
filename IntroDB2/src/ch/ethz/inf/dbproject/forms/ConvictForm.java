@@ -23,7 +23,7 @@ import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.HiddenField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.model.Conviction;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 
 public class ConvictForm extends CreationForm<Conviction> {
 	final public static String REFERENCE_CASEID = "CaseId";
@@ -85,7 +85,7 @@ public class ConvictForm extends CreationForm<Conviction> {
 		int crimeId = Integer.valueOf(values.get(this.crime));
 		int caseId = Integer.valueOf(values.get(REFERENCE_CASEID));
 		int poiId = Integer.valueOf(values.get(REFERENCE_POIID));
-		return new DatastoreInterfaceMySQL().insertConviction(caseId, poiId, convictionDate, sentence, crimeId);
+		return new DatastoreInterfaceSimpleDatabase().insertConviction(caseId, poiId, convictionDate, sentence, crimeId);
 	}
 
 	@Override

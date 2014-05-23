@@ -1,4 +1,4 @@
-<%@page import="ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL"%>
+<%@page import="ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase"%>
 <%@page import="ch.ethz.inf.dbproject.UserServlet"%>
 <%@page import="ch.ethz.inf.dbproject.model.Crime"%>
 <%@page import="java.util.List"%>
@@ -28,7 +28,7 @@
 			<tr>
 				<th id="masterHeader" colspan="2">
 					<h1>Law Enforcement Project</h1>
-					Project by Christian, Lorin & Nina
+					Project by Christian, Lorin &amp; Nina
 				</th>
 			</tr>
 			<tr id="masterContent">
@@ -44,7 +44,7 @@
 					<div class="menuDiv2"><a href="Cases?filter=oldest">Oldest Unsolved</a></div>
 					<div class="menuDiv1">Categories</div>
 					<%
-					DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+					DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 					for (Crime crime : dbInterface.getAll(Crime.class)) {
 						%><div class="menuDiv2"><a href="Cases?category=<%=crime.getName()%>"><%=crime.getName() %>
 						</a></div>

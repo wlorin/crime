@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.UserManagement;
 
@@ -19,7 +18,6 @@ import ch.ethz.inf.dbproject.util.UserManagement;
 public final class LogoutServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
 
 	public final static String SESSION_USER_LOGGED_IN = "userLoggedIn";
 	public final static String SESSION_USER_DETAILS = "userDetails";

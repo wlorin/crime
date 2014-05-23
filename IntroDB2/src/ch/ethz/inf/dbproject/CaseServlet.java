@@ -15,7 +15,7 @@ import ch.ethz.inf.dbproject.forms.CommentForm;
 import ch.ethz.inf.dbproject.forms.OpenCloseButton;
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.CaseNote;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
@@ -26,7 +26,7 @@ import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 public final class CaseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	/**
 	 * @see HttpServlet#HttpServlet()

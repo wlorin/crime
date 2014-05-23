@@ -56,12 +56,12 @@ public class Conviction extends Entity {
 	}
 	
 	public String getCasename() {
-		final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+		final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 		return dbInterface.getCasenameById(crimeId);
 	}
 	
 	public String getCrime() {
-		final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+		final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 		return dbInterface.getCrimeById(crimeId);
 	}
 	

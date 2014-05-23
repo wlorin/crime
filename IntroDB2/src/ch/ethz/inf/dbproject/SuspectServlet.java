@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.model.Case;
 import ch.ethz.inf.dbproject.model.Convict;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
@@ -23,7 +23,7 @@ import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 public final class SuspectServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	/**
 	 * @see HttpServlet#HttpServlet()

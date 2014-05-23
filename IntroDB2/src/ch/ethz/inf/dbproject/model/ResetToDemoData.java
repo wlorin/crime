@@ -1,4 +1,4 @@
-package ch.ethz.inf.dbproject.model.test;
+package ch.ethz.inf.dbproject.model;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
@@ -10,17 +10,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
 
-import ch.ethz.inf.dbproject.model.Case;
-import ch.ethz.inf.dbproject.model.CaseNote;
-import ch.ethz.inf.dbproject.model.Conviction;
-import ch.ethz.inf.dbproject.model.Crime;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
-import ch.ethz.inf.dbproject.model.PoI;
-import ch.ethz.inf.dbproject.model.PoINote;
-import ch.ethz.inf.dbproject.model.Suspect;
-import ch.ethz.inf.dbproject.model.User;
+
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
@@ -29,7 +21,6 @@ public class ResetToDemoData {
 	
 	private DatastoreInterfaceSimpleDatabase intf = new DatastoreInterfaceSimpleDatabase();
 
-	@Test
 	public void resetToDemoData() {
 		List<String> files = new ArrayList<String>();
 		files.add(intf.getTableName(Case.class));

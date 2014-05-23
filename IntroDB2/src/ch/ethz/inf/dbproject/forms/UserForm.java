@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.forms;
 
+import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,10 +19,9 @@ import org.apache.commons.lang3.StringUtils;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.PasswordField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.UserManagement;
-import static ch.ethz.inf.dbproject.util.Constant.*;
 
 
 public class UserForm extends CreationForm<User> {
@@ -48,7 +49,7 @@ public class UserForm extends CreationForm<User> {
 		String name = StringUtils.strip(values.get(this.name));
 		String password = StringUtils.strip(values.get(this.password));
 
-		return new DatastoreInterfaceMySQL().insertUser(name, password);
+		return new DatastoreInterfaceSimpleDatabase().insertUser(name, password);
 	}
 
 	@Override

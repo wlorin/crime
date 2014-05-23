@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 public class PoINote extends Note {
 	final int poiId;

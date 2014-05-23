@@ -20,7 +20,7 @@ import ch.ethz.inf.dbproject.forms.fields.DateField;
 import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.HiddenField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.PoI;
 
 
@@ -32,7 +32,6 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 	
 	DateField fieldBirthdate = new DateField(date, true);
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<Field> newFormFields() {
 		List<Field> bla = new ArrayList<Field>();
@@ -48,7 +47,7 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 		String name = StringUtils.strip(values.get(PersonOfInterestForm.name));
 		Date birthdate = fieldBirthdate.parse(values);
 
-		return new DatastoreInterfaceMySQL().insertPoI(name, birthdate);
+		return new DatastoreInterfaceSimpleDatabase().insertPoI(name, birthdate);
 	}
 
 	@Override
@@ -96,6 +95,6 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 		Date birthdate = fieldBirthdate.parse(values);
 		Long id = Long.valueOf(values.get(PersonOfInterestForm.id));
 
-		return new DatastoreInterfaceMySQL().updatePoI(id, name, birthdate);
+		return new DatastoreInterfaceSimpleDatabase().updatePoI(id, name, birthdate);
 	}
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.ethz.inf.dbproject.model.Crime;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 
 
 public class CrimeField extends SelectField {
@@ -15,7 +15,7 @@ public class CrimeField extends SelectField {
 
 	private static String[] crimeItems() {
 		List<String> value__name = new ArrayList<String>();
-		List<Crime> all = new DatastoreInterfaceMySQL().getAll(Crime.class);
+		List<Crime> all = new DatastoreInterfaceSimpleDatabase().getAll(Crime.class);
 		for (Crime category : all) {
 			value__name.add("" + category.getId());
 			value__name.add(category.getName());

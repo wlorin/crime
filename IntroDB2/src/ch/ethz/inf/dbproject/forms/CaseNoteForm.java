@@ -19,7 +19,7 @@ import ch.ethz.inf.dbproject.forms.fields.Field;
 import ch.ethz.inf.dbproject.forms.fields.HiddenField;
 import ch.ethz.inf.dbproject.forms.fields.TextArea;
 import ch.ethz.inf.dbproject.model.CaseNote;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.util.UserManagement;
 
 
@@ -49,7 +49,7 @@ public class CaseNoteForm extends CommentForm<CaseNote> {
 		int caseId = Integer.valueOf(StringUtils.strip(fieldCase.parse(values)));
 		 String comment = StringUtils.strip(fieldComment.getValue(values));
 		
-		return new DatastoreInterfaceMySQL().insertComment(comment, caseId, UserManagement.getCurrentlyLoggedInUser(session).getUserid());
+		return new DatastoreInterfaceSimpleDatabase().insertComment(comment, caseId, UserManagement.getCurrentlyLoggedInUser(session).getUserid());
 	}
 
 	@Override

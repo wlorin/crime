@@ -21,7 +21,7 @@ public abstract class Note extends Entity {
 		note = rs.getString("Note");
 		timestamp = rs.getTimestamp("Timestamp");
 	}
-	public Note(Tuple rs) throws Exception {
+	public Note(Tuple rs) {
 		username = new DatastoreInterfaceSimpleDatabase().getById(rs.getInt("UserId"), User.class).getName();
 		note = rs.getString("Note");
 		timestamp = rs.getTimestamp("Timestamp");

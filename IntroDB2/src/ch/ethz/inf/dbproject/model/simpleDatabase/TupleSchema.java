@@ -18,6 +18,10 @@ import com.google.common.collect.Lists;
  */
 public class TupleSchema implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6638859351571682217L;
 	public final Type[] types;
 	private final HashMap<String, Integer> columnNamesMap;
 	private final HashMap<String, Type> nameToType;

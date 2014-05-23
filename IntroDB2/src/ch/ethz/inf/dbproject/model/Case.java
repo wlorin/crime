@@ -8,7 +8,6 @@ import java.util.List;
 
 import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 
 public final class Case extends Entity {
 	
@@ -75,7 +74,7 @@ public final class Case extends Entity {
 	}
 
 	public String getCrime() {
-		final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+		final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 		return dbInterface.getCrimeById(crimeId);
 	}
 	
@@ -100,7 +99,7 @@ public final class Case extends Entity {
 	}
 
 	public List<CaseNote> getCaseNotes() {
-		return new DatastoreInterfaceMySQL().getCaseNotesFrom(this.getId());
+		return new DatastoreInterfaceSimpleDatabase().getCaseNotesFrom(this.getId());
 	}
 
 	public boolean isOpen() {

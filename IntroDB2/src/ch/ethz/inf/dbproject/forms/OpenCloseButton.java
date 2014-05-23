@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
-
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import static ch.ethz.inf.dbproject.util.Constant.WEB_ROOT;
 
 public class OpenCloseButton extends ButtonForm {
@@ -24,10 +23,10 @@ public class OpenCloseButton extends ButtonForm {
 	{
 		int caseId = Integer.valueOf(request.getParameter(ButtonForm.PARAMETER_FIELD));
 		if (ACTION_OPEN.equals(action)) {
-			new DatastoreInterfaceMySQL().openCase(caseId);
+			new DatastoreInterfaceSimpleDatabase().openCase(caseId);
 		}
 		else if (ACTION_CLOSE.equals(action)){
-			new DatastoreInterfaceMySQL().closeCase(caseId);
+			new DatastoreInterfaceSimpleDatabase().closeCase(caseId);
 		}
 		else {
 			throw new UnsupportedOperationException("Action " + action + " not supported");

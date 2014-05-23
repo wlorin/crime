@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.forms.CrimeForm;
 import ch.ethz.inf.dbproject.forms.PersonOfInterestForm;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.User;
 import ch.ethz.inf.dbproject.util.Constant;
 import ch.ethz.inf.dbproject.util.UserManagement;
@@ -21,7 +21,7 @@ import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 public final class UserServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	public final static String SESSION_USER_LOGGED_IN = "userLoggedIn";
 	public final static String SESSION_USER_DETAILS = "userDetails";
@@ -70,7 +70,7 @@ public final class UserServlet extends HttpServlet {
 			// However for this project, security is not a requirement.
 			final String password = request.getParameter("password");
 
-			User user = new DatastoreInterfaceMySQL().tryGetUserFromCredentials(username, password);
+			User user = dbInterface.tryGetUserFromCredentials(username, password);
 			if (user != null) {
 				session.setAttribute(UserManagement.SESSION_USER, user);
 				response.sendRedirect(Constant.WEB_ROOT + "User");

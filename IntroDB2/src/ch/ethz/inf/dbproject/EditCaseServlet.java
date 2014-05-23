@@ -11,15 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ch.ethz.inf.dbproject.forms.CaseForm;
-import ch.ethz.inf.dbproject.forms.CreationForm;
 import ch.ethz.inf.dbproject.model.Case;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 
 @WebServlet(description = "Edits a specific case.", urlPatterns = { "/EditCase" })
 public final class EditCaseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private final DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -40,7 +39,6 @@ public final class EditCaseServlet extends HttpServlet {
 			return;
 		}
 		Long id = Long.valueOf(idString);
-		DatastoreInterfaceMySQL dbInterface = new DatastoreInterfaceMySQL();
 		Case aCase = dbInterface.getById(id, Case.class);
 		session.setAttribute("caseName", aCase.getName());
 		HashMap<String, String> initialValues = new HashMap<String, String>();

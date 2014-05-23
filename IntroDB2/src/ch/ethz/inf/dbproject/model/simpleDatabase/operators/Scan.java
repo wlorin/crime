@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import ch.ethz.inf.dbproject.model.ResetToDemoData;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
@@ -45,7 +46,13 @@ public class Scan extends Operator {
 		try {
 			reader = new BufferedInputStream(new FileInputStream(fileName));
 		} catch (final FileNotFoundException e) {
-			throw new RuntimeException("could not find file " + fileName);
+			ResetToDemoData d = new ResetToDemoData();
+			d.resetToDemoData();
+			try {
+				reader = new BufferedInputStream(new FileInputStream(fileName));
+			} catch (final FileNotFoundException e2) {
+				throw new RuntimeException("2: could not find file " + fileName);
+			}
 		}
 		this.reader = reader;
 	}

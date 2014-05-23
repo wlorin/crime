@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +26,7 @@ import ch.ethz.inf.dbproject.forms.fields.InputField;
 import ch.ethz.inf.dbproject.forms.fields.StringField;
 import ch.ethz.inf.dbproject.forms.fields.TimeField;
 import ch.ethz.inf.dbproject.model.Case;
-import ch.ethz.inf.dbproject.model.DatastoreInterfaceMySQL;
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 
 
 public class CaseForm extends CreationForm<Case> {
@@ -75,7 +74,7 @@ public class CaseForm extends CreationForm<Case> {
 		Date date = fieldDate.parse(values);
 		Time time = fieldTime.parse(values);
 		
-		return new DatastoreInterfaceMySQL().insertCase(name, state, crimeId, location, date, time);
+		return new DatastoreInterfaceSimpleDatabase().insertCase(name, state, crimeId, location, date, time);
 	}
 	
 	protected Case processEditForm(List<Field> fields, HashMap<String, String> values, HttpSession session) {
@@ -89,7 +88,7 @@ public class CaseForm extends CreationForm<Case> {
 		Time time = fieldTime.parse(values);
 		int caseId = Integer.valueOf(values.get(id));
 		
-		return new DatastoreInterfaceMySQL().updateCase(caseId, name, state, crimeId, location, date, time);
+		return new DatastoreInterfaceSimpleDatabase().updateCase(caseId, name, state, crimeId, location, date, time);
 	}
 
 	@Override
