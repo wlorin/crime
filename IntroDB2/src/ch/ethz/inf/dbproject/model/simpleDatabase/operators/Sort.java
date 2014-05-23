@@ -60,6 +60,7 @@ public class Sort extends Operator implements Comparator<Tuple> {
 		}
 		if (sortBuffer.size() > pos) {
 			this.current = sortBuffer.get(pos);
+			
 			pos++;
 			return true;
 		}

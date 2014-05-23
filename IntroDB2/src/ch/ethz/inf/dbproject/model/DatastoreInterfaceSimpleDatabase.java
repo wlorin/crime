@@ -6,6 +6,8 @@ import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 
 import java.lang.reflect.Constructor;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	/*
 	 * Schema
 	 */
+	public static final String pathToDb = "c:\\database\\";
 	private final HashMap<String, TupleSchema> schemas;
 	
 	public DatastoreInterfaceSimpleDatabase() {
@@ -214,8 +217,14 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	 */
 	@Override
 	public User tryGetUserFromCredentials(String name, String password) {
+		String pwmd5 = "";
+		try {
+			pwmd5 = MessageDigest.getInstance("MD5").digest(password.getBytes()).toString();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		final Scan scan = new Scan(getTableName(User.class), getSchema(User.class));
-		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
+		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(pwmd5))));
 		User user = null;
 		if (select.moveNext()) {
 			Tuple tuple = select.current();

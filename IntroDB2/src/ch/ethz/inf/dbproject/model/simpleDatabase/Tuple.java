@@ -1,9 +1,9 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * A tuple in our database. A tuple consists of a schema (describing the names
@@ -91,7 +91,7 @@ public class Tuple {
 			return null;
 		}
 		try {
-			return new SimpleDateFormat("yyyy-MM-dd").parse(values[index]);
+			return new Date((new SimpleDateFormat("yyyy-MM-dd").parse(values[index])).getTime());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +107,7 @@ public class Tuple {
 			return null;
 		}
 		try {
-			return (Time)new SimpleDateFormat("hh:mm:ss").parse(values[index]);
+			return new Time((new SimpleDateFormat("hh:mm:ss").parse(values[index])).getTime());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
