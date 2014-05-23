@@ -610,6 +610,19 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 				 eq(col("CaseId"), val(CaseId)));
 		return getById(CaseId, Case.class);
 	}
+	public void deleteConviction(Integer caseId, int poiId, int crimeId) {
+		// runQuery("DELETE FROM Convicted WHERE CaseId=" + caseId + " AND PoIId=" + poiId + " AND CrimeId=" + crimeid);
+		StaticOperators.delete(getTableName(Conviction.class), getSchema(Conviction.class), 
+				and(
+					and(
+						eq(col("CaseId"), val(caseId)), 
+						eq(col("PoIId"), val(poiId))
+					), 
+					eq(col("CrimeId"), val(crimeId))
+				)
+		);
+		
+	}
 	
 
 }
