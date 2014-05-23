@@ -217,14 +217,9 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	 */
 	@Override
 	public User tryGetUserFromCredentials(String name, String password) {
-		String pwmd5 = "";
-		try {
-			pwmd5 = MessageDigest.getInstance("MD5").digest(password.getBytes()).toString();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		
 		final Scan scan = new Scan(getTableName(User.class), getSchema(User.class));
-		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(pwmd5))));
+		final Select select = new Select(scan, and(eq(col("Name"), val(name)), eq(col("Password"), val(password))));
 		User user = null;
 		if (select.moveNext()) {
 			Tuple tuple = select.current();

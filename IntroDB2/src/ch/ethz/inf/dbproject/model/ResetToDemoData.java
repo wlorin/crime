@@ -51,18 +51,12 @@ public class ResetToDemoData {
 	private void insertUser() {
 		String fileName = intf.getTableName(User.class);
 		TupleSchema schema = intf.getSchema(User.class);
-		String pwmd5 = "";
-		try {
-			pwmd5 = MessageDigest.getInstance("MD5").digest("password".getBytes()).toString();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		insert(fileName, schema, new String[] {null, "Max", pwmd5});
-		insert(fileName, schema, new String[] {null, "Philipp", pwmd5});
-		insert(fileName, schema, new String[] {null, "Anna", pwmd5});
-		insert(fileName, schema, new String[] {null, "Christian", pwmd5});
-		insert(fileName, schema, new String[] {null, "Lorin", pwmd5});
-		insert(fileName, schema, new String[] {null, "Nina", pwmd5});
+		insert(fileName, schema, new String[] {null, "Max", "password"});
+		insert(fileName, schema, new String[] {null, "Philipp", "password"});
+		insert(fileName, schema, new String[] {null, "Anna", "password"});
+		insert(fileName, schema, new String[] {null, "Christian", "password"});
+		insert(fileName, schema, new String[] {null, "Lorin", "password"});
+		insert(fileName, schema, new String[] {null, "Nina", "password"});
 	}
 
 	private void insertSuspect() {
