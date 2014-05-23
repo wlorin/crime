@@ -618,7 +618,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		String stime = new SimpleDateFormat("hh:mm:ss").format(time);
 		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
 				new String[] {"CaseId", "Name", "CrimeId", "Status", "Date", "Time", "Location"}, 
-				new String[] {null, name, state, Integer.toString(crimeId), sdate, stime, location},
+				new String[] {String.valueOf(CaseId), name, String.valueOf(crimeId), state, sdate, stime, location},
 				 eq(col("CaseId"), val(CaseId)));
 		return getById(CaseId, Case.class);
 	}
