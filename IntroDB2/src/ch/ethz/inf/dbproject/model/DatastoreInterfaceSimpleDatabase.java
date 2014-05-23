@@ -482,6 +482,8 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		}
 		return convictions;
 	}
+	
+	
 
 	@Override
 	public void closeCase(int caseId) {
