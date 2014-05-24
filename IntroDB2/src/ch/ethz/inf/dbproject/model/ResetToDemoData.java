@@ -64,7 +64,7 @@ public class ResetToDemoData {
 		TupleSchema schema = intf.getSchema(Suspect.class);
 		insert(fileName, schema, new String[] { getPoIIdByName("Urs Gerold"), String.valueOf(intf.getCaseIdByName("Case 5"))});
 		insert(fileName, schema, new String[] { getPoIIdByName("Sarah Meier"), String.valueOf(intf.getCaseIdByName("Case 5"))});
-		insert(fileName, schema, new String[] { getPoIIdByName("Hans Müller"), String.valueOf(intf.getCaseIdByName("Case 5"))});
+		insert(fileName, schema, new String[] { getPoIIdByName("Hans Muller"), String.valueOf(intf.getCaseIdByName("Case 5"))});
 		insert(fileName, schema, new String[] { getPoIIdByName("Oliver Sieber"), String.valueOf(intf.getCaseIdByName("Case 5"))});
 		insert(fileName, schema, new String[] { getPoIIdByName("Fabienne Neuwirth"), String.valueOf(intf.getCaseIdByName("Case 5"))});
 		
@@ -74,13 +74,13 @@ public class ResetToDemoData {
 		String fileName = intf.getTableName(PoI.class);
 		TupleSchema schema = intf.getSchema(PoI.class);
 		insert(fileName, schema, new String[] { null, "Sarah Meier", "1980-08-25", getUserIdByName("Max") });
-		insert(fileName, schema, new String[] { null, "Hans Müller", "1987-07-27", getUserIdByName("Max") });
+		insert(fileName, schema, new String[] { null, "Hans Muller", "1987-07-27", getUserIdByName("Max") });
 		insert(fileName, schema, new String[] { null, "Oliver Sieber", "1986-06-26", getUserIdByName("Christian") });
 		insert(fileName, schema, new String[] { null, "Karl Hinrichsen", "1985-05-25", getUserIdByName("Christian") });
 		insert(fileName, schema, new String[] { null, "Fabienne Neuwirth", "1984-04-24", getUserIdByName("Anna") });
-		insert(fileName, schema, new String[] { null, "Peter Müller", "1983-03-23", getUserIdByName("Anna") });
+		insert(fileName, schema, new String[] { null, "Peter Muller", "1983-03-23", getUserIdByName("Anna") });
 		insert(fileName, schema, new String[] { null, "Urs Gerold", "1982-03-22", getUserIdByName("Anna") });
-		insert(fileName, schema, new String[] { null, "Tamara Jäger", "1981-02-22", getUserIdByName("Anna") });
+		insert(fileName, schema, new String[] { null, "Tamara Jager", "1981-02-22", getUserIdByName("Anna") });
 		insert(fileName, schema, new String[] { null, "Lorin Weilenmann", "1984-08-05", getUserIdByName("Lorin") });
 		insert(fileName, schema, new String[] { null, "Michael Peters", "1972-12-16", getUserIdByName("Lorin") });
 		insert(fileName, schema, new String[] { null, "Stefan Brunner", "1970-08-25", getUserIdByName("Lorin") });
@@ -91,7 +91,7 @@ public class ResetToDemoData {
 	private void insertPoINote() {
 		String fileName = intf.getTableName(PoINote.class);
 		TupleSchema schema = intf.getSchema(PoINote.class);
-		insert(fileName, schema, new String[] { null, getPoIIdByName("Tamara Jäger"), "2014-03-22 18:25:12", "Kein Alibi für Tatzeit", getUserIdByName("Lorin") });
+		insert(fileName, schema, new String[] { null, getPoIIdByName("Urs Gerold"), "2014-03-22 18:25:12", "Kein Alibi Tatzeit", getUserIdByName("Lorin") });
 	}
 
 	private void insertConviction() {
@@ -107,9 +107,9 @@ public class ResetToDemoData {
 		insert(fileName, schema, new String[] {
 				getPoIIdByName("Oliver Sieber"),
 				getCaseIdByName("Case 6"),
-				String.valueOf(intf.getCrimeIdByName("Körperverletzung")),
+				String.valueOf(intf.getCrimeIdByName("Korperverletzung")),
 				"2014-05-11",
-				"3 Jahre Gefängnis"
+				"3 Jahre Haft"
 		});
 	}
 	
@@ -167,14 +167,14 @@ public class ResetToDemoData {
 				null, 
 				getCaseIdByName("Diebstahl 2"), 
 				"2014-05-05 23:22:52",
-				"durch Balkontüre ins Haus eingebrochen, Bargeld und Schmuck gestohlen",
+				"durch Balkonfenster ins Haus eingebrochen, Bargeld und Schmuck gestohlen",
 				getUserIdByName("Christian")}
 		);
 		insert(fileName, schema, new String[] { 
 				null, 
 				getCaseIdByName("Bankraub 2"), 
 				"2014-04-19 12:56:00",
-				"Täter gefasst",
+				"Taeter gefasst",
 				getUserIdByName("Anna")}
 		);
 		
@@ -183,7 +183,7 @@ public class ResetToDemoData {
 	private void insertCrime() {
 		String fileName = intf.getTableName(Crime.class);
 		TupleSchema schema = intf.getSchema(Crime.class);
-		insert(fileName, schema, new String[] { null, "Körperverletzung"});
+		insert(fileName, schema, new String[] { null, "Korperverletzung"});
 		insert(fileName, schema, new String[] { null, "Mord"});
 		insert(fileName, schema, new String[] { null, "Diebstahl"});
 		insert(fileName, schema, new String[] { null, "Einbruch"});
@@ -200,7 +200,7 @@ public class ResetToDemoData {
 				"open",
 				"2014-03-11",
 				"12:31:00",
-				"Zürich"
+				"Zurich"
 		});
 		insert(fileName, schema, new String[] {
 				null,
@@ -222,12 +222,12 @@ public class ResetToDemoData {
 		});
 		insert(fileName, schema, new String[] {
 				null,
-				"Mord in Zürich",
+				"Mord in Zurich",
 				String.valueOf(intf.getCrimeIdByName("Mord")),
 				"open",
 				"2014-04-11",
 				"11:23:00",
-				"Zürich"
+				"Zurich"
 		});
 		insert(fileName, schema, new String[] {
 				null,
@@ -236,12 +236,12 @@ public class ResetToDemoData {
 				"open",
 				"2014-02-17",
 				"14:43:00",
-				"Zürich"
+				"Zurich"
 		});
 		insert(fileName, schema, new String[] {
 				null,
-				"Schlägerei",
-				String.valueOf(intf.getCrimeIdByName("Körperverletzung")),
+				"Schlagerei",
+				String.valueOf(intf.getCrimeIdByName("Korperverletzung")),
 				"closed",
 				"2014-01-01",
 				"00:43:00",
@@ -254,7 +254,7 @@ public class ResetToDemoData {
 				"closed",
 				"2014-02-09",
 				"07:43:00",
-				"Zürich"
+				"Zurich"
 		});
 		insert(fileName, schema, new String[] {
 				null,
@@ -263,7 +263,7 @@ public class ResetToDemoData {
 				"open",
 				"2013-12-09",
 				"03:12:00",
-				"Zürich"
+				"Zurich"
 		});
 		insert(fileName, schema, new String[] {
 				null,
