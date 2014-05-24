@@ -18,7 +18,7 @@ public final class Case extends Operator {
 		super(makeNewSchema(op.schema, columns));
 		this.op = op;
 	}
-	public Case (TupleSchema schema, final Operator op, final TupleSchema newSchema) {
+	public Case (final Operator op, final TupleSchema newSchema) {
 		super(newSchema);
 		this.op = op;
 	}

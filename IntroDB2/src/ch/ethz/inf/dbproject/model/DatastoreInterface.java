@@ -61,7 +61,7 @@ public interface DatastoreInterface {
 	
 	public abstract List<Convict> getAllConvicts(Integer caseId);
 	
-	public abstract List<PoI> getAllPoIsNotLinked(Integer id);
+	public abstract List<PoI> getAllPoIsNotLinkedToCase(Integer id);
 	
 	public abstract List<Conviction> getAllConvictions(Integer poiId);
 	

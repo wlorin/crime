@@ -112,7 +112,7 @@ public final class SuspectServlet extends HttpServlet {
 			}
 			convicts.addObjects(dbInterface.getAllConvicts(id));
 			table.addObjects(this.dbInterface.getAllSuspects(id));
-			pois.addObjects(dbInterface.getAllPoIsNotLinked(id));
+			pois.addObjects(dbInterface.getAllPoIsNotLinkedToCase(id));
 			
 			session.setAttribute("convicts", convicts);	
 			

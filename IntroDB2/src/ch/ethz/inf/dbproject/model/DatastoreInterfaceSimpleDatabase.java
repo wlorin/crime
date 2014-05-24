@@ -22,6 +22,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
 import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
+import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.ConditionalSource;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
@@ -233,6 +234,10 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public void removeSuspect(int caseId, int poiId) {
+		Scan s = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
+		while (s.moveNext()) {
+			System.out.println(s.current());
+		}
 		StaticOperators.delete(getTableName(Suspect.class), getSchema(Suspect.class), and(eq(col("CaseId"), val(caseId)), eq(col("PoIId"), val(poiId))));		
 	}
 
@@ -313,6 +318,15 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			return tuple.getString("Crime");
 		}
 		return null;
+	}
+	
+	public int getCaseIdByName(String name) {
+		Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
+		Select select = new Select(scan, eq(col("Name"), val(name)));
+		if (select.moveNext()) {
+			return select.current().getInt("CaseId");
+		}
+		return -1;
 	}
 
 	@Override
@@ -407,17 +421,16 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
-	// TODO Duplikate entfernen?
 	public List<PoI> getAllSuspects(Integer caseId) {
-		Scan scan = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
-		Select select = new Select(scan, eq(col("CaseId"), val(caseId)));
+		Operator suspect = new Scan(getTableName(Suspect.class), getSchema(Suspect.class)).as("s");
+		Scan poi = new Scan(getTableName(PoI.class), getSchema(PoI.class));
+		Operator join = poi.join(suspect, eq(col("s.PoIId"), col("PoIId")));
+		Operator reducedSchema = new ch.ethz.inf.dbproject.model.simpleDatabase.operators.Case(join, getSchema(PoI.class));
 		List<PoI> suspects = new ArrayList<PoI>();
-		while (select.moveNext()) {
-			Tuple tuple = select.current();
-			PoI poi = new PoI (tuple);
-			suspects.add(poi);
+		while (reducedSchema.moveNext()) {
+			Tuple tuple = reducedSchema.current();
+			suspects.add(new PoI (tuple));
 		}
-		
 		return suspects;
 	}
 
@@ -461,13 +474,15 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			tableName +  " poi LEFT JOIN Suspect s ON (poi.PoIId = s.PoIId AND s.CaseId=" + id + ") " +
 			"WHERE IsNull(s.CaseId);";
 	 */
-	public List<PoI> getAllPoIsNotLinked(Integer id) {
+	public List<PoI> getAllPoIsNotLinkedToCase(Integer caseId) {
 		List<PoI> pois = new ArrayList<PoI>();
 		Operator suspect = new Scan(getTableName(Suspect.class), getSchema(Suspect.class)).as("s");
 		Operator poi = new Scan(getTableName(PoI.class), getSchema(PoI.class)).as("poi");
-		Operator poiSuspect = suspect.joinLeft(poi, and(eq(col("poi.PoIId"), val("s.PoIId")), eq(col("s.CaseId"), val(id))));
+		Condition cond = and(eq(col("poi.PoIId"), col("s.PoIId")), eq(col("s.CaseId"), val(caseId)));
+		Operator poiSuspect = poi.joinLeft(suspect, cond);
+		Select isNull = new Select(poiSuspect, eq(col("s.CaseId"), val(null)));
 		
-		while (poiSuspect.moveNext()) {
+		while (isNull.moveNext()) {
 			Tuple tuple = poiSuspect.current();
 			pois.add(getById(tuple.getInt("poi.PoIId"), PoI.class));
 		}

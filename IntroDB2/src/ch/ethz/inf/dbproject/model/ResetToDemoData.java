@@ -62,7 +62,7 @@ public class ResetToDemoData {
 	private void insertSuspect() {
 		String fileName = intf.getTableName(Suspect.class);
 		TupleSchema schema = intf.getSchema(Suspect.class);
-		insert(fileName, schema, new String[] { getPoIIdByName("Urs Gerold"), String.valueOf(intf.getCrimeIdByName("Case 5"))});
+		insert(fileName, schema, new String[] { getPoIIdByName("Urs Gerold"), String.valueOf(intf.getCaseIdByName("Case 5"))});
 		
 	}
 

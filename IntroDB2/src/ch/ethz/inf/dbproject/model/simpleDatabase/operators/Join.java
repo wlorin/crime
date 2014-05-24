@@ -68,9 +68,9 @@ public abstract class Join extends Operator {
 		TreeSet<Integer> unusedLeftIndices = leftIndices;
 		TreeSet<Integer> unusedRightIndices = rightIndices;
 		
-		List<Tuple> unprocessedLeft = unprocessedLeft(lefts, unusedLeftIndices, schema, leftOp.schema.columns.size());
+		List<Tuple> unprocessedLeft = unprocessedLeft(lefts, unusedLeftIndices, schema, rightOp.schema.columns.size());
 		handleUnprocessedLeft(joined, unprocessedLeft);
-		List<Tuple> unprocessedRight = unprocessedRight(rights, unusedRightIndices, schema, rightOp.schema.columns.size());
+		List<Tuple> unprocessedRight = unprocessedRight(rights, unusedRightIndices, schema, leftOp.schema.columns.size());
 		handleUnprocessedRight(joined, unprocessedRight);
 	}
 
