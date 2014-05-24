@@ -484,7 +484,6 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			pois.add(getById(tuple.getInt("poi.PoIId"), PoI.class));
 		}
 			
-			
 		return pois;
 	}
 
@@ -494,9 +493,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		Select select = new Select(scan, eq(col("PoIId"), val(poiId)));
 		List<Conviction> convictions = new ArrayList<Conviction>();
 		while (select.moveNext()) {
-			Tuple tuple = select.current();
-			Conviction c = new Conviction(tuple);
-			convictions.add(c);
+			convictions.add(new Conviction(select.current()));
 		}
 		return convictions;
 	}
@@ -522,7 +519,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		String sdate = (convictionDate == null) ? null : format.format(convictionDate);
 		StaticOperators.insert(getTableName(Conviction.class), 
 				getSchema(Conviction.class), new String[] {Integer.toString(poiId), Integer.toString(caseId),
-			Integer.toString(crimeId), sdate, sentence, });
+			Integer.toString(crimeId), sdate, sentence });
 		
 		return new Conviction(convictionDate, poiId, caseId, crimeId, sentence);
 	}

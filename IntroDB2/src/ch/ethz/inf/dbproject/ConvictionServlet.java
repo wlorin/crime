@@ -54,11 +54,11 @@ public final class ConvictionServlet extends HttpServlet {
 					"casesTable" 		/* The table html class property */,
 					Conviction.class 	/* The class of the objects (rows) that will be displayed */
 			);
-
 			table.addBeanColumn("Case", "casename");
 			table.addBeanColumn("Crime", "crime");
 			table.addBeanColumn("Sentence", "sentence");
 			table.addBeanColumn("Date of Conviction", "date");
+			table.addLinkColumn("Link", "Goto Case", "Case?id=", "caseId");
 			
 			session.setAttribute("conviction", table);		
 			

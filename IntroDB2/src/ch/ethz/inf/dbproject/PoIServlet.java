@@ -51,7 +51,7 @@ public final class PoIServlet extends HttpServlet {
 		
 		final String action = request.getParameter("action");
 		if ("delete".equals(action)) {
-			final String idString = request.getParameter("id");
+			final String idString = request.getParameter("PoIId");
 			Integer id = Integer.valueOf(idString);
 			dbInterface.deletePoI(id);
 		}
@@ -65,18 +65,18 @@ public final class PoIServlet extends HttpServlet {
 //		 */
 		table.addLinkColumn("Convictions"	/* The header. We will leave it empty */,
 				"View Convictions" 	/* What should be displayed in every row */,
-				"Conviction?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+				"Conviction?PoIId=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
 				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
         
 		
 		table.addLinkColumn("Details"	/* The header. We will leave it empty */,
 				"View Person" 	/* What should be displayed in every row */,
-				"PoIDetail?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+				"PoIDetail?PoIId=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
 				"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 		
 		
 		if (UserManagement.isUserLoggedIn(session)) {
-			table.addLinkColumn("Delete PoI", "Delete", "PoI?action=delete&id=","id");
+			table.addLinkColumn("Delete PoI", "Delete", "PoI?action=delete&id=","PoIId");
 		}
 		
 		

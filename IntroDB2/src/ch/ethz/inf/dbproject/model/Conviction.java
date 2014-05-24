@@ -19,6 +19,7 @@ public class Conviction extends Entity {
 	private final int crimeId;
 	private final Date date;
 	private final String sentence;
+	private final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 
 	public Conviction(ResultSet rs) throws SQLException {
 		this.caseId = rs.getInt("caseId");
@@ -56,12 +57,11 @@ public class Conviction extends Entity {
 	}
 	
 	public String getCasename() {
-		final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
-		return dbInterface.getCasenameById(crimeId);
+		
+		return dbInterface.getCasenameById(caseId);
 	}
 	
 	public String getCrime() {
-		final DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 		return dbInterface.getCrimeById(crimeId);
 	}
 	
