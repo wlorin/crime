@@ -84,7 +84,7 @@ public final class SearchServlet extends HttpServlet {
 			} else if (filter.equals("category")) {
 			
 				final String category = request.getParameter("category");
-				table.addObjects(this.dbInterface.getProjectsByCategory(category));
+				table.addObjects(this.dbInterface.getCasesByCrime(category));
 			
 			} else if (filter.equals("status")) {
 			

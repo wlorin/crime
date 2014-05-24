@@ -54,13 +54,15 @@ public class Scan extends Operator {
 	private void cleanUp() {
 		try {
 			reader.close();
+			if (optimise && recordCounter > 10 && (float)delCounter / recordCounter > 0.3) {
+				//StaticOperators.optimiseTable(fileName, schema);
+				//buggy for now
+			}
 		} catch (final IOException e) {
 			throw new RuntimeException("could not read: " + this.reader + 
-				". Error is " + e);
+				". Error is " + e.getLocalizedMessage());
 		}
-		if (optimise && recordCounter > 10 && (float)delCounter / recordCounter > 0.3) {
-			StaticOperators.optimiseTable(fileName, schema);
-		}
+		
 	}
 
 	/**

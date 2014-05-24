@@ -182,7 +182,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public List<Case> getMostRecentCases(int number) {
 		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
-		final Sort sort = new Sort(select, "Date", true);
+		final Sort sort = new Sort(select, "Date", false);
 		List<Case> cases = new ArrayList<Case>();
 		for (int i = 0; i < number; i++) {
 			if (sort.moveNext()) {			
@@ -198,7 +198,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public List<Case> getOldestUnsolvedCases(int number) {		
 		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
 		final Select select = new Select(scan, eq(col("Status"), val("open"))); 
-		final Sort sort = new Sort(select, "Date", false);
+		final Sort sort = new Sort(select, "Date", true);
 		List<Case> cases = new ArrayList<Case>();
 		for (int i = 0; i < number; i++) {
 			if (sort.moveNext()) {			
@@ -333,16 +333,20 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 	
 	@Override
-	public List<Case> getProjectsByCategory(String category) {
+	@Deprecated
+	public List<Case> getCasesByCrime(String category) {
 		int id = getCrimeIdByName(category);
+		return getCasesByCrime(id);
+	}
+	public List<Case> getCasesByCrime(int crimeId) {
 		final Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));	
-		final Select select = new Select(scan, eq(col("CrimeId"), val(id))); 
+		final Select select = new Select(scan, eq(col("CrimeId"), val(crimeId))); 
 		List<Case> cases = new ArrayList<Case>();
 		while (select.moveNext()) {			
 			final Tuple tuple = select.current();
 			Case c = new Case(tuple);
-				cases.add(c);
-			}
+			cases.add(c);
+		}
 		return cases;
 	}
 
@@ -603,10 +607,10 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			String location, Date date, Time time) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String sdate = (date == null) ? null : format.format(date);
-		String stime = (time == null) ? null : new SimpleDateFormat("hh:mm:ss").format(time);
-		int caseid = StaticOperators.insert(getTableName(Case.class), 
-				getSchema(Case.class), new String[] {null, name, state, Integer.toString(crimeId), location, sdate, stime});
-		
+		String stime = (time == null) ? null : new SimpleDateFormat("HH:mm:ss").format(time);
+		int caseid = StaticOperators.insert(getTableName(Case.class), getSchema(Case.class), new String[] {
+			null, name, Integer.toString(crimeId), state, sdate, stime, location
+			});
 		return getById(caseid, Case.class);
 	}
 	
@@ -615,7 +619,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 			String location, Date date, Time time) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String sdate = (date == null) ? null : format.format(date);
-		String stime = (time == null) ? null : new SimpleDateFormat("hh:mm:ss").format(time);
+		String stime = (time == null) ? null : new SimpleDateFormat("HH:mm:ss").format(time);
 		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
 				new String[] {"CaseId", "Name", "CrimeId", "Status", "Date", "Time", "Location"}, 
 				new String[] {String.valueOf(CaseId), name, String.valueOf(crimeId), state, sdate, stime, location},

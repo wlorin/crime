@@ -107,7 +107,7 @@ public class Tuple {
 			return null;
 		}
 		try {
-			return new Time((new SimpleDateFormat("hh:mm:ss").parse(values[index])).getTime());
+			return new Time((new SimpleDateFormat("HH:mm:ss").parse(values[index])).getTime());
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -49,7 +49,7 @@ public interface DatastoreInterface {
 	
 	public abstract String getCasenameById(int id);
 	
-	public abstract List<Case> getProjectsByCategory(String category);
+	public abstract List<Case> getCasesByCrime(String category);
 	
 	public abstract List<Case> getProjectsWithoutCategory();
 	

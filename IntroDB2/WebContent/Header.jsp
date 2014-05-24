@@ -46,7 +46,7 @@
 					<%
 					DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 					for (Crime crime : dbInterface.getAll(Crime.class)) {
-						%><div class="menuDiv2"><a href="Cases?category=<%=crime.getName()%>"><%=crime.getName() %>
+						%><div class="menuDiv2"><a href="Cases?crimeId=<%=crime.getId()%>"><%=crime.getName() %>
 						</a></div>
 					<%
 					}

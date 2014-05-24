@@ -90,76 +90,39 @@ public final class CasesServlet extends HttpServlet {
 
 		// The filter parameter defines what to show on the Projects page
 		final String filter = request.getParameter("filter");
-		final String category = request.getParameter("category");
+		final String strCrimeId = request.getParameter("crimeId");
 
 		if (UserManagement.isUserLoggedIn(session)) {
 			table.addLinkColumn("Delete Case", "Delete", "Cases?action=delete&id=", "id");
 			request.setAttribute("formNewCase", new CaseForm().generateNewForm());
 		}
 		
-		if (filter == null && category == null) {
+		if (filter == null && strCrimeId == null) {
 
 			// If no filter is specified, then we display all the cases!
 			table.addObjects(this.dbInterface.getAll(Case.class));
 
-		} else if (category != null) {
-			table.addObjects(dbInterface.getProjectsByCategory(category));
-			/*
-			if(category.equals("personal")) {
-
-				table.addObjects(this.dbInterface.getProjectsByCategory("Koerperverletzung"));
-				table.addObjects(this.dbInterface.getProjectsByCategory("Mord"));
+		} 
+		else if (strCrimeId != null) {
+			final int crimeId = Integer.valueOf(strCrimeId);
+			table.addObjects(dbInterface.getCasesByCrime(crimeId));
 			
-			} else if (category.equals("property")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Bankraub"));
-				table.addObjects(this.dbInterface.getProjectsByCategory("Diebstahl"));
-				table.addObjects(this.dbInterface.getProjectsByCategory("Einbruch"));
-
-			} 
-			else if (category.equals("assault")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Koerperverletzung"));
-
-			}			
-			else if (category.equals("murder")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Mord"));
-			}
-			else if (category.equals("theft")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Diebstahl"));
-			}
-			else if (category.equals("burglary")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Einbruch"));
-			}
-			else if (category.equals("robbery")) {
-				table.addObjects(this.dbInterface.getProjectsByCategory("Bankraub"));
-			}
-			else {
-				table.addObjects(this.dbInterface.getProjectsWithoutCategory());
-			}
-			*/
-			
-		} else if (filter != null) {
-		
+		} 
+		else if (filter != null) {
 			if(filter.equals("open")) {
-
 				table.addObjects(this.dbInterface.getByStatus("open"));
-
-			} else if (filter.equals("closed")) {
-
+			} 
+			else if (filter.equals("closed")) {
 				table.addObjects(this.dbInterface.getByStatus("closed"));
-
-			} else if (filter.equals("recent")) {
-
+			} 
+			else if (filter.equals("recent")) {
 				table.addObjects(this.dbInterface.getMostRecentCases(5));
-
 			}
-			
 			else if (filter.equals("oldest")) {
-
 				table.addObjects(this.dbInterface.getOldestUnsolvedCases(2));
-
 			}
-			
-		} else {
+		} 
+		else {
 			throw new RuntimeException("Code should not be reachable!");
 		}
 

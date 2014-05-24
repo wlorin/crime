@@ -19,7 +19,7 @@ public abstract class Type {
 	
 	public byte[] toByteArr(String value) {
 		if (value.length() > size) {
-			return value.substring(0, size).getBytes(Charset.forName(""));
+			return value.substring(0, size).getBytes(Charset.forName("ISO-8859-1"));
 		}
 		return value.getBytes(Charset.forName("ISO-8859-1"));
 	}
