@@ -291,7 +291,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public PoI updatePoI(Long id, String name, Date birthdate) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String sdate = (birthdate == null) ? null : format.format(birthdate);
-		StaticOperators.update(getTableName(Case.class), getSchema(Case.class), 
+		StaticOperators.update(getTableName(PoI.class), getSchema(PoI.class), 
 				new String[] {"PoIId", "Name", "Birthdate"}, 
 				new String[] {Long.toString(id), name, sdate},
 				 eq(col("PoIId"), val(Long.toString(id))));

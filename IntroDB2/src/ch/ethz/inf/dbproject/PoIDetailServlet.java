@@ -39,7 +39,7 @@ public final class PoIDetailServlet extends HttpServlet {
 
 		final HttpSession session = request.getSession(true);
 
-		final String idString = request.getParameter("id");
+		final String idString = request.getParameter("PoIId");
 		if (idString == null) {
 			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
 			return;
@@ -70,7 +70,7 @@ public final class PoIDetailServlet extends HttpServlet {
 			
 			table.addLinkColumn("Convictions"	/* The header. We will leave it empty */,
 					"View Convictions" 	/* What should be displayed in every row */,
-					"Conviction?id=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
+					"Conviction?PoIId=" 	/* This is the base url. The final url will be composed from the concatenation of this and the parameter below */, 
 					"id" 			/* For every case displayed, the ID will be retrieved and will be attached to the url base above */);
 	  
 			

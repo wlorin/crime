@@ -28,7 +28,7 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 
 	public static final String name = "Name";
 	public static final String date = "Birthdate";
-	public static final String id = "id";
+	public static final String id = "PoIId";
 	
 	DateField fieldBirthdate = new DateField(date, true);
 
@@ -75,14 +75,14 @@ public class PersonOfInterestForm extends CreationForm<PoI> {
 	@Override
 	protected void onNewSuccess(PoI result, ServletContext servletContext, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getId());
+		response.sendRedirect(WEB_ROOT + "PoIDetail?PoIId=" + result.getId());
 	}
 
 	@Override
 	protected void onEditSuccess(PoI result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getId());
+		response.sendRedirect(WEB_ROOT + "PoIDetail?PoIId=" + result.getId());
 		
 	}
 

@@ -50,8 +50,8 @@ public final class PoIServlet extends HttpServlet {
 		// Add columns to the new table
 		
 		final String action = request.getParameter("action");
-		if ("delete".equals(action)) {
-			final String idString = request.getParameter("PoIId");
+		final String idString = request.getParameter("PoIId");
+		if (UserManagement.isUserLoggedIn(session) && "delete".equals(action) && idString != null) {
 			Integer id = Integer.valueOf(idString);
 			dbInterface.deletePoI(id);
 		}
@@ -76,7 +76,7 @@ public final class PoIServlet extends HttpServlet {
 		
 		
 		if (UserManagement.isUserLoggedIn(session)) {
-			table.addLinkColumn("Delete PoI", "Delete", "PoI?action=delete&id=","PoIId");
+			table.addLinkColumn("Delete PoI", "Delete", "PoI?action=delete&PoIId=","id");
 		}
 		
 		
