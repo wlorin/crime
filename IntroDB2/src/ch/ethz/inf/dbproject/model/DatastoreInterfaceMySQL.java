@@ -216,7 +216,15 @@ public final class DatastoreInterfaceMySQL {
 	public void deleteConviction(int caseId, int poiId, int crimeid) {
 		runQuery("DELETE FROM Convicted WHERE CaseId=" + caseId + " AND PoIId=" + poiId + " AND CrimeId=" + crimeid);
 	}
+	
+	public void deletePoINote(int poinoteId) {
+		runQuery("DELETE FROM PoINote WHERE PoINoteId=" + poinoteId);
+	}
 
+	public void deleteCaseNote(int casenoteId) {
+		runQuery("DELETE FROM CaseNote WHERE CaseNoteId=" + casenoteId);
+	}
+	
 	public User insertUser(String name, String password) {
 		try (
 			PreparedStatement stmt = this.sqlConnection.prepareStatement("INSERT INTO `User` (Name, Password) VALUES (?, MD5(?))", Statement.RETURN_GENERATED_KEYS);
