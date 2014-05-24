@@ -4,6 +4,7 @@ import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.and;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.like;
 
 import java.lang.reflect.Constructor;
 import java.security.MessageDigest;
@@ -19,6 +20,8 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.meta.TableName;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
+import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
+import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
@@ -318,7 +321,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		Select select = new Select(scan, eq(col("CaseId"), val(id)));
 		if (select.moveNext()) {
 			Tuple tuple = select.current();
-			return tuple.getString("Case");
+			return tuple.getString("Name");
 		}
 		return null;
 	}
@@ -367,11 +370,9 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public List<Case> searchByName(String string) {
 		List<Case> cases = new ArrayList<Case>();
 		Scan scan = new Scan(getTableName(Case.class), getSchema(Case.class));
-		while (scan.moveNext()) {
-			Tuple tuple = scan.current();
-			if (tuple.getString(1).matches("%" + string + "%")) {
-				cases.add(new Case(tuple));
-			}
+		Select select = new Select(scan, like(col("Name"), val("%" + string + "%")));
+		while (select.moveNext()) {
+			cases.add(new Case(select.current()));
 		}
 		return cases;
 	}
@@ -379,11 +380,9 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	public List<PoI> searchPoIByName(String name) {
 		List<PoI> pois = new ArrayList<PoI>();
 		Scan scan = new Scan(getTableName(PoI.class), getSchema(PoI.class));
-		while (scan.moveNext()) {
-			Tuple tuple = scan.current();
-			if (tuple.getString(1).matches("%" + name + "%")) {
-				pois.add(new PoI(tuple));
-			}
+		Select select = new Select(scan, like(col("Name"), val("%" + name + "%")));
+		while (select.moveNext()) {
+			pois.add(new PoI(select.current()));
 		}
 		return pois;
 	}
@@ -451,31 +450,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 					t.getString("c.Sentence"));
 			convicts.add(c);
 		}
-		/*
-		Scan scan = new Scan(convictedFile, getSchema(Convict.class));
 		
-		Scan scanpers = new Scan(getTableName(PoI.class), getSchema(PoI.class));
-		while (scan.moveNext()) {
-			Tuple tuple = scan.current();
-			Select select = new Select(scanpers, eq(col("PoIId"), val(Integer.toString(tuple.getInt(0)))));
-			if (select.moveNext()) {
-				Tuple tpers = select.current();
-				String poiname = tpers.get(1);
-				Date birthdate = tpers.getDate(2);
-				Convict c = new Convict (
-						tuple.getInt(1),
-						tuple.getInt(0),
-						tuple.getInt(2),
-						getCrimeById(tuple.getInt(2)),
-						poiname,
-						birthdate,
-						tuple.getDate(3),
-						tuple.get(4)
-						);
-				convicts.add(c);
-			}
-		}
-		*/
 		return convicts;
 	}
 
@@ -572,20 +547,27 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		List<Case> cases = new ArrayList<Case>();
 		List<PoI> pois = searchPoIByName(poiname);
 		Scan susp = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
-
-		Scan conv = new Scan(getTableName(Convict.class), getSchema(Convict.class));
-		PoI poi = pois.get(0);
-		Select s1 = new Select(susp, eq(col("PoIId"), val(poi.getId())));
+		Scan conv = new Scan(getTableName(Conviction.class), getSchema(Conviction.class));
+		Condition condition = null;
+		for (PoI poi : pois) {
+			Condition newCondition = eq(col("PoIId"), val(poi.getId()));
+			if (condition != null) {
+				condition = and(condition, newCondition);
+			}
+			else {
+				condition = newCondition;
+			}
+		}
+		Select s1 = new Select(susp, condition);
 		while (s1.moveNext()) {
 			Tuple t = s1.current();
 			cases.add(getById(t.getInt(1), Case.class));
 		}
-		Select s2 = new Select(conv, eq(col("PoIId"), val(poi.getId())));
+		Select s2 = new Select(conv, condition);
 		while (s2.moveNext()) {
 			Tuple t = s2.current();
 			cases.add(getById(t.getInt(1), Case.class));
 		}
-				
 		return cases;
 	}
 

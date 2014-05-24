@@ -28,6 +28,9 @@ public class Static {
 	public static Equals eq(ConditionalSource a, ConditionalSource b) {
 		return new Equals(a, b);
 	}
+	public static Like like(ConditionalSource a, ConditionalSource b) {
+		return new Like(a, b);
+	}
 	
 	public static Condition all() {
 		return new Condition() {

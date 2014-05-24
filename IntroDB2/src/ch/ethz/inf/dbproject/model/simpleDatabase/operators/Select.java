@@ -30,6 +30,7 @@ public class Select extends Operator {
 
 	private final Operator op;
 	private final Condition c;
+	private final boolean cNull;
 
 	/**
 	 * Contructs a new selection operator.
@@ -41,11 +42,12 @@ public class Select extends Operator {
 		super(op.schema);
 		this.op = op;
 		this.c = c;
+		cNull = c == null;
 	}
 	
 	@Override
 	public boolean moveNext() {
-		while (op.moveNext()) {
+		while (op.moveNext() && !cNull) {
 			if(c.matches(op.current)) {
 				this.current = op.current();
 				return true;
