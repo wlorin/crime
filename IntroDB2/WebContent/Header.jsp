@@ -9,7 +9,7 @@
 	
 	<head>
 	    <link href="style.css" rel="stylesheet" type="text/css">
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Law Enforcement Project</title>
 	</head>
 
