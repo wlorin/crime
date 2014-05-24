@@ -45,8 +45,7 @@ public class Scan extends Operator {
 		try {
 			reader = new BufferedInputStream(new FileInputStream(fileName));
 		} catch (final FileNotFoundException e) {
-			System.out.println(System.getProperty("user.dir"));
-			throw new RuntimeException("could not find file " + fileName);
+			throw new RuntimeException("could not find file " + fileName + ", current relative path is :" + System.getProperty("user.dir"));
 		}
 		this.reader = reader;
 	}

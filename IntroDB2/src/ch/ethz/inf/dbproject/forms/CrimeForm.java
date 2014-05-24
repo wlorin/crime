@@ -54,9 +54,6 @@ public class CrimeForm extends CreationForm<Crime> {
 	@Override
 	protected Crime processNewForm(List<Field> fields,
 			HashMap<String, String> values, HttpSession session) {
-		for (Entry<String, String> item : values.entrySet()) {
-			System.out.println(item.getKey() + " => " + item.getValue());
-		}
 		requireNotEmpty(this.crime, values);
 		
 		String crimeName = StringUtils.strip(values.get(this.crime));

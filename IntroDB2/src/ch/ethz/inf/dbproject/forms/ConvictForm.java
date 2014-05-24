@@ -75,10 +75,6 @@ public class ConvictForm extends CreationForm<Conviction> {
 	@Override
 	protected Conviction processNewForm(List<Field> fields,
 			HashMap<String, String> values, HttpSession session) {
-		for (Entry<String, String> item : values.entrySet()) {
-			System.out.println(item.getKey() + " => " + item.getValue());
-		}
-		System.out.println("processing form");
 		requireNotEmpty(this.sentence, values);
 		String sentence = StringUtils.strip(values.get(this.sentence));
 		Date convictionDate = fieldConviction.parse(values);
