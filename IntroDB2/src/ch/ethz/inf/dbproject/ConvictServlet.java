@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
+
 /**
  * Servlet implementation class of Convictions
  */
@@ -29,11 +31,21 @@ public final class ConvictServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected final void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-
+		
+		DatastoreInterfaceSimpleDatabase dbInterface = new DatastoreInterfaceSimpleDatabase();
 		final HttpSession session = request.getSession(true);
 		
 		final String CaseIdString = request.getParameter("CaseId");
 		final String PoIIdString = request.getParameter("PoIId");
+		session.setAttribute("customTitle", "");
+		if (PoIIdString != null && CaseIdString != null) {
+			final int poiId = Integer.valueOf(PoIIdString);
+			final int caseId = Integer.valueOf(CaseIdString);
+			final String poiName = dbInterface.getPoiNameById(poiId);
+			final String caseName = dbInterface.getCasenameById(caseId);
+			session.setAttribute("customTitle", poiName + " for " + caseName);
+		}
+			
 		if (CaseIdString == null || PoIIdString == null) {
 			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
 			return;

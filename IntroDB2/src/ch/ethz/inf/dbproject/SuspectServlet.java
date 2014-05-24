@@ -46,21 +46,21 @@ public final class SuspectServlet extends HttpServlet {
 		}
 
 		try {
-			final Integer id = Integer.parseInt(idString);
+			final Integer caseId = Integer.parseInt(idString);
 			if (UserManagement.isUserLoggedIn(session)) {
 				String action = request.getParameter("action");
 				if ("link".equals(action)) {
-					String poiIdString = request.getParameter("id");
+					String poiIdString = request.getParameter("PoIId");
 					if (poiIdString != null) {
 						int poiId = Integer.parseInt(poiIdString);
-						dbInterface.insertSuspect(id, poiId);
+						dbInterface.insertSuspect(caseId, poiId);
 					}
 				}
 				else if ("unlink".equals(action)) {
-					String poiIdString = request.getParameter("id");
+					String poiIdString = request.getParameter("PoIId");
 					if (poiIdString != null) {
 						int poiId = Integer.parseInt(poiIdString);
-						dbInterface.removeSuspect(id, poiId);
+						dbInterface.removeSuspect(caseId, poiId);
 					}
 				}
 				else if ("delete".equals(action)) {
@@ -70,7 +70,7 @@ public final class SuspectServlet extends HttpServlet {
 					String crimeString = poiCrime.substring(dash+1);
 					int poi = Integer.parseInt(poiString);
 					int crime = Integer.parseInt(crimeString);
-					dbInterface.deleteConviction(id, poi, crime);
+					dbInterface.deleteConviction(caseId, poi, crime);
 				}
 			}
 			
@@ -84,14 +84,14 @@ public final class SuspectServlet extends HttpServlet {
 
 			
 
-			final BeanTableHelper<PoI> table = new BeanTableHelper<PoI>(
+			final BeanTableHelper<PoI> suspects = new BeanTableHelper<PoI>(
 					"suspect" 		/* The table html id property */,
 					"casesTable" /* The table html class property */,
 					PoI.class 	/* The class of the objects (rows) that will be displayed */
 			);
 
-			table.addBeanColumn("Name", "name");
-			table.addBeanColumn("Birthdate", "birthdate");
+			suspects.addBeanColumn("Name", "name");
+			suspects.addBeanColumn("Birthdate", "birthdate");
 			final BeanTableHelper<PoI> pois = new BeanTableHelper<PoI>(
 					"PoI",
 					"casesTable",
@@ -100,19 +100,18 @@ public final class SuspectServlet extends HttpServlet {
 			pois.addBeanColumn("Name", "name");
 			pois.addBeanColumn("Birthdate", "birthdate");
 			session.setAttribute("poisnotlinkted", "");
-			session.setAttribute("suspect", table);
-			final Case aCase = dbInterface.getById(Long.valueOf(id), Case.class);
+			session.setAttribute("suspect", suspects);
+			final Case aCase = dbInterface.getById(caseId, Case.class);
 			if (UserManagement.isUserLoggedIn(session) && aCase.isOpen()) {
-				table.addLinkColumn("Remove Conviction", "Remove", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
-				table.addLinkColumn("Unlink", "Unlink", "Suspect?CaseId=" + id + "&action=unlink&id=", "id");
-				table.addLinkColumn("Convict", "Convict", "Convict?CaseId=" + id + "&PoIId=", "id");
-				pois.addLinkColumn("Link with Case", "Link", "Suspect?CaseId=" + id + "&action=link&id=", "id");
-				convicts.addLinkColumn("Delete Conviction", "Delete", "Suspect?action=delete&CaseId=" + id + "&poi-crime=", "poiCrime");
+				suspects.addLinkColumn("Unlink", "Unlink", "Suspect?CaseId=" + caseId + "&action=unlink&PoIId=", "id");
+				suspects.addLinkColumn("Convict", "Convict", "Convict?CaseId=" + caseId + "&PoIId=", "id");
+				pois.addLinkColumn("Link with Case", "Link", "Suspect?CaseId=" + caseId + "&action=link&PoIId=", "id");
+				convicts.addLinkColumn("Delete Conviction", "Delete", "Suspect?action=delete&CaseId=" + caseId + "&poi-crime=", "poiCrime");
 				session.setAttribute("poisnotlinkted", pois);
 			}
-			convicts.addObjects(dbInterface.getAllConvicts(id));
-			table.addObjects(this.dbInterface.getAllSuspects(id));
-			pois.addObjects(dbInterface.getAllPoIsNotLinkedToCase(id));
+			convicts.addObjects(dbInterface.getAllConvicts(caseId));
+			suspects.addObjects(this.dbInterface.getAllSuspects(caseId));
+			pois.addObjects(dbInterface.getAllPoIsNotLinkedToCase(caseId));
 			
 			session.setAttribute("convicts", convicts);	
 			

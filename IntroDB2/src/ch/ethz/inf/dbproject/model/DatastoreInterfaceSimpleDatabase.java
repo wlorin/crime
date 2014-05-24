@@ -234,10 +234,6 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 	@Override
 	public void removeSuspect(int caseId, int poiId) {
-		Scan s = new Scan(getTableName(Suspect.class), getSchema(Suspect.class));
-		while (s.moveNext()) {
-			System.out.println(s.current());
-		}
 		StaticOperators.delete(getTableName(Suspect.class), getSchema(Suspect.class), and(eq(col("CaseId"), val(caseId)), eq(col("PoIId"), val(poiId))));		
 	}
 
@@ -265,7 +261,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public Suspect insertSuspect(int caseId, int poiId) {
 		StaticOperators.insert(getTableName(Suspect.class), getSchema(Suspect.class), 
-				new String[] {Integer.toString(caseId), Integer.toString(poiId)});
+				new String[] {Integer.toString(poiId), Integer.toString(caseId)});
 
 		return new Suspect(caseId, poiId);
 	}
@@ -423,8 +419,9 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public List<PoI> getAllSuspects(Integer caseId) {
 		Operator suspect = new Scan(getTableName(Suspect.class), getSchema(Suspect.class)).as("s");
+		Operator suspectSelect = new Select(suspect, eq(col("s.CaseId"), val(caseId)));
 		Scan poi = new Scan(getTableName(PoI.class), getSchema(PoI.class));
-		Operator join = poi.join(suspect, eq(col("s.PoIId"), col("PoIId")));
+		Operator join = poi.join(suspectSelect, eq(col("s.PoIId"), col("PoIId")));
 		Operator reducedSchema = new ch.ethz.inf.dbproject.model.simpleDatabase.operators.Case(join, getSchema(PoI.class));
 		List<PoI> suspects = new ArrayList<PoI>();
 		while (reducedSchema.moveNext()) {
@@ -524,10 +521,10 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String sdate = (convictionDate == null) ? null : format.format(convictionDate);
 		StaticOperators.insert(getTableName(Conviction.class), 
-				getSchema(Conviction.class), new String[] {Integer.toString(caseId), Integer.toString(poiId),
-			sdate, sentence, Integer.toString(crimeId)});
+				getSchema(Conviction.class), new String[] {Integer.toString(poiId), Integer.toString(caseId),
+			Integer.toString(crimeId), sdate, sentence, });
 		
-		return new Conviction(convictionDate, caseId, poiId, crimeId, sentence);
+		return new Conviction(convictionDate, poiId, caseId, crimeId, sentence);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public final class ConvictionServlet extends HttpServlet {
 
 		final HttpSession session = request.getSession(true);
 
-		final String idString = request.getParameter("id");
+		final String idString = request.getParameter("PoIId");
 		if (idString == null) {
 			this.getServletContext().getRequestDispatcher("/PoI").forward(request, response);
 			return;
