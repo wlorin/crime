@@ -250,6 +250,18 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	}
 
 	@Override
+	public void deletePoINote(int poinoteId) {
+		StaticOperators.delete(getTableName(PoINote.class), getSchema(PoINote.class), eq(col("PoINoteId"), val(poinoteId)));
+		
+	}
+	
+	@Override
+	public void deleteCaseNote(int casenoteId) {
+		StaticOperators.delete(getTableName(CaseNote.class), getSchema(CaseNote.class), eq(col("CaseNoteId"), val(casenoteId)));
+		
+	}
+	
+	@Override
 	public User insertUser(String name, String password) {
 		int userid = StaticOperators.insert(getTableName(User.class), getSchema(User.class), new String[] {null, name, password});
 		if (userid > 0) {

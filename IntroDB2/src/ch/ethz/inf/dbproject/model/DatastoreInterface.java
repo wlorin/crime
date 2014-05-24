@@ -81,6 +81,10 @@ public interface DatastoreInterface {
 	
 	public abstract void deletePoI(int poiId);
 	
+	public abstract void deleteCaseNote(int casenoteId);
+	
+	public abstract void deletePoINote(int poinoteId);
+	
 	public abstract boolean isCaseClosed(int caseId);
 	
 }
