@@ -24,7 +24,7 @@ ${poiNotes }
 <%
 if (user != null) {
 	HashMap<String, String> initialValues = new HashMap<String, String>();
-	initialValues.put(CommentForm.REFERENCE_ID, "" + request.getParameter("id"));
+	initialValues.put(CommentForm.REFERENCE_ID, "" + request.getParameter("PoIId"));
 %>
 
 	<%= new PoINoteForm().generateNewForm(initialValues) %>

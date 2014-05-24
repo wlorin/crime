@@ -49,7 +49,7 @@ public class CaseNoteForm extends CommentForm<CaseNote> {
 		int caseId = Integer.valueOf(StringUtils.strip(fieldCase.parse(values)));
 		 String comment = StringUtils.strip(fieldComment.getValue(values));
 		
-		return new DatastoreInterfaceSimpleDatabase().insertComment(comment, caseId, UserManagement.getCurrentlyLoggedInUser(session).getUserid());
+		return new DatastoreInterfaceSimpleDatabase().insertCaseNote(comment, caseId, UserManagement.getCurrentlyLoggedInUser(session).getUserid());
 	}
 
 	@Override

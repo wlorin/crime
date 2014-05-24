@@ -28,8 +28,14 @@ public class StaticOperators {
 		ImmutableList<SchemaColumn> primaryKeys = schema.primaryKeys;
 		if (!primaryKeys.isEmpty()) {
 			Condition condition = null;
+			int autoIncCol = schema.getAutoIncrementColumn();
 			for (SchemaColumn primaryKey : primaryKeys) {
-				Condition newCondition = eq(col(primaryKey.name), val(values[schema.getIndex(primaryKey.name)]));
+				int index = schema.getIndex(primaryKey.name);
+				String value = values[index];
+				if (value == null && index != autoIncCol) {
+					return false; //primary key component cannot be null
+				}
+				Condition newCondition = eq(col(primaryKey.name), val(value));
 				if (condition != null) {
 					condition = and(condition, newCondition);
 				}
@@ -90,7 +96,7 @@ public class StaticOperators {
 	public static int insert(final String fileName, final TupleSchema schema, final String[] values) {
 		int result = 0;
 		if (schema.types.length != values.length)
-			throw new RuntimeException("number of column in schema must match size of values");
+				throw new RuntimeException("number of column in schema must match size of values");
 		if (!checkKey(fileName, schema, values))
 				throw new RuntimeException("PrimaryKey violation");
 		FileOutputStream writer = null;

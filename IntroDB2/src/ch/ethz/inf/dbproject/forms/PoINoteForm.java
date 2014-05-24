@@ -39,7 +39,7 @@ public class PoINoteForm extends CommentForm<PoINote> {
 	protected void onNewSuccess(PoINote result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "PoIDetail?id=" + result.getCaseId());
+		response.sendRedirect(WEB_ROOT + "PoIDetail?PoIId=" + result.getCaseId());
 	}
 
 	@Override

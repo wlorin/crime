@@ -3,15 +3,14 @@ package ch.ethz.inf.dbproject.model;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.and;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.col;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.eq;
-import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.like;
+import static ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Static.val;
 
 import java.lang.reflect.Constructor;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +19,7 @@ import ch.ethz.inf.dbproject.model.meta.Entity;
 import ch.ethz.inf.dbproject.model.meta.TableName;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
-import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema.TupleSchemaBuilder.SchemaColumn;
 import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
-import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.ConditionalSource;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Operator;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Scan;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.Select;
@@ -277,11 +274,18 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 
 		return new Suspect(caseId, poiId);
 	}
+	
+	private String getCurrentTimestamp() {
+		Date now = Calendar.getInstance().getTime();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = format.format(now);
+		return time;
+	}
 
 	@Override
-	public CaseNote insertComment(String comment, int caseId, int userid) {
+	public CaseNote insertCaseNote(String comment, int caseId, int userid) {
 		int noteid = StaticOperators.insert(getTableName(CaseNote.class), getSchema(CaseNote.class), 
-				new String[] {comment, Integer.toString(caseId), Integer.toString(userid)});		
+				new String[] {null, Integer.toString(caseId), getCurrentTimestamp(), comment, Integer.toString(userid)});		
 		return getById(noteid, CaseNote.class);
 	}
 
@@ -313,7 +317,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 	@Override
 	public PoINote insertPoINote(String comment, int poiId, int userid) {
 		int noteid = StaticOperators.insert(getTableName(PoINote.class), getSchema(PoINote.class), 
-				new String[] {comment, Integer.toString(poiId), Integer.toString(userid)});		
+				new String[] {null, Integer.toString(poiId), getCurrentTimestamp(), comment, Integer.toString(userid)});		
 		return getById(noteid, PoINote.class);
 	}
 

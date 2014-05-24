@@ -35,7 +35,7 @@ public interface DatastoreInterface {
 	
 	public abstract Case updateCase(int CaseId, String name, String state, int crimeId, String location, Date date, Time time);
 	
-	public abstract CaseNote insertComment(String comment, int caseId, int userid);
+	public abstract CaseNote insertCaseNote(String comment, int caseId, int userid);
 	
 	public abstract Crime insertCrime(String crimeName);
 	
