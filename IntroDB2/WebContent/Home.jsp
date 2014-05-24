@@ -24,4 +24,7 @@ if (user != null) {
 <br /><br />
 See all available <a href="Cases">cases</a> and <a href="PoI">persons of interest</a>.
 
+<br /><br />
+In case you screwed something up, you can always reset the database to the demo data <a href="?action=reset">here</a>
+
 <%@ include file="Footer.jsp" %>

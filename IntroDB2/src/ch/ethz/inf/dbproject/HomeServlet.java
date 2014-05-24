@@ -32,10 +32,8 @@ public final class HomeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DatastoreInterfaceSimpleDatabase intf = new DatastoreInterfaceSimpleDatabase();
-		String filePath = intf.getTableName(Case.class);
-		File file = new File(filePath);
-		if (!file.exists()) {
+		final String action = request.getParameter("action");
+		if ("reset".equals(action)) {
 			ResetToDemoData reset = new ResetToDemoData();
 			reset.resetToDemoData();
 		}
