@@ -87,4 +87,8 @@ public interface DatastoreInterface {
 	
 	public abstract boolean isCaseClosed(int caseId);
 	
+	public abstract int getCaseIdFromCaseNote(int casenoteid);
+	
+	public abstract int getPoIIdFromPoINote(int noteId);
+	
 }

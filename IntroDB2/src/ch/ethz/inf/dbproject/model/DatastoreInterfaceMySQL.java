@@ -625,4 +625,14 @@ public final class DatastoreInterfaceMySQL {
 			return null;
 		}
 	}
+	
+	public int getCaseIdFromCaseNote(int casenoteid) {
+		CaseNote note = getById((long) casenoteid, CaseNote.class);
+		return note.getCaseId();
+	}
+	
+	public int getPoIIdFromPoINote(Integer noteId) {
+		PoINote note = getById((long) noteId, PoINote.class);
+		return note.getPoiId();
+	}
 }

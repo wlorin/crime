@@ -646,6 +646,18 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 		);
 		
 	}
+		
+	@Override
+	public int getCaseIdFromCaseNote(int casenoteid) {
+		CaseNote note = getById(casenoteid, CaseNote.class);
+		return note.getCaseId();
+	}
+
+	@Override
+	public int getPoIIdFromPoINote(int noteId) {
+		PoINote note = getById(noteId, PoINote.class);
+		return note.getPoiId();
+	}
 	
 
 }

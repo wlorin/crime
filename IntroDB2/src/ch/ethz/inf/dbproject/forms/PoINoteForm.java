@@ -39,21 +39,21 @@ public class PoINoteForm extends CommentForm<PoINote> {
 	protected void onNewSuccess(PoINote result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		response.sendRedirect(WEB_ROOT + "PoIDetail?PoIId=" + result.getCaseId());
+		response.sendRedirect(WEB_ROOT + "PoIDetail?PoIId=" + result.getPoiId());
 	}
 
 	@Override
 	protected void onEditSuccess(PoINote result, ServletContext servletContext,
 			HttpServletRequest request, HttpServletResponse response,
 			HttpSession session) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	protected PoINote processEditForm(List<Field> fields,
 			HashMap<String, String> values, HttpSession session) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 }

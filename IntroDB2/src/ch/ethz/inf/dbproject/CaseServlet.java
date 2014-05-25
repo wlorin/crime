@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import ch.ethz.inf.dbproject.forms.CaseForm;
 import ch.ethz.inf.dbproject.forms.CaseNoteForm;
 import ch.ethz.inf.dbproject.forms.CommentForm;
 import ch.ethz.inf.dbproject.forms.OpenCloseButton;
@@ -64,6 +65,17 @@ public final class CaseServlet extends HttpServlet {
 					Case.class 	/* The class of the objects (rows) that will be displayed */
 			);
 
+			final String action = request.getParameter("action");
+			if ("delete".equals(action)) {
+				final String sId = request.getParameter("id");
+				Integer noteId = Integer.valueOf(sId);
+				int caseId = dbInterface.getCaseIdFromCaseNote(noteId);
+				dbInterface.deleteCaseNote(noteId);
+				final String caseUrl = "Case?id=" + Integer.toString(caseId);
+				response.sendRedirect(caseUrl);
+				return;
+			}
+			
 			// Add columns to the new table
 
 			/*
@@ -99,6 +111,10 @@ public final class CaseServlet extends HttpServlet {
 			caseNotes.addBeanColumn("Author", "username");
 			caseNotes.addBeanColumn("Date", "timestamp");
 			caseNotes.addBeanColumn("Note", "note");
+			
+			if (UserManagement.isUserLoggedIn(session)) {
+				caseNotes.addLinkColumn("Delete Note", "Delete", "Case?action=delete&id=", "id");
+			}
 
 			final List<CaseNote> notes = aCase.getCaseNotes();
 			caseNotes.addObjects(notes);

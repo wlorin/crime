@@ -25,10 +25,6 @@ public class PoINote extends Note {
 		return id;
 	}
 
-	public int getCaseId() {
-		return poiId;
-	}
-
 	public int getPoiId() {
 		return poiId;
 	}

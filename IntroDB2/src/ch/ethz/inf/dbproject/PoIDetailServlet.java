@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import ch.ethz.inf.dbproject.model.DatastoreInterfaceSimpleDatabase;
 import ch.ethz.inf.dbproject.model.PoI;
 import ch.ethz.inf.dbproject.model.PoINote;
+import ch.ethz.inf.dbproject.util.UserManagement;
 import ch.ethz.inf.dbproject.util.html.BeanTableHelper;
 
 /**
@@ -39,14 +40,26 @@ public final class PoIDetailServlet extends HttpServlet {
 
 		final HttpSession session = request.getSession(true);
 
+		
+		final String action = request.getParameter("action");
 		final String idString = request.getParameter("PoIId");
-		if (idString == null) {
+		if (action == null && idString == null) {
 			this.getServletContext().getRequestDispatcher("/Cases").forward(request, response);
 			return;
 		}
 
 		try {
 
+			if ("delete".equals(action)) {
+				final String sId = request.getParameter("id");
+				Integer noteId = Integer.valueOf(sId);
+				int poiId = dbInterface.getPoIIdFromPoINote(noteId);
+				dbInterface.deletePoINote(noteId);
+				final String poiUrl = "PoIDetail?PoIId=" + Integer.toString(poiId);
+				response.sendRedirect(poiUrl);
+				return;
+			}
+			
 			final Integer id = Integer.parseInt(idString);
 			final PoI poi = this.dbInterface.getById(Long.valueOf(id), PoI.class);
 			session.setAttribute("poiId", poi.getId());
@@ -59,7 +72,7 @@ public final class PoIDetailServlet extends HttpServlet {
 					"casesTable" /* The table html class property */,
 					PoI.class 	/* The class of the objects (rows) that will be displayed */
 			);
-
+			
 			// Add columns to the new table
 
 			/*
@@ -88,6 +101,10 @@ public final class PoIDetailServlet extends HttpServlet {
 			poiNoteTable.addBeanColumn("Author", "username");
 			poiNoteTable.addBeanColumn("Date", "timestamp");
 			poiNoteTable.addBeanColumn("", "Note");
+			
+			if (UserManagement.isUserLoggedIn(session)) {
+				 poiNoteTable.addLinkColumn("Delete Note", "Delete", "PoIDetail?action=delete&id=", "id");
+			}
 			
 			final List<PoINote> notes = dbInterface.getPoINote(id);
 			poiNoteTable.addObjects(notes);
