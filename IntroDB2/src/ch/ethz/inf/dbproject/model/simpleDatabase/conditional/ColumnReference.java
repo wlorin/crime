@@ -16,7 +16,7 @@ public class ColumnReference implements ConditionalSource {
 	}
 
 	@Override
-	public Type valueType(Tuple t) {
+	public Type<?> valueType(Tuple t) {
 		return t.getType(name);
 	}
 }

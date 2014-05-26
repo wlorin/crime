@@ -2,7 +2,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 import java.nio.charset.Charset;
 
-public abstract class Type {
+public abstract class Type<T> {
 	public final int size;
 	public final boolean variableSize;
 	public boolean isPrimaryKey = false;
@@ -15,7 +15,18 @@ public abstract class Type {
 		this(size, variableSize);
 		this.isPrimaryKey = isPrimary;
 	}
-	public abstract String getType();
+	public abstract Class<T> getType();
+	public abstract T parse(String string);
+	protected abstract String tToString(T t);
+	
+	public String store(T t) {
+		if (t == null) {
+			return null;
+		}
+		else {
+			return tToString(t);
+		}
+	}
 	
 	public byte[] toByteArr(String value) {
 		if (value.length() > size) {

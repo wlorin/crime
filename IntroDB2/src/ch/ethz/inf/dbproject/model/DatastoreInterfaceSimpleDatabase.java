@@ -643,8 +643,7 @@ public final class DatastoreInterfaceSimpleDatabase implements DatastoreInterfac
 					), 
 					eq(col("CrimeId"), val(crimeId))
 				)
-		);
-		
+		);	
 	}
 		
 	@Override

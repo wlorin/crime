@@ -22,9 +22,9 @@ public class TupleSchema implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6638859351571682217L;
-	public final Type[] types;
+	public final Type<?>[] types;
 	private final HashMap<String, Integer> columnNamesMap;
-	private final HashMap<String, Type> nameToType;
+	private final HashMap<String, Type<?>> nameToType;
 	public ImmutableList<SchemaColumn> primaryKeys = null;
 	String[] names;
 	public final List<SchemaColumn> columns;
@@ -34,7 +34,7 @@ public class TupleSchema implements Serializable {
 		this.columnNamesMap = new HashMap<String, Integer>();
 		this.nameToType = new HashMap<>();
 		names= new String[columns.size()];
-		types = new Type[columns.size()];
+		types = new Type<?>[columns.size()];
 		
 		List<SchemaColumn> keys = Lists.newArrayList();
 		for (int i = 0; i < types.length; ++i) {
@@ -81,7 +81,7 @@ public class TupleSchema implements Serializable {
 		return -1;
 	}
 	
-	public Type getType(int index) {
+	public Type<?> getType(int index) {
 		return types[index];
 	}
 	
@@ -93,7 +93,7 @@ public class TupleSchema implements Serializable {
 		TupleSchemaBuilder tupleSchemaBuilder = new TupleSchemaBuilder();
 		for (int i = 0; i < types.length; i++) {
 			String name = names[i];
-			Type type = types[i];
+			Type<?> type = types[i];
 			String newName = prefix + "." + name;
 			if (name.contains("\\.")) {
 				newName = prefix + "." + name.split("\\.")[1];
@@ -114,7 +114,7 @@ public class TupleSchema implements Serializable {
 		
 		boolean built = false;
 		
-		public TupleSchemaBuilder with(String name, Type type) {
+		public TupleSchemaBuilder with(String name, Type<?> type) {
 			if (built) {
 				throw new IllegalStateException("Schema already built");
 			}
@@ -153,7 +153,7 @@ public class TupleSchema implements Serializable {
 			if (built) {
 				throw new IllegalStateException("Schema already built");
 			}
-			Type type = columns.get(columns.size() - 1).type;
+			Type<?> type = columns.get(columns.size() - 1).type;
 			if (!(type instanceof TypeInt)) {
 				throw new IllegalStateException("Can only set TypeInt type to autoincrement");
 			}
@@ -198,9 +198,9 @@ public class TupleSchema implements Serializable {
 		
 		public class SchemaColumn {
 			public final String name;
-			public final Type type;
+			public final Type<?> type;
 
-			public SchemaColumn(String name, Type type) {
+			public SchemaColumn(String name, Type<?> type) {
 				this.name = name;
 				this.type = type;
 			}
@@ -215,7 +215,7 @@ public class TupleSchema implements Serializable {
 		}
 	}
 
-	public Type getType(String columnName) {
+	public Type<?> getType(String columnName) {
 		return getType(getIndex(columnName));
 	}
 }

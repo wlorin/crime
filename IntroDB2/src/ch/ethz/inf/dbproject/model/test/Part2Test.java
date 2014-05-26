@@ -66,6 +66,7 @@ public class Part2Test {
 		assertEquals("Count different after deleting nothing", oldCount, afterEmptyDelete);
 		assertEquals("Didn't delete tuple", oldCount -1, afterOneDelete);
 	}
+	
 	@Test
 	public void testUpdate() {
 		testInsert();
@@ -136,6 +137,16 @@ public class Part2Test {
 		String expected = "id=1,name=test,status=Test2";
 		assertEquals(expected, res.toString());
 	}
+	
+	@Test
+	public void testGroupBy2() {
+		testInsert();
+		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
+		testInsert();
+		int countOne = StaticOperators.count(new Scan(testTable, schema).sum("id").groupBy("status"));
+		assertEquals("On = ", 1, countOne);
+	}
+	
 	@Test
 	public void testScanWithNull() {
 		String[] values = new String[] { "1", null, "Test2" };

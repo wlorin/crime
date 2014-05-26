@@ -5,9 +5,9 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 
 public class Value implements ConditionalSource {
 	final private String value;
-	private Type type;
+	private Type<?> type;
 
-	public Value(final String value, Type type) {
+	public Value(final String value, Type<?> type) {
 		this.value = value;
 		this.type = type;
 	}
@@ -18,7 +18,7 @@ public class Value implements ConditionalSource {
 	}
 
 	@Override
-	public Type valueType(Tuple t) {
+	public Type<?> valueType(Tuple t) {
 		return type;
 	}
 }

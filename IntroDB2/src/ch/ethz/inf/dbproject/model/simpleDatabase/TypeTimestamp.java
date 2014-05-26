@@ -1,6 +1,9 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase;
 
-public class TypeTimestamp extends Type {
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+public class TypeTimestamp extends Type<Timestamp> {
 
 	public TypeTimestamp() {
 		super(19, false);
@@ -11,8 +14,18 @@ public class TypeTimestamp extends Type {
 	}
 
 	@Override
-	public String getType() {
-		return "TimeStamp";
+	public Class<Timestamp> getType() {
+		return Timestamp.class;
+	}
+
+	@Override
+	public Timestamp parse(String string) {
+		return Timestamp.valueOf(string);
+	}
+
+	@Override
+	protected String tToString(Timestamp t) {
+		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(t);
 	}
 
 }

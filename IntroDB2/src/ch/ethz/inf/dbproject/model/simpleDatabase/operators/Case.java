@@ -42,7 +42,7 @@ public final class Case extends Operator {
 	private static TupleSchema makeNewSchema(TupleSchema schema, String[] columns) {
 		TupleSchemaBuilder builder = TupleSchema.build();
 		for (String columnName : columns) {
-			Type type = schema.getType(columnName);
+			Type<?> type = schema.getType(columnName);
 			builder.with(columnName, type);
 		}
 		return builder.build();

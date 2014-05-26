@@ -3,13 +3,17 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Aggregatorable;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy.AggregatorEntry;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Sum;
 
 /**
  * Base class of all operators. An operator processes one tuple at a time. It
  * allows an application to call moveNext() to move to the next tuple. After
  * moveNext() the application can retrieve the new tuple by a call to current().
  */
-public abstract class Operator {
+public abstract class Operator implements Aggregatorable {
 	final public TupleSchema schema;
 	
 	public Operator(TupleSchema schema) {
@@ -58,5 +62,38 @@ public abstract class Operator {
 	
 	public final Sort sortDesc(String column) {
 		return new Sort(this, column, false);
+	}
+	
+	public final NeedsGroupBy max(String column) {
+		return null;
+	}
+
+	@Override
+	public NeedsGroupBy sum(String columnName) {
+		return new NeedsGroupBy(this, columnName, new Sum());
+	}
+
+	@Override
+	public NeedsGroupBy min(String columnName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NeedsGroupBy avg(String columnName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NeedsGroupBy count(String columnName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Operator groupBy(String... columnNames) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

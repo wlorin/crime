@@ -79,7 +79,7 @@ public class Tuple {
 		return size;
 	}
 
-	public Type getType(String name) {
+	public Type<?> getType(String name) {
 		return schema.getType(schema.getIndex(name));
 	}
 	

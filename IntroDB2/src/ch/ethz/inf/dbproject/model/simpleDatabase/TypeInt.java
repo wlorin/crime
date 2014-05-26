@@ -2,7 +2,7 @@ package ch.ethz.inf.dbproject.model.simpleDatabase;
 
 import java.nio.ByteBuffer;
 
-public class TypeInt extends Type {
+public class TypeInt extends Type<Integer> {
 	
 	public boolean isAutoIncrement = false;
 
@@ -11,8 +11,8 @@ public class TypeInt extends Type {
 	}
 
 	@Override
-	public String getType() {
-		return "int";
+	public Class<Integer> getType() {
+		return int.class;
 	}
 	
 	@Override
@@ -32,5 +32,15 @@ public class TypeInt extends Type {
 	
 	public int getIntFromByteArr(byte[] value) {
 		return ByteBuffer.wrap(value).getInt();
+	}
+
+	@Override
+	public Integer parse(String string) {
+		return Integer.valueOf(string);
+	}
+
+	@Override
+	protected String tToString(Integer t) {
+		return "" + t;
 	}
 }

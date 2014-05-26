@@ -6,5 +6,5 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 public interface ConditionalSource {
 	public String value(Tuple t);
 
-	public Type valueType(Tuple t);
+	public Type<?> valueType(Tuple t);
 }
