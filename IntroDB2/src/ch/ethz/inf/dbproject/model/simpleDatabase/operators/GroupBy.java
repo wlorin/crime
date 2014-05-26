@@ -35,7 +35,7 @@ public class GroupBy extends Operator {
 		public AggregatorResultPair(AggregatorEntry aggregatorEntry, Tuple tuple) {
 			this.aggregator = (Aggregator<T>) aggregatorEntry.aggregator;
 			this.source = aggregatorEntry.sourceColumn;
-			result = aggregator.getSchemaType().parse(tuple.getString(source));
+			result = aggregator.init(aggregator.getSchemaType().parse(tuple.getString(source)));
 		}
 
 		public void process(Tuple current) {
@@ -88,7 +88,7 @@ public class GroupBy extends Operator {
 		for (AggregatorEntry aggregatorEntry : aggregators) {
 			targetColum2AggregatorResultPair.put(
 					aggregatorEntry.targetColumn, 
-					new AggregatorResultPair<>(aggregatorEntry, tuple)
+					new AggregatorResultPair<Object>(aggregatorEntry, tuple)
 			);
 		}
 		x.put(groupKey, targetColum2AggregatorResultPair);

@@ -14,4 +14,9 @@ public class Min extends Aggregator<Integer> {
 	public Type<Integer> getSchemaType() {
 		return new TypeInt();
 	}
+
+	@Override
+	public Integer init(Integer t) {
+		return t;
+	}
 }

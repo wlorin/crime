@@ -3,11 +3,11 @@ package ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators;
 import ch.ethz.inf.dbproject.model.simpleDatabase.Type;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TypeInt;
 
-public class Sum extends Aggregator<Integer> {
+public class Count extends Aggregator<Integer> {
 
 	@Override
 	public Integer aggregate(Integer aggregate, Integer x) {
-		return aggregate + x;
+		return aggregate + 1;
 	}
 
 	@Override
@@ -17,6 +17,6 @@ public class Sum extends Aggregator<Integer> {
 
 	@Override
 	public Integer init(Integer t) {
-		return t;
+		return 1;
 	}
 }
