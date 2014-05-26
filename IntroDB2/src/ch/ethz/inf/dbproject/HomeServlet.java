@@ -25,7 +25,13 @@ public final class HomeServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public HomeServlet() {
-        super();
+    	super();
+    	DatastoreInterfaceSimpleDatabase dbint = new DatastoreInterfaceSimpleDatabase();
+    	File file = new File(dbint.getTableName(Case.class));
+    	if (!file.exists()) {
+    		ResetToDemoData reset = new ResetToDemoData();
+			reset.resetToDemoData();
+    	}
     }
 
 	/**
