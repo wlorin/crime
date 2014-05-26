@@ -27,13 +27,14 @@ public class NeedsGroupBy implements Aggregatorable {
 
 	@Override
 	public NeedsGroupBy max(String columnName) {
-		// TODO Auto-generated method stub
-		return null;
+		add(columnName, new Max());
+		return this;
 	}
 
 	@Override
 	public NeedsGroupBy min(String columnName) {
-		return null;
+		add(columnName, new Max());
+		return this;
 	}
 
 	@Override

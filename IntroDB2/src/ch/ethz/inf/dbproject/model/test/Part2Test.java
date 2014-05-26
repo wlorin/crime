@@ -180,6 +180,29 @@ public class Part2Test {
 	}
 	
 	@Test
+	public void testGroupByCount() {
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name2", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name2", "status1" });
+		Operator op = new Scan(testTable, schema).count("id").groupBy("status", "name");
+		List<Integer> expected = new ArrayList<Integer>();
+		expected.add(4);
+		expected.add(2);
+		while (op.moveNext()) {
+			int res = op.current().getInt("id");
+			int idx = expected.indexOf(res);
+			if (idx >= 0) {
+				expected.remove(idx);
+			}
+		}
+		assertTrue("all expected should be removed", expected.size() == 0);
+		
+	}
+	
+	@Test
 	public void testScanWithNull() {
 		String[] values = new String[] { "1", null, "Test2" };
 		StaticOperators.insert(testTable, schema, values);
