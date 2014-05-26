@@ -148,6 +148,17 @@ public class Part2Test {
 	}
 	
 	@Test
+	public void testGroupByWithoutAggregate() {
+		testInsert();
+		StaticOperators.update(testTable, schema, new String[] { "name", "id"}, new String[] {"after Update", "2"}, eq(col("id"), val(1)));
+		testInsert();
+		int countOne = StaticOperators.count(new Scan(testTable, schema).groupBy("status"));
+		assertEquals("On = ", 1, countOne);
+		int countTwo = StaticOperators.count(new Scan(testTable, schema).groupBy("status", "name"));
+		assertEquals("On = ", 2, countTwo);
+	}
+	
+	@Test
 	public void testGroupBy() {
 		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
 		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
