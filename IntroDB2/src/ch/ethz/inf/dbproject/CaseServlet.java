@@ -112,7 +112,7 @@ public final class CaseServlet extends HttpServlet {
 			caseNotes.addBeanColumn("Date", "timestamp");
 			caseNotes.addBeanColumn("Note", "note");
 			
-			if (UserManagement.isUserLoggedIn(session)) {
+			if (UserManagement.isUserLoggedIn(session) && aCase.isOpen()) {
 				caseNotes.addLinkColumn("Delete Note", "Delete", "Case?action=delete&id=", "id");
 			}
 
