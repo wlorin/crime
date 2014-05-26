@@ -148,6 +148,38 @@ public class Part2Test {
 	}
 	
 	@Test
+	public void testGroupBy() {
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name1", "status1" });
+		StaticOperators.insert(testTable, schema, new String[] { null, "name2", "status1" });
+		Operator op = new Scan(testTable, schema).sum("id").groupBy("name", "status");
+		while (op.moveNext()) {
+			assertTrue("Expecting 3", op.current().getInt("id") == 3);
+		}
+		List<Integer> expected = new ArrayList<Integer>();
+		expected.add(2);
+		expected.add(3);
+		op = new Scan(testTable, schema).max("id").groupBy("name", "status");
+		while (op.moveNext()) {
+			int idx = expected.indexOf(op.current().getInt("id"));
+			if (idx >= 0) {
+				expected.remove(idx);
+			}
+		}
+		assertTrue("all expected should be removed", expected.size() == 0);
+		expected.add(1);
+		expected.add(3);
+		op = new Scan(testTable, schema).min("id").groupBy("name", "status");
+		while (op.moveNext()) {
+			int idx = expected.indexOf(op.current().getInt("id"));
+			if (idx >= 0) {
+				expected.remove(idx);
+			}
+		}
+		assertTrue("all expected should be removed", expected.size() == 0);
+	}
+	
+	@Test
 	public void testScanWithNull() {
 		String[] values = new String[] { "1", null, "Test2" };
 		StaticOperators.insert(testTable, schema, values);

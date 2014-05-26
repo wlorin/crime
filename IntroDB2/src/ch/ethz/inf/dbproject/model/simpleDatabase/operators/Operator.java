@@ -4,8 +4,9 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Aggregatorable;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Max;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Min;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy;
-import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy.AggregatorEntry;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Sum;
 
 /**
@@ -65,7 +66,7 @@ public abstract class Operator implements Aggregatorable {
 	}
 	
 	public final NeedsGroupBy max(String column) {
-		return null;
+		return new NeedsGroupBy(this, column, new Max());
 	}
 
 	@Override
@@ -75,8 +76,7 @@ public abstract class Operator implements Aggregatorable {
 
 	@Override
 	public NeedsGroupBy min(String columnName) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NeedsGroupBy(this, columnName, new Min());
 	}
 
 	@Override
