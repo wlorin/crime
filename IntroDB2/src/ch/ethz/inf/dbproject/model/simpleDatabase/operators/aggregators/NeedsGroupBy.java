@@ -44,6 +44,7 @@ public class NeedsGroupBy implements Aggregatorable {
 
 	@Override
 	public NeedsGroupBy count(String columnName) {
+		add(columnName, new Count());
 		return this;
 	}
 	
