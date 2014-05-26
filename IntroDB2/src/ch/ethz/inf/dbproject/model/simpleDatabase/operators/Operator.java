@@ -1,5 +1,7 @@
 package ch.ethz.inf.dbproject.model.simpleDatabase.operators;
 
+import java.util.ArrayList;
+
 import ch.ethz.inf.dbproject.model.simpleDatabase.Tuple;
 import ch.ethz.inf.dbproject.model.simpleDatabase.TupleSchema;
 import ch.ethz.inf.dbproject.model.simpleDatabase.conditional.Condition;
@@ -8,6 +10,7 @@ import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Count;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Max;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Min;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy;
+import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.NeedsGroupBy.AggregatorEntry;
 import ch.ethz.inf.dbproject.model.simpleDatabase.operators.aggregators.Sum;
 
 /**
@@ -81,18 +84,12 @@ public abstract class Operator implements Aggregatorable {
 	}
 
 	@Override
-	public NeedsGroupBy avg(String columnName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public NeedsGroupBy count(String columnName) {
 		return new NeedsGroupBy(this, columnName, new Count());	
 	}
 
 	@Override
 	public Operator groupBy(String... columnNames) {
-		return null;
+		return new GroupBy(this, new ArrayList<AggregatorEntry>(), columnNames);
 	}
 }

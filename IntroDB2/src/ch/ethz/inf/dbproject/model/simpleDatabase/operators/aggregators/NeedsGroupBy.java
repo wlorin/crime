@@ -33,13 +33,8 @@ public class NeedsGroupBy implements Aggregatorable {
 
 	@Override
 	public NeedsGroupBy min(String columnName) {
-		add(columnName, new Max());
+		add(columnName, new Min());
 		return this;
-	}
-
-	@Override
-	public NeedsGroupBy avg(String columnName) {
-		return null;
 	}
 
 	@Override
