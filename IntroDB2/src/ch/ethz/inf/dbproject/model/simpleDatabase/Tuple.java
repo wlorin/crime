@@ -70,7 +70,7 @@ public class Tuple {
 		for (int i = 0; i < schema.types.length; i++) {
 			if (schema.types[i].variableSize) {
 				size += 4;
-				size += values[i].length();
+				size += (values[i] == null) ? 0 : values[i].length();
 			}
 			else {
 				size += schema.types[i].size;
